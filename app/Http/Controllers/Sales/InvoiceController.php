@@ -171,8 +171,13 @@ class InvoiceController
     public function show(string $invoice)
     {
         $row = $this->findInvoiceOrFail($invoice);
+        $document = $this->buildInvoiceDocument($row);
 
-        return view('components.sales.invoices.show', compact('row'));
+        return view('components.sales.invoices.show', [
+            'row' => $row,
+            'invoice' => $document['invoice'],
+            'items' => $document['items'],
+        ]);
     }
 
     /**
@@ -209,12 +214,54 @@ class InvoiceController
     /**
      * Download invoice as PDF
      */
-    public function downloadPdf($id)
+    public function pdf(string $invoice)
     {
-        // For now, just redirect back
+        $row = $this->findInvoiceOrFail($invoice);
+        $document = $this->buildInvoiceDocument($row);
+
+        $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
+            'row' => $row,
+            'invoice' => $document['invoice'],
+            'items' => $document['items'],
+            'generatedAt' => now(),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream($row['number'] . '.pdf');
+    }
+
+    /**
+     * Download invoice as PDF
+     */
+    public function downloadPdf(string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+        $document = $this->buildInvoiceDocument($row);
+
+        $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
+            'row' => $row,
+            'invoice' => $document['invoice'],
+            'items' => $document['items'],
+            'generatedAt' => now(),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download($row['number'] . '.pdf');
+    }
+
+    public function convertToReceipt(string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+        $digits = preg_replace('/\D+/', '', $row['number']) ?: '00000';
+
         return redirect()
-            ->route('sales.invoices.index')
-            ->with('info', 'PDF download coming soon');
+            ->route('sales.payments.create', [
+                'payment_number' => 'RCPT-' . $digits,
+                'customer_name' => $row['customer'],
+                'method' => 'Cash',
+                'reference' => $row['number'],
+                'amount' => $row['amount'],
+                'notes' => 'Converted from invoice ' . $row['number'],
+            ])
+            ->with('success', 'Receipt draft opened. Confirm and save to record payment.');
     }
 
     /**
@@ -236,5 +283,42 @@ class InvoiceController
         abort_unless($invoice, 404);
 
         return $invoice;
+    }
+
+    private function buildInvoiceDocument(array $row): array
+    {
+        $vatRate = 16.5;
+        $grandTotal = (int) ($row['amount'] ?? 0);
+        $subTotal = (int) round($grandTotal / (1 + ($vatRate / 100)));
+        $vatAmount = $grandTotal - $subTotal;
+
+        $items = collect([
+            [
+                'name' => 'Professional Services',
+                'note' => 'Service charge for invoice ' . $row['number'],
+                'qty' => 1,
+                'rate' => $subTotal,
+                'discount_type' => 'fixed',
+                'discount' => 0,
+                'line_total' => $subTotal,
+            ],
+        ]);
+
+        $invoice = [
+            'customer_name' => $row['customer'],
+            'invoice_number' => $row['number'],
+            'invoice_date' => $row['date'],
+            'due_date' => $row['due'],
+            'subject' => 'Invoice ' . $row['number'],
+            'currency' => 'MWK',
+            'vat_rate' => $vatRate,
+            'notes' => 'Thank you for your business.',
+            'terms' => 'Payment due by ' . $row['due'] . '.',
+            'sub_total' => $subTotal,
+            'vat_amount' => $vatAmount,
+            'grand_total' => $grandTotal,
+        ];
+
+        return compact('invoice', 'items');
     }
 }

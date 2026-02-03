@@ -28,6 +28,9 @@ Route::prefix('sales')->name('sales.')->group(function () {
     Route::post('invoices', [InvoiceController::class, 'store'])->name('invoices.store');
     Route::post('invoices/preview', [InvoiceController::class, 'preview'])->name('invoices.preview');
     Route::get('invoices/export/pdf', [InvoiceController::class, 'exportPdf'])->name('invoices.export.pdf');
+    Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::get('invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.download');
+    Route::get('invoices/{invoice}/convert-to-receipt', [InvoiceController::class, 'convertToReceipt'])->name('invoices.convert.receipt');
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
