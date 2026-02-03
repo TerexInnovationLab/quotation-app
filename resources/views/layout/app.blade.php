@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>@yield('title', 'Sales')</title>
+    <title>@yield('title')</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -17,14 +17,10 @@
             </div>
             <div class="leading-tight">
                 <div class="font-semibold">AccountYanga</div>
-                <div class="text-xs text-slate-500">Sales Module</div>
             </div>
         </div>
 
         <nav class="px-3 py-4 overflow-y-auto">
-            <div class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Sales
-            </div>
 
             <div class="mt-3 space-y-1">
                 @php
@@ -52,9 +48,16 @@
             </div>
         </nav>
 
-        <div class="mt-auto p-4 border-t border-slate-200 text-xs text-slate-500">
-            UI only • No DB yet
+        <div class="mt-auto p-4 border-t border-slate-200">
+            <form method="POST" action="/logout">
+                @csrf
+                <button type="submit"
+                        class="w-full rounded-xl border border-[#465FFF] bg-white px-4 py-2 text-sm font-medium text-[#465FFF] hover:bg-slate-100">
+                    Logout
+                </button>
+            </form>
         </div>
+
     </aside>
 
     {{-- Main --}}
@@ -66,7 +69,7 @@
                     <span class="text-sm font-semibold">☰</span>
                 </div>
                 <div>
-                    <div class="text-sm text-slate-500">@yield('breadcrumb', 'Sales')</div>
+                    <div class="text-sm text-slate-500">@yield('breadcrumb')</div>
                     <div class="font-semibold text-slate-900">@yield('page_title', 'Dashboard')</div>
                 </div>
             </div>
