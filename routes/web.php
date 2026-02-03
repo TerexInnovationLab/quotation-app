@@ -6,6 +6,7 @@ use App\Http\Controllers\Sales\QuotationController;
 use App\Http\Controllers\Sales\InvoiceController;
 use App\Http\Controllers\Sales\PaymentsReceivedController;
 use App\Http\Controllers\Sales\SalesOrderController;
+use App\Http\Controllers\Sales\SettingsController;
 
 Route::redirect('/', '/sales/quotations');
 
@@ -32,6 +33,8 @@ Route::prefix('sales')->name('sales.')->group(function () {
     Route::get('payments-received/{payment}/edit', [PaymentsReceivedController::class, 'edit'])->name('payments.edit');
     Route::put('payments-received/{payment}', [PaymentsReceivedController::class, 'update'])->name('payments.update');
     Route::get('sales-orders', [SalesOrderController::class, 'index'])->name('orders.index');
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingsController::class, 'update'])->name('settings.update');
     
     
 });

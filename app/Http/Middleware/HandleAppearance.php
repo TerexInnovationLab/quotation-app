@@ -16,7 +16,19 @@ class HandleAppearance
      */
     public function handle(Request $request, Closure $next): Response
     {
-        View::share('appearance', $request->cookie('appearance') ?? 'system');
+        $appearance = $request->cookie('appearance') ?? 'system';
+        $primaryColor = $request->cookie('primary_color') ?? 'indigo';
+
+        if (! in_array($appearance, ['light', 'dark', 'system'], true)) {
+            $appearance = 'system';
+        }
+
+        if (! in_array($primaryColor, ['indigo', 'emerald', 'rose', 'amber', 'sky', 'slate'], true)) {
+            $primaryColor = 'indigo';
+        }
+
+        View::share('appearance', $appearance);
+        View::share('primaryColor', $primaryColor);
 
         return $next($request);
     }

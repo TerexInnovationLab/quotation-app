@@ -175,3 +175,57 @@
         @apply border border-slate-300 px-3 py-2.5;
     }
 }
+
+:root {
+    --app-primary: #465fff;
+    --app-primary-hover: #3d54e6;
+}
+
+[class*="bg-[#465FFF]"] {
+    background-color: var(--app-primary) !important;
+}
+
+[class*="hover:bg-[#3d54e6]"]:hover {
+    background-color: var(--app-primary-hover) !important;
+}
+
+[class*="text-[#465FFF]"] {
+    color: var(--app-primary) !important;
+}
+
+[class*="border-[#465FFF]"] {
+    border-color: var(--app-primary) !important;
+}
+
+.dark .bg-white {
+    background-color: hsl(0 0% 7%);
+}
+
+.dark .bg-slate-50 {
+    background-color: hsl(0 0% 10%);
+}
+
+.dark .border-slate-200 {
+    border-color: hsl(0 0% 18%);
+}
+
+.dark .text-slate-900 {
+    color: hsl(0 0% 97%);
+}
+
+.dark .text-slate-700 {
+    color: hsl(0 0% 86%);
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500 {
+    color: hsl(0 0% 70%);
+}
+
+.dark .hover\:bg-slate-50:hover {
+    background-color: hsl(0 0% 14%);
+}
+
+.dark .hover\:bg-slate-100:hover {
+    background-color: hsl(0 0% 18%);
+}

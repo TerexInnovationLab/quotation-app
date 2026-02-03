@@ -1,18 +1,58 @@
+@php
+    $primaryPalette = [
+        'indigo' => ['base' => '#465FFF', 'hover' => '#3d54e6'],
+        'emerald' => ['base' => '#10B981', 'hover' => '#059669'],
+        'rose' => ['base' => '#F43F5E', 'hover' => '#E11D48'],
+        'amber' => ['base' => '#F59E0B', 'hover' => '#D97706'],
+        'sky' => ['base' => '#0EA5E9', 'hover' => '#0284C7'],
+        'slate' => ['base' => '#475569', 'hover' => '#334155'],
+    ];
+    $primary = $primaryPalette[$primaryColor ?? 'indigo'] ?? $primaryPalette['indigo'];
+@endphp
 <!doctype html>
-<html lang="en">
+<html lang="en" class="{{ ($appearance ?? 'system') === 'dark' ? 'dark' : '' }}" style="--app-primary: {{ $primary['base'] }}; --app-primary-hover: {{ $primary['hover'] }};">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title')</title>
+    <script>
+        (function () {
+            const appearance = @json($appearance ?? 'system');
+            const root = document.documentElement;
+
+            if (appearance === 'dark') {
+                root.classList.add('dark');
+                return;
+            }
+
+            if (appearance === 'light') {
+                root.classList.remove('dark');
+                return;
+            }
+
+            const media = window.matchMedia('(prefers-color-scheme: dark)');
+            const sync = function () {
+                root.classList.toggle('dark', media.matches);
+            };
+
+            sync();
+
+            if (typeof media.addEventListener === 'function') {
+                media.addEventListener('change', sync);
+            } else if (typeof media.addListener === 'function') {
+                media.addListener(sync);
+            }
+        })();
+    </script>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 <div class="min-h-screen flex">
 
     {{-- Sidebar --}}
     <aside class="w-72 bg-white border-r border-slate-200 hidden lg:flex lg:flex-col">
         <div class="h-16 px-5 flex items-center gap-3 ">
-            <div class="h-9 w-9 rounded-xl bg-[#465FFF] text-white grid place-items-center font-semibold">
+            <div class="h-9 w-9 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
                 A
             </div>
             <div class="leading-tight">
@@ -29,6 +69,7 @@
                         ['label' => 'Quotations', 'route' => 'sales.quotations.index', 'icon' => 'M7 7h10M7 11h10M7 15h6'],
                         ['label' => 'Invoices', 'route' => 'sales.invoices.index', 'icon' => 'M6 3h8l4 4v14H6zM14 3v4h4M9 11h6M9 15h6'],
                         ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'icon' => 'M3 7h18M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M12 4v8m0 0-3-3m3 3 3-3'],
+                        ['label' => 'Settings', 'route' => 'sales.settings.index', 'icon' => 'M10.325 4.317a1 1 0 0 1 1.35-.936l.144.054 1.21.55a1 1 0 0 0 .82 0l1.21-.55a1 1 0 0 1 1.35.936l.09 1.325a1 1 0 0 0 .518.819l1.125.648a1 1 0 0 1 .364 1.364l-.628 1.17a1 1 0 0 0 0 .94l.628 1.17a1 1 0 0 1-.364 1.364l-1.125.648a1 1 0 0 0-.518.819l-.09 1.325a1 1 0 0 1-1.35.936l-1.21-.55a1 1 0 0 0-.82 0l-1.21.55a1 1 0 0 1-1.35-.936l-.09-1.325a1 1 0 0 0-.518-.819l-1.125-.648a1 1 0 0 1-.364-1.364l.628-1.17a1 1 0 0 0 0-.94l-.628-1.17a1 1 0 0 1 .364-1.364l1.125-.648a1 1 0 0 0 .518-.819l.09-1.325zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'],
                     ];
                 @endphp
 
@@ -38,7 +79,7 @@
                     @endphp
                     <a href="{{ route($link['route']) }}"
                        class="flex items-center gap-3 px-3 py-2 rounded-xl border
-                              {{ $isActive ? 'bg-[#465FFF] text-white border-[#465FFF]' : 'bg-white text-slate-700 border-transparent hover:bg-slate-100' }}">
+                              {{ $isActive ? 'bg-[var(--app-primary)] text-white border-[var(--app-primary)]' : 'bg-white text-slate-700 border-transparent hover:bg-slate-100' }}">
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="{{ $link['icon'] }}" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -52,7 +93,7 @@
             <form method="POST" action="/logout">
                 @csrf
                 <button type="submit"
-                        class="w-full rounded-xl border border-[#465FFF] bg-white px-4 py-2 text-sm font-medium text-[#465FFF] hover:bg-slate-100">
+                        class="w-full rounded-xl border border-[var(--app-primary)] bg-white px-4 py-2 text-sm font-medium text-[var(--app-primary)] hover:bg-slate-100">
                     Logout
                 </button>
             </form>
