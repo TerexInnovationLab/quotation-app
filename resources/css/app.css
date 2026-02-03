@@ -229,3 +229,21 @@
 .dark .hover\:bg-slate-100:hover {
     background-color: hsl(0 0% 18%);
 }
+
+.dark form input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+.dark form select,
+.dark form textarea {
+    background-color: hsl(0 0% 10%);
+    color: hsl(0 0% 96%);
+    border-color: hsl(0 0% 24%);
+}
+
+.dark form select option {
+    background-color: hsl(0 0% 10%);
+    color: hsl(0 0% 96%);
+}
+
+.dark form input::placeholder,
+.dark form textarea::placeholder {
+    color: hsl(0 0% 65%);
+}
