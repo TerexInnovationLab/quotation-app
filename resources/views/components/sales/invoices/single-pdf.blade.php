@@ -4,123 +4,312 @@
     <meta charset="utf-8">
     <title>Invoice {{ $row['number'] }}</title>
     <style>
+        @page {
+            margin: 28px 30px;
+        }
+
         body {
             font-family: DejaVu Sans, sans-serif;
             color: #0f172a;
             font-size: 12px;
+            line-height: 1.5;
         }
-        .header {
-            margin-bottom: 20px;
+
+        .top-accent {
+            height: 8px;
+            background: #465fff;
+            margin-bottom: 18px;
         }
-        .title {
-            font-size: 20px;
-            margin: 0 0 6px;
-            font-weight: 700;
-        }
-        .meta {
-            margin: 0;
-            color: #475569;
-            font-size: 11px;
-        }
-        .grid {
-            width: 100%;
-            margin: 14px 0;
-        }
-        .grid td {
-            width: 50%;
-            padding: 4px 0;
-            vertical-align: top;
-        }
-        .label {
-            color: #475569;
-            font-size: 11px;
-        }
-        .value {
-            font-weight: 700;
-        }
-        table {
+
+        .header-table,
+        .bill-table,
+        .items-table,
+        .totals-table,
+        .notes-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
         }
-        th, td {
-            border: 1px solid #cbd5e1;
-            padding: 8px 10px;
+
+        .header-table td {
+            vertical-align: top;
         }
-        th {
-            background: #f8fafc;
-            text-align: left;
-            font-weight: 700;
+
+        .brand-wrap {
+            width: 58%;
         }
-        .right {
+
+        .invoice-meta-wrap {
+            width: 42%;
             text-align: right;
         }
-        .totals {
-            width: 40%;
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .logo-fallback {
+            width: 58px;
+            height: 58px;
+            line-height: 58px;
+            text-align: center;
+            font-size: 22px;
+            color: #ffffff;
+            background: #465fff;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .company-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .company-tagline {
+            margin: 2px 0 0;
+            color: #475569;
+            font-size: 11px;
+        }
+
+        .company-details {
+            margin-top: 10px;
+            color: #334155;
+            font-size: 11px;
+        }
+
+        .invoice-title {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 3px 10px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .invoice-meta {
+            margin-top: 12px;
+        }
+
+        .invoice-meta .row {
+            margin-top: 4px;
+            color: #334155;
+            font-size: 11px;
+        }
+
+        .invoice-meta .label {
+            color: #64748b;
+            width: 92px;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .subject {
+            margin-top: 14px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 11px;
+        }
+
+        .section-title {
+            color: #64748b;
+            font-size: 10px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .bill-table {
+            margin-top: 20px;
+        }
+
+        .bill-table td {
+            width: 50%;
+            vertical-align: top;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        .bill-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 2px 0 6px;
+        }
+
+        .bill-line {
+            color: #334155;
+            font-size: 11px;
+            margin: 2px 0;
+        }
+
+        .items-table {
+            margin-top: 20px;
+        }
+
+        .items-table th,
+        .items-table td {
+            border: 1px solid #dbe3ee;
+            padding: 9px 10px;
+        }
+
+        .items-table th {
+            background: #f8fafc;
+            color: #334155;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            text-align: left;
+        }
+
+        .items-table .right {
+            text-align: right;
+        }
+
+        .item-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .item-note {
+            margin-top: 2px;
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .totals-table {
+            width: 42%;
             margin-left: auto;
             margin-top: 14px;
         }
-        .totals td {
-            border: none;
-            padding: 4px 0;
+
+        .totals-table td {
+            padding: 6px 2px;
+            border: 0;
+            font-size: 11px;
         }
-        .totals .total td {
+
+        .totals-table .value {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .totals-table .grand td {
             border-top: 1px solid #cbd5e1;
+            font-size: 13px;
             font-weight: 700;
             padding-top: 8px;
         }
-        .footer {
-            margin-top: 20px;
-            color: #475569;
+
+        .notes-table {
+            margin-top: 18px;
+        }
+
+        .notes-table td {
+            width: 50%;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            vertical-align: top;
+        }
+
+        .notes-content {
             font-size: 11px;
+            color: #334155;
+            white-space: pre-line;
+        }
+
+        .footer {
+            margin-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+            font-size: 10px;
+            color: #64748b;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="title">Invoice {{ $row['number'] }}</div>
-        <p class="meta">Generated: {{ $generatedAt->format('Y-m-d H:i') }}</p>
-    </div>
+    <div class="top-accent"></div>
 
-    <table class="grid">
+    <table class="header-table">
         <tr>
-            <td>
-                <div class="label">Customer</div>
-                <div class="value">{{ $invoice['customer_name'] }}</div>
+            <td class="brand-wrap">
+                @if(!empty($company['logo']))
+                    <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
+                @else
+                    <div class="logo-fallback">A</div>
+                @endif
+                <h1 class="company-name">{{ $company['name'] }}</h1>
+                <p class="company-tagline">{{ $company['tagline'] }}</p>
+                <div class="company-details">
+                    {{ $company['address'] }}<br>
+                    {{ $company['email'] }} | {{ $company['phone'] }}
+                </div>
             </td>
-            <td>
-                <div class="label">Status</div>
-                <div class="value">{{ $row['status'] }}</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="label">Invoice Date</div>
-                <div class="value">{{ $invoice['invoice_date'] }}</div>
-            </td>
-            <td>
-                <div class="label">Due Date</div>
-                <div class="value">{{ $invoice['due_date'] }}</div>
+            <td class="invoice-meta-wrap">
+                <h2 class="invoice-title">INVOICE</h2>
+                <span class="status-badge">{{ strtoupper($row['status']) }}</span>
+                <div class="invoice-meta">
+                    <div class="row"><span class="label">Invoice No:</span> {{ $invoice['invoice_number'] }}</div>
+                    <div class="row"><span class="label">Invoice Date:</span> {{ $invoice['invoice_date'] }}</div>
+                    <div class="row"><span class="label">Due Date:</span> {{ $invoice['due_date'] }}</div>
+                    <div class="row"><span class="label">Generated:</span> {{ $generatedAt->format('Y-m-d H:i') }}</div>
+                </div>
             </td>
         </tr>
     </table>
 
-    <table>
+    <div class="subject">
+        <strong>Subject:</strong> {{ $invoice['subject'] }}
+    </div>
+
+    <table class="bill-table">
+        <tr>
+            <td>
+                <div class="section-title">Bill To</div>
+                <div class="bill-name">{{ $invoice['customer_name'] }}</div>
+                <div class="bill-line">Payment due by {{ $invoice['due_date'] }}</div>
+                <div class="bill-line">Currency: {{ $invoice['currency'] }}</div>
+            </td>
+            <td>
+                <div class="section-title">Bill From</div>
+                <div class="bill-name">{{ $company['name'] }}</div>
+                <div class="bill-line">{{ $company['address'] }}</div>
+                <div class="bill-line">{{ $company['email'] }}</div>
+                <div class="bill-line">{{ $company['phone'] }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="items-table">
         <thead>
             <tr>
-                <th>Item</th>
-                <th class="right">Qty</th>
-                <th class="right">Rate</th>
-                <th class="right">Amount</th>
+                <th style="width: 46%;">Item</th>
+                <th style="width: 12%;" class="right">Qty</th>
+                <th style="width: 20%;" class="right">Rate</th>
+                <th style="width: 22%;" class="right">Amount</th>
             </tr>
         </thead>
         <tbody>
             @foreach($items as $item)
                 <tr>
                     <td>
-                        <div>{{ $item['name'] }}</div>
+                        <div class="item-name">{{ $item['name'] }}</div>
                         @if(!empty($item['note']))
-                            <div class="meta">{{ $item['note'] }}</div>
+                            <div class="item-note">{{ $item['note'] }}</div>
                         @endif
                     </td>
                     <td class="right">{{ number_format($item['qty'], 2) }}</td>
@@ -131,24 +320,36 @@
         </tbody>
     </table>
 
-    <table class="totals">
+    <table class="totals-table">
         <tr>
             <td>Sub Total</td>
-            <td class="right">{{ $invoice['currency'] }} {{ number_format($invoice['sub_total'], 0) }}</td>
+            <td class="value">{{ $invoice['currency'] }} {{ number_format($invoice['sub_total'], 0) }}</td>
         </tr>
         <tr>
             <td>VAT ({{ number_format($invoice['vat_rate'], 1) }}%)</td>
-            <td class="right">{{ $invoice['currency'] }} {{ number_format($invoice['vat_amount'], 0) }}</td>
+            <td class="value">{{ $invoice['currency'] }} {{ number_format($invoice['vat_amount'], 0) }}</td>
         </tr>
-        <tr class="total">
+        <tr class="grand">
             <td>Total</td>
-            <td class="right">{{ $invoice['currency'] }} {{ number_format($invoice['grand_total'], 0) }}</td>
+            <td class="value">{{ $invoice['currency'] }} {{ number_format($invoice['grand_total'], 0) }}</td>
+        </tr>
+    </table>
+
+    <table class="notes-table">
+        <tr>
+            <td>
+                <div class="section-title">Notes</div>
+                <div class="notes-content">{{ $invoice['notes'] }}</div>
+            </td>
+            <td>
+                <div class="section-title">Terms</div>
+                <div class="notes-content">{{ $invoice['terms'] }}</div>
+            </td>
         </tr>
     </table>
 
     <div class="footer">
-        <div><strong>Notes:</strong> {{ $invoice['notes'] }}</div>
-        <div><strong>Terms:</strong> {{ $invoice['terms'] }}</div>
+        This invoice is generated digitally by {{ $company['name'] }}.
     </div>
 </body>
 </html>

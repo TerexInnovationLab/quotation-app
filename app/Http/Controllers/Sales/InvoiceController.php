@@ -57,6 +57,7 @@ class InvoiceController
         $pdf = Pdf::loadView('components.sales.invoices.pdf', [
             'rows' => $rows,
             'generatedAt' => now(),
+            'company' => $this->companyProfile(),
         ])->setPaper('a4', 'portrait');
 
         $filename = 'invoices-' . now()->format('Ymd-His') . '.pdf';
@@ -224,6 +225,7 @@ class InvoiceController
             'invoice' => $document['invoice'],
             'items' => $document['items'],
             'generatedAt' => now(),
+            'company' => $this->companyProfile(),
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream($row['number'] . '.pdf');
@@ -242,6 +244,7 @@ class InvoiceController
             'invoice' => $document['invoice'],
             'items' => $document['items'],
             'generatedAt' => now(),
+            'company' => $this->companyProfile(),
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download($row['number'] . '.pdf');
@@ -320,5 +323,37 @@ class InvoiceController
         ];
 
         return compact('invoice', 'items');
+    }
+
+    private function companyProfile(): array
+    {
+        $logo = null;
+        $logoPaths = [
+            public_path('images/company-logo.png'),
+            public_path('images/company-logo.jpg'),
+            public_path('images/company-logo.jpeg'),
+            public_path('logo.png'),
+            public_path('logo.jpg'),
+            public_path('logo.jpeg'),
+        ];
+
+        foreach ($logoPaths as $path) {
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path) ?: 'image/png';
+            $logo = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path));
+            break;
+        }
+
+        return [
+            'name' => 'AccountYanga Ltd',
+            'tagline' => 'Billing and Invoicing',
+            'email' => 'billing@accountyanga.com',
+            'phone' => '+265 88 000 0000',
+            'address' => 'Lilongwe, Malawi',
+            'logo' => $logo,
+        ];
     }
 }
