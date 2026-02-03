@@ -5,9 +5,10 @@
 @section('page_title','Quotations')
 
 @section('primary_action')
-    <button class="px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
+    <a href="{{ route('sales.quotations.create') }}"
+       class="inline-flex items-center px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
         + New Quotation
-    </button>
+    </a>
 @endsection
 
 @section('content')

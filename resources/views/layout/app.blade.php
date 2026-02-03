@@ -32,7 +32,7 @@
                         ['label' => 'Dashboard', 'route' => 'sales.dashboard', 'icon' => 'M4 10.5h7V4H4v6.5zM13 20h7v-9h-7v9zM13 4h7v5h-7V4zM4 13h7v7H4v-7z'],
                         ['label' => 'Quotations', 'route' => 'sales.quotations.index', 'icon' => 'M7 7h10M7 11h10M7 15h6'],
                         ['label' => 'Invoices', 'route' => 'sales.invoices.index', 'icon' => 'M6 2h8l4 4v16H6z'],
-                        ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'icon' => 'M12 1v22M7 6h10M7 18h10'],
+                        ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'icon' => 'M3 7h18M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M12 4v8m0 0-3-3m3 3 3-3'],
                     ];
                 @endphp
 

@@ -169,4 +169,9 @@
     body {
         @apply bg-background text-foreground;
     }
+    form input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+    form select,
+    form textarea {
+        @apply border border-slate-300 px-3 py-2.5;
+    }
 }

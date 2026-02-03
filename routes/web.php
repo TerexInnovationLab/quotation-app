@@ -15,4 +15,6 @@ Route::prefix('sales')->name('sales.')->group(function () {
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('payments-received', [PaymentsReceivedController::class, 'index'])->name('payments.index');
     Route::get('sales-orders', [SalesOrderController::class, 'index'])->name('orders.index');
+    Route::get('quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
+    Route::post('quotations', [QuotationController::class, 'store'])->name('quotations.store');
 });

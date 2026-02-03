@@ -59,7 +59,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                     <div class="text-sm font-semibold">Total Sales Trend</div>
-                    <div class="text-xs text-slate-500">Interactive graph (dummy data)</div>
+                    <div class="text-xs text-slate-500">Interactive graph</div>
                 </div>
 
                 <div class="flex items-center gap-2">
