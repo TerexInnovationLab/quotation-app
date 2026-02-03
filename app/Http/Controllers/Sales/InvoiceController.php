@@ -107,6 +107,65 @@ class InvoiceController
     }
 
     /**
+     * Preview invoice before exporting/sharing.
+     */
+    public function preview(Request $request)
+    {
+        $currency = (string) $request->input('currency', 'MWK');
+        $vatRate = min(max((float) $request->input('vat_rate', 0), 0), 100);
+
+        $items = collect($request->input('items', []))
+            ->map(function ($item) {
+                $discountType = in_array($item['discount_type'] ?? 'fixed', ['fixed', 'percent'], true)
+                    ? $item['discount_type']
+                    : 'fixed';
+
+                $qty = max((float) ($item['qty'] ?? 0), 0);
+                $rate = max((float) ($item['rate'] ?? 0), 0);
+                $discount = max((float) ($item['discount'] ?? 0), 0);
+                $lineSubtotal = $qty * $rate;
+                $lineDiscount = $discountType === 'percent'
+                    ? $lineSubtotal * (min($discount, 100) / 100)
+                    : min($discount, $lineSubtotal);
+                $lineTotal = max($lineSubtotal - $lineDiscount, 0);
+
+                return [
+                    'name' => trim((string) ($item['name'] ?? '')),
+                    'note' => trim((string) ($item['note'] ?? '')),
+                    'qty' => $qty,
+                    'rate' => $rate,
+                    'discount_type' => $discountType,
+                    'discount' => $discount,
+                    'line_subtotal' => round($lineSubtotal),
+                    'line_discount' => round($lineDiscount),
+                    'line_total' => round($lineTotal),
+                ];
+            })
+            ->filter(fn ($item) => $item['name'] !== '' || $item['line_total'] > 0 || $item['note'] !== '')
+            ->values();
+
+        $subTotal = (int) $items->sum('line_total');
+        $vatAmount = (int) round($subTotal * ($vatRate / 100));
+
+        $invoice = [
+            'customer_name' => (string) $request->input('customer_name', ''),
+            'invoice_number' => (string) $request->input('invoice_number', 'DRAFT'),
+            'invoice_date' => (string) $request->input('invoice_date', now()->toDateString()),
+            'due_date' => (string) $request->input('due_date', ''),
+            'subject' => (string) $request->input('subject', ''),
+            'currency' => $currency,
+            'vat_rate' => $vatRate,
+            'notes' => (string) $request->input('notes', ''),
+            'terms' => (string) $request->input('terms', ''),
+            'sub_total' => $subTotal,
+            'vat_amount' => $vatAmount,
+            'grand_total' => $subTotal + $vatAmount,
+        ];
+
+        return view('components.sales.invoices.preview', compact('invoice', 'items'));
+    }
+
+    /**
      * Show invoice details
      */
     public function show(string $invoice)
