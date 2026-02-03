@@ -5,6 +5,10 @@
 @section('page_title','Quotations')
 
 @section('primary_action')
+    <a href="{{ route('sales.quotations.export.pdf') }}"
+        class="inline-flex items-center px-4 py-2 text-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50">
+            Export PDF
+    </a>
     <a href="{{ route('sales.quotations.create') }}"
        class="inline-flex items-center px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
         + New Quotation

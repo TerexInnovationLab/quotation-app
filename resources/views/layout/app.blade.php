@@ -47,17 +47,26 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-<div class="min-h-screen flex">
+<div class="min-h-screen flex" x-data="{ sidebarExpanded: true }">
 
     {{-- Sidebar --}}
-    <aside class="w-72 bg-white border-r border-slate-200 hidden lg:flex lg:flex-col">
-        <div class="h-16 px-5 flex items-center gap-3 ">
-            <div class="h-9 w-9 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
+    <aside class="bg-white border-r border-slate-200 hidden lg:flex lg:flex-col transition-all duration-200 overflow-hidden"
+           :class="sidebarExpanded ? 'w-72' : 'w-20'">
+        <div class="h-16 px-5 flex items-center gap-3">
+            <div class="h-9 w-9 shrink-0 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
                 A
             </div>
-            <div class="leading-tight">
+            <div class="leading-tight" x-show="sidebarExpanded">
                 <div class="font-semibold">AccountYanga</div>
             </div>
+            <button type="button"
+                    @click="sidebarExpanded = !sidebarExpanded"
+                    class="ml-auto h-8 w-8 rounded-lg bg-[#465FFF] text-white grid place-items-center"
+                    aria-label="Toggle sidebar">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
 
         <nav class="px-3 py-4 overflow-y-auto">
@@ -69,7 +78,7 @@
                         ['label' => 'Quotations', 'route' => 'sales.quotations.index', 'icon' => 'M7 7h10M7 11h10M7 15h6'],
                         ['label' => 'Invoices', 'route' => 'sales.invoices.index', 'icon' => 'M6 3h8l4 4v14H6zM14 3v4h4M9 11h6M9 15h6'],
                         ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'icon' => 'M3 7h18M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M12 4v8m0 0-3-3m3 3 3-3'],
-                        ['label' => 'Settings', 'route' => 'sales.settings.index', 'icon' => 'M10.325 4.317a1 1 0 0 1 1.35-.936l.144.054 1.21.55a1 1 0 0 0 .82 0l1.21-.55a1 1 0 0 1 1.35.936l.09 1.325a1 1 0 0 0 .518.819l1.125.648a1 1 0 0 1 .364 1.364l-.628 1.17a1 1 0 0 0 0 .94l.628 1.17a1 1 0 0 1-.364 1.364l-1.125.648a1 1 0 0 0-.518.819l-.09 1.325a1 1 0 0 1-1.35.936l-1.21-.55a1 1 0 0 0-.82 0l-1.21.55a1 1 0 0 1-1.35-.936l-.09-1.325a1 1 0 0 0-.518-.819l-1.125-.648a1 1 0 0 1-.364-1.364l.628-1.17a1 1 0 0 0 0-.94l-.628-1.17a1 1 0 0 1 .364-1.364l1.125-.648a1 1 0 0 0 .518-.819l.09-1.325zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'],
+                        ['label' => 'Settings', 'route' => 'sales.settings.index', 'icon' => 'M12.22 2a.75.75 0 0 1 .74.65l.13 1.13c.3.06.59.15.88.27l1.02-.5a.75.75 0 0 1 .89.17l1.5 1.5a.75.75 0 0 1 .17.89l-.5 1.02c.12.29.21.58.27.88l1.13.13a.75.75 0 0 1 .65.74v2.12a.75.75 0 0 1-.65.74l-1.13.13c-.06.3-.15.59-.27.88l.5 1.02a.75.75 0 0 1-.17.89l-1.5 1.5a.75.75 0 0 1-.89.17l-1.02-.5c-.29.12-.58.21-.88.27l-.13 1.13a.75.75 0 0 1-.74.65h-2.12a.75.75 0 0 1-.74-.65l-.13-1.13a5.5 5.5 0 0 1-.88-.27l-1.02.5a.75.75 0 0 1-.89-.17l-1.5-1.5a.75.75 0 0 1-.17-.89l.5-1.02a5.5 5.5 0 0 1-.27-.88l-1.13-.13a.75.75 0 0 1-.65-.74V9.88a.75.75 0 0 1 .65-.74l1.13-.13c.06-.3.15-.59.27-.88l-.5-1.02a.75.75 0 0 1 .17-.89l1.5-1.5a.75.75 0 0 1 .89-.17l1.02.5c.29-.12.58-.21.88-.27l.13-1.13a.75.75 0 0 1 .74-.65h2.12ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'],
                     ];
                 @endphp
 
@@ -83,7 +92,7 @@
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="{{ $link['icon'] }}" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span class="text-sm font-medium">{{ $link['label'] }}</span>
+                        <span class="text-sm font-medium" x-show="sidebarExpanded">{{ $link['label'] }}</span>
                     </a>
                 @endforeach
             </div>

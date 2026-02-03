@@ -52,12 +52,12 @@
 
                 <div class="flex items-center gap-2">
                     <button type="submit"
-                            class="px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
-                        Save (UI)
+                            class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
+                        Save
                     </button>
                     <button type="button"
                             class="px-4 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
-                        Save as Draft (UI)
+                        Save as Draft
                     </button>
                 </div>
             </div>

@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Sales;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class QuotationController
 {
-    public function index(Request $request)
+    private function quotationRows(): \Illuminate\Support\Collection
     {
-        $rows = collect([
+        return collect([
             [
                 'date' => '2026-02-01',
                 'number' => 'QT-00012',
                 'customer' => 'MUST - Procurement',
                 'status' => 'Sent',
                 'amount' => 1250000,
+                'expiry' => '2026-02-15',
             ],
             [
                 'date' => '2026-01-24',
@@ -22,10 +24,35 @@ class QuotationController
                 'customer' => 'Terex Innovation Lab',
                 'status' => 'Draft',
                 'amount' => 420000,
+                'expiry' => '2026-02-07',
             ],
         ]);
+    }
+
+    public function index(Request $request)
+    {
+        $rows = $this->quotationRows()->map(function (array $row) {
+            $row['view_url'] = route('sales.quotations.show', $row['number']);
+            $row['edit_url'] = route('sales.quotations.edit', $row['number']);
+
+            return $row;
+        });
 
         return view('components.sales.quotations.index', compact('rows'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $rows = $this->quotationRows();
+
+        $pdf = Pdf::loadView('components.sales.quotations.pdf', [
+            'rows' => $rows,
+            'generatedAt' => now(),
+        ])->setPaper('a4', 'portrait');
+
+        $filename = 'quotations-' . now()->format('Ymd-His') . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function create()
@@ -47,10 +74,9 @@ class QuotationController
         return view('components.sales.quotations.create', compact('customers', 'items'));
     }
 
-    // NEW: UI-only store (validates then redirects back)
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'customer_name'   => ['required', 'string', 'max:255'],
             'quotation_date'  => ['required', 'date'],
             'expiry_date'     => ['nullable', 'date'],
@@ -69,9 +95,54 @@ class QuotationController
             'items.*.note'            => ['nullable', 'string'],
         ]);
 
-        // UI-only: no DB yet. Just show success message.
-    return redirect()
-        ->route('sales.quotations.create')
-        ->with('success', 'Quotation form submitted (UI only).');
+        return redirect()
+            ->route('sales.quotations.create')
+            ->with('success', 'Quotation form submitted (UI only).');
+    }
+
+    public function show(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+
+        return view('components.sales.quotations.show', compact('row'));
+    }
+
+    public function edit(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+        $customers = [
+            'MUST - Procurement',
+            'Terex Innovation Lab',
+            'Kumudzi Centre',
+            'Nyasa Tech',
+        ];
+
+        return view('components.sales.quotations.edit', compact('row', 'customers'));
+    }
+
+    public function update(Request $request, string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+
+        $request->validate([
+            'customer_name' => ['required', 'string', 'max:255'],
+            'quotation_date' => ['required', 'date'],
+            'expiry_date' => ['nullable', 'date', 'after_or_equal:quotation_date'],
+            'status' => ['required', 'string', 'in:Draft,Sent,Accepted,Rejected'],
+            'amount' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        return redirect()
+            ->route('sales.quotations.show', $row['number'])
+            ->with('success', 'Quotation updated successfully (UI only).');
+    }
+
+    private function findQuotationOrFail(string $quotationNumber): array
+    {
+        $quotation = $this->quotationRows()->firstWhere('number', $quotationNumber);
+
+        abort_unless($quotation, 404);
+
+        return $quotation;
     }
 }
