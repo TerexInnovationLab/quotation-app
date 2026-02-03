@@ -19,6 +19,9 @@ Route::prefix('sales')->name('sales.')->group(function () {
     Route::post('quotations', [QuotationController::class, 'store'])->name('quotations.store');
     Route::get('quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
     Route::get('quotations/export/pdf', [QuotationController::class, 'exportPdf'])->name('quotations.export.pdf');
+    Route::get('quotations/{quotation}/pdf', [QuotationController::class, 'pdf'])->name('quotations.pdf');
+    Route::get('quotations/{quotation}/download', [QuotationController::class, 'downloadPdf'])->name('quotations.download');
+    Route::get('quotations/{quotation}/convert-to-invoice', [QuotationController::class, 'convertToInvoice'])->name('quotations.convert.invoice');
     Route::get('quotations/{quotation}', [QuotationController::class, 'show'])->name('quotations.show');
     Route::get('quotations/{quotation}/edit', [QuotationController::class, 'edit'])->name('quotations.edit');
     Route::put('quotations/{quotation}', [QuotationController::class, 'update'])->name('quotations.update');

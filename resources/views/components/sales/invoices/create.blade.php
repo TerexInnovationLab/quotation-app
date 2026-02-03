@@ -69,14 +69,14 @@
                             class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                         <option value="">Select customer</option>
                         @foreach($customers as $c)
-                            <option value="{{ $c }}" @selected(old('customer_name') === $c)>{{ $c }}</option>
+                            <option value="{{ $c }}" @selected(old('customer_name', request('customer_name')) === $c)>{{ $c }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div>
                     <label class="text-xs text-slate-500">Invoice Date *</label>
-                    <input type="date" name="invoice_date" value="{{ old('invoice_date', now()->toDateString()) }}"
+                    <input type="date" name="invoice_date" value="{{ old('invoice_date', request('invoice_date', now()->toDateString())) }}"
                            class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                 </div>
 
@@ -96,20 +96,20 @@
 
                 <div>
                     <label class="text-xs text-slate-500">Due Date *</label>
-                    <input type="date" name="due_date" value="{{ old('due_date', now()->addDays(14)->toDateString()) }}"
+                    <input type="date" name="due_date" value="{{ old('due_date', request('due_date', now()->addDays(14)->toDateString())) }}"
                            class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                 </div>
 
                 <div>
                     <label class="text-xs text-slate-500">Invoice # *</label>
-                    <input type="text" name="invoice_number" value="{{ old('invoice_number') }}"
+                    <input type="text" name="invoice_number" value="{{ old('invoice_number', request('invoice_number')) }}"
                            placeholder="e.g. INV-0001"
                            class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="text-xs text-slate-500">Description</label>
-                    <input type="text" name="subject" value="{{ old('subject') }}"
+                    <input type="text" name="subject" value="{{ old('subject', request('subject')) }}"
                            placeholder="e.g. Website development invoice"
                            class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                 </div>
@@ -252,7 +252,7 @@
                 <div class="text-xs text-slate-500">Shown on the invoice</div>
                 <textarea name="notes" rows="6"
                           class="mt-3 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200"
-                          placeholder="e.g. Thank you for your interest...">{{ old('notes') }}</textarea>
+                          placeholder="e.g. Thank you for your interest...">{{ old('notes', request('notes')) }}</textarea>
             </div>
 
             <div class="bg-white border border-slate-200 rounded-2xl p-5">
@@ -260,7 +260,7 @@
                 <div class="text-xs text-slate-500">Payment terms, validity, delivery</div>
                 <textarea name="terms" rows="6"
                           class="mt-3 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200"
-                          placeholder="e.g. Valid for 14 days...">{{ old('terms') }}</textarea>
+                          placeholder="e.g. Valid for 14 days...">{{ old('terms', request('terms')) }}</textarea>
             </div>
         </div>
 
@@ -284,7 +284,7 @@ window.invoiceForm = function() {
     const initialItems = @json($oldItems);
 
     return {
-        currency: @json(old('currency', 'MWK')),
+        currency: @json(old('currency', request('currency', 'MWK'))),
         currencySymbol: 'MWK',
 
         items: (initialItems?.length ? initialItems : [

@@ -48,6 +48,7 @@ class QuotationController
         $pdf = Pdf::loadView('components.sales.quotations.pdf', [
             'rows' => $rows,
             'generatedAt' => now(),
+            'company' => $this->companyProfile(),
         ])->setPaper('a4', 'portrait');
 
         $filename = 'quotations-' . now()->format('Ymd-His') . '.pdf';
@@ -103,8 +104,13 @@ class QuotationController
     public function show(string $quotation)
     {
         $row = $this->findQuotationOrFail($quotation);
+        $document = $this->buildQuotationDocument($row);
 
-        return view('components.sales.quotations.show', compact('row'));
+        return view('components.sales.quotations.show', [
+            'row' => $row,
+            'quotation' => $document['quotation'],
+            'items' => $document['items'],
+        ]);
     }
 
     public function edit(string $quotation)
@@ -137,6 +143,56 @@ class QuotationController
             ->with('success', 'Quotation updated successfully (UI only).');
     }
 
+    public function pdf(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+        $document = $this->buildQuotationDocument($row);
+
+        $pdf = Pdf::loadView('components.sales.quotations.single-pdf', [
+            'row' => $row,
+            'quotation' => $document['quotation'],
+            'items' => $document['items'],
+            'generatedAt' => now(),
+            'company' => $this->companyProfile(),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream($row['number'] . '.pdf');
+    }
+
+    public function downloadPdf(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+        $document = $this->buildQuotationDocument($row);
+
+        $pdf = Pdf::loadView('components.sales.quotations.single-pdf', [
+            'row' => $row,
+            'quotation' => $document['quotation'],
+            'items' => $document['items'],
+            'generatedAt' => now(),
+            'company' => $this->companyProfile(),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download($row['number'] . '.pdf');
+    }
+
+    public function convertToInvoice(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+        $digits = preg_replace('/\D+/', '', $row['number']) ?: '00000';
+
+        return redirect()
+            ->route('sales.invoices.create', [
+                'customer_name' => $row['customer'],
+                'invoice_number' => 'INV-' . $digits,
+                'invoice_date' => $row['date'],
+                'due_date' => $row['expiry'] ?? now()->addDays(14)->toDateString(),
+                'subject' => 'Converted from quotation ' . $row['number'],
+                'notes' => 'Converted from quotation ' . $row['number'],
+                'currency' => 'MWK',
+            ])
+            ->with('success', 'Invoice draft opened from quotation. Review and save.');
+    }
+
     private function findQuotationOrFail(string $quotationNumber): array
     {
         $quotation = $this->quotationRows()->firstWhere('number', $quotationNumber);
@@ -144,5 +200,74 @@ class QuotationController
         abort_unless($quotation, 404);
 
         return $quotation;
+    }
+
+    private function buildQuotationDocument(array $row): array
+    {
+        $vatRate = 16.5;
+        $grandTotal = (int) ($row['amount'] ?? 0);
+        $subTotal = (int) round($grandTotal / (1 + ($vatRate / 100)));
+        $vatAmount = $grandTotal - $subTotal;
+
+        $items = collect([
+            [
+                'name' => 'Professional Services',
+                'note' => 'Quoted service package for ' . $row['customer'],
+                'qty' => 1,
+                'rate' => $subTotal,
+                'discount_type' => 'fixed',
+                'discount' => 0,
+                'line_total' => $subTotal,
+            ],
+        ]);
+
+        $quotation = [
+            'customer_name' => $row['customer'],
+            'quotation_number' => $row['number'],
+            'quotation_date' => $row['date'],
+            'expiry_date' => $row['expiry'] ?? now()->addDays(14)->toDateString(),
+            'subject' => 'Quotation ' . $row['number'],
+            'currency' => 'MWK',
+            'vat_rate' => $vatRate,
+            'notes' => 'Pricing based on current scope and assumptions.',
+            'terms' => 'Validity until ' . ($row['expiry'] ?? now()->addDays(14)->toDateString()) . '.',
+            'sub_total' => $subTotal,
+            'vat_amount' => $vatAmount,
+            'grand_total' => $grandTotal,
+        ];
+
+        return compact('quotation', 'items');
+    }
+
+    private function companyProfile(): array
+    {
+        $logo = null;
+        $logoPaths = [
+            public_path('images/company-logo.png'),
+            public_path('images/company-logo.jpg'),
+            public_path('images/company-logo.jpeg'),
+            public_path('logo.png'),
+            public_path('logo.jpg'),
+            public_path('logo.jpeg'),
+        ];
+
+        foreach ($logoPaths as $path) {
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path) ?: 'image/png';
+            $logo = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path));
+            break;
+        }
+
+        return [
+            'name' => 'AccountYanga Ltd',
+            'tagline' => 'Billing and Invoicing',
+            'email' => 'billing@accountyanga.com',
+            'phone' => '+265 88 000 0000',
+            'address' => 'Lilongwe, Malawi',
+            'logo' => $logo,
+        ];
     }
 }
