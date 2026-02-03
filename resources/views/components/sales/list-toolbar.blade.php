@@ -9,10 +9,10 @@
             <div class="relative">
                 <input type="text"
                        placeholder="{{ $searchPlaceholder }}"
-                       class="w-full sm:w-80 rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                       class="sales-toolbar-input w-full sm:w-80 rounded-xl border-slate-200 bg-white text-slate-900 focus:border-slate-400 focus:ring-slate-200 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 dark:focus:border-slate-500 dark:focus:ring-slate-700">
             </div>
 
-            <select class="rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+            <select class="sales-toolbar-select rounded-xl border-slate-200 bg-white text-slate-900 focus:border-slate-400 focus:ring-slate-200 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 dark:focus:border-slate-500 dark:focus:ring-slate-700">
                 @foreach($statusOptions as $opt)
                     <option>{{ $opt }}</option>
                 @endforeach

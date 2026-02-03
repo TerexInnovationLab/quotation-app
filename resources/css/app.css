@@ -247,3 +247,14 @@
 .dark form textarea::placeholder {
     color: hsl(0 0% 65%);
 }
+
+.dark .sales-toolbar-input::placeholder {
+    color: hsl(0 0% 65%);
+}
+
+.dark .sales-toolbar-select,
+.dark .sales-toolbar-select option {
+    background-color: hsl(0 0% 10%);
+    color: hsl(0 0% 96%);
+    border-color: hsl(0 0% 24%);
+}
