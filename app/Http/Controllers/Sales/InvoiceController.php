@@ -37,7 +37,12 @@ class InvoiceController
      */
     public function index(Request $request)
     {
-        $rows = $this->invoiceRows();
+        $rows = $this->invoiceRows()->map(function (array $row) {
+            $row['view_url'] = route('sales.invoices.show', $row['number']);
+            $row['edit_url'] = route('sales.invoices.edit', $row['number']);
+
+            return $row;
+        });
 
         return view('components.sales.invoices.index', compact('rows'));
     }
@@ -102,6 +107,47 @@ class InvoiceController
     }
 
     /**
+     * Show invoice details
+     */
+    public function show(string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+
+        return view('components.sales.invoices.show', compact('row'));
+    }
+
+    /**
+     * Show invoice edit form
+     */
+    public function edit(string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+        $customers = ['Kumudzi Centre', 'Nyasa Tech', 'ABC Company', 'XYZ Solutions'];
+
+        return view('components.sales.invoices.edit', compact('row', 'customers'));
+    }
+
+    /**
+     * Update invoice (UI-only)
+     */
+    public function update(Request $request, string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'invoice_date' => 'required|date',
+            'due_date' => 'required|date|after_or_equal:invoice_date',
+            'status' => 'required|string|in:Draft,Sent,Paid,Unpaid,Overdue',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        return redirect()
+            ->route('sales.invoices.show', $row['number'])
+            ->with('success', 'Invoice updated successfully (UI only).');
+    }
+
+    /**
      * Download invoice as PDF
      */
     public function downloadPdf($id)
@@ -122,5 +168,14 @@ class InvoiceController
             'success' => true,
             'message' => 'Invoice sent successfully (frontend only)',
         ]);
+    }
+
+    private function findInvoiceOrFail(string $invoiceNumber): array
+    {
+        $invoice = $this->invoiceRows()->firstWhere('number', $invoiceNumber);
+
+        abort_unless($invoice, 404);
+
+        return $invoice;
     }
 }

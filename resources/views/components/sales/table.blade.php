@@ -37,8 +37,22 @@
                         @endforeach
 
                         <td class="px-4 py-3 text-right whitespace-nowrap">
-                            <button class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 hover:bg-slate-50">View</button>
-                            <button class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 hover:bg-slate-50">Edit</button>
+                            @php
+                                $viewUrl = data_get($row, 'view_url');
+                                $editUrl = data_get($row, 'edit_url');
+                            @endphp
+
+                            @if($viewUrl)
+                                <a href="{{ $viewUrl }}" class="inline-flex px-3 py-1.5 text-xs rounded-lg border border-slate-200 hover:bg-slate-50">View</a>
+                            @else
+                                <button type="button" class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed" disabled>View</button>
+                            @endif
+
+                            @if($editUrl)
+                                <a href="{{ $editUrl }}" class="inline-flex px-3 py-1.5 text-xs rounded-lg border border-slate-200 hover:bg-slate-50">Edit</a>
+                            @else
+                                <button type="button" class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed" disabled>Edit</button>
+                            @endif
                         </td>
                     </tr>
                 @empty
