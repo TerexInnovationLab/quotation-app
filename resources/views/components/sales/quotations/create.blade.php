@@ -122,10 +122,7 @@
                 <div>
                     <div class="text-sm font-semibold">Line Items</div>
                     <div class="text-xs text-slate-500">Add items/services, quantities, rates</div>
-                    <div class="mt-2 inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-sm text-amber-900">
-                        <span class="font-medium">Alpine state:</span>
-                        <span x-text="'LIVE - rows: ' + items.length">NOT LIVE</span>
-                    </div>
+
                 </div>
 
                 <button type="button" @click="addItem()"

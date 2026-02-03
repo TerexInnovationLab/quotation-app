@@ -11,12 +11,12 @@
 
     {{-- Sidebar --}}
     <aside class="w-72 bg-white border-r border-slate-200 hidden lg:flex lg:flex-col">
-        <div class="h-16 px-5 flex items-center gap-3 border-b border-slate-200">
-            <div class="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-semibold">
-                Z
+        <div class="h-16 px-5 flex items-center gap-3 ">
+            <div class="h-9 w-9 rounded-xl bg-[#465FFF] text-white grid place-items-center font-semibold">
+                A
             </div>
             <div class="leading-tight">
-                <div class="font-semibold">Books UI</div>
+                <div class="font-semibold">AccountYanga</div>
                 <div class="text-xs text-slate-500">Sales Module</div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                     @endphp
                     <a href="{{ route($link['route']) }}"
                        class="flex items-center gap-3 px-3 py-2 rounded-xl border
-                              {{ $isActive ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-transparent hover:bg-slate-100' }}">
+                              {{ $isActive ? 'bg-[#465FFF] text-white border-[#465FFF]' : 'bg-white text-slate-700 border-transparent hover:bg-slate-100' }}">
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="{{ $link['icon'] }}" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>

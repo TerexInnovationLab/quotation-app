@@ -5,7 +5,7 @@
 @section('page_title','Dashboard')
 
 @section('primary_action')
-    <button class="px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
+    <button class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
         + New Transaction
     </button>
 @endsection
@@ -64,12 +64,12 @@
 
                 <div class="flex items-center gap-2">
                     <button @click="setRange('6')"
-                            :class="range === '6' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
+                            :class="range === '6' ? 'bg-[#465FFF] text-white' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
                             class="px-3 py-2 text-sm rounded-xl border">
                         Last 6 months
                     </button>
                     <button @click="setRange('12')"
-                            :class="range === '12' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
+                            :class="range === '12' ? 'bg-[#465FFF] text-white' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
                             class="px-3 py-2 text-sm rounded-xl border">
                         Last 12 months
                     </button>
