@@ -9,22 +9,6 @@ import Chart from "chart.js/auto";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) =>
-        resolvePageComponent(
-            `./pages/${name}.vue`,
-            import.meta.glob<DefineComponent>('./pages/**/*.vue'),
-        ),
-    setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .mount(el);
-    },
-    progress: {
-        color: '#4B5563',
-    },
-});
 declare global {
   interface Window {
     Alpine: any;
@@ -35,5 +19,25 @@ declare global {
 window.Alpine = Alpine;
 window.Chart = Chart;
 Alpine.start();
+
+// Only boot Inertia when an Inertia root exists on the page.
+if (document.querySelector('[data-page]')) {
+    createInertiaApp({
+        title: (title) => (title ? `${title} - ${appName}` : appName),
+        resolve: (name) =>
+            resolvePageComponent(
+                `./pages/${name}.vue`,
+                import.meta.glob<DefineComponent>('./pages/**/*.vue'),
+            ),
+        setup({ el, App, props, plugin }) {
+            createApp({ render: () => h(App, props) })
+                .use(plugin)
+                .mount(el);
+        },
+        progress: {
+            color: '#4B5563',
+        },
+    });
+}
 // This will set light / dark mode on page load...
 initializeTheme();

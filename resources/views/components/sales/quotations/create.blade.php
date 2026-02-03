@@ -19,7 +19,8 @@
 @endphp
 
 <div class="max-w-6xl space-y-4"
-     x-data="quotationForm({ initialItems: @json($oldItems) })"
+     x-data="window.quotationForm()"
+     x-init="init()"
 >
     @if (session('success'))
         <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
@@ -121,6 +122,10 @@
                 <div>
                     <div class="text-sm font-semibold">Line Items</div>
                     <div class="text-xs text-slate-500">Add items/services, quantities, rates</div>
+                    <div class="mt-2 inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-sm text-amber-900">
+                        <span class="font-medium">Alpine state:</span>
+                        <span x-text="'LIVE - rows: ' + items.length">NOT LIVE</span>
+                    </div>
                 </div>
 
                 <button type="button" @click="addItem()"
@@ -146,48 +151,41 @@
                     <tbody class="divide-y divide-slate-100">
                         <template x-for="(row, idx) in items" :key="idx">
                             <tr class="hover:bg-slate-50 align-top">
+                                <!-- Item -->
                                 <td class="px-4 py-3 min-w-[280px]">
                                     <input type="text"
-                                           :name="`items[${idx}][name]`"
-                                           x-model="row.name"
-                                           placeholder="Item / Service name"
-                                           class="w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                        :name="`items[${idx}][name]`"
+                                        x-model="row.name"
+                                        placeholder="Item / Service name"
+                                        class="w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
 
-                                    <div class="mt-2 text-xs text-slate-500">
-                                        Quick pick:
-                                        @foreach($items as $it)
-                                            <button type="button"
-                                                    class="underline hover:no-underline mr-2"
-                                                    @click="pickItem(idx, @js($it['name']), @js($it['rate']))">
-                                                {{ $it['name'] }}
-                                            </button>
-                                        @endforeach
-                                    </div>
                                     <div class="mt-3">
-                                    <label class="text-xs text-slate-500">Line item note</label>
-                                    <textarea rows="2"
-                                            :name="`items[${idx}][note]`"
-                                            x-model="row.note"
-                                            placeholder="Optional note (e.g. deliverables, scope, timeline)"
-                                            class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200"></textarea>
-                                </div>
-
+                                        <label class="text-xs text-slate-500">Line item note</label>
+                                        <textarea rows="2"
+                                                :name="`items[${idx}][note]`"
+                                                x-model="row.note"
+                                                placeholder="Optional note (e.g. deliverables, scope, timeline)"
+                                                class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200"></textarea>
+                                    </div>
                                 </td>
 
+                                <!-- Qty -->
                                 <td class="px-4 py-3">
                                     <input type="number" step="0.01" min="0"
-                                           :name="`items[${idx}][qty]`"
-                                           x-model.number="row.qty"
-                                           class="w-full text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                        :name="`items[${idx}][qty]`"
+                                        x-model.number="row.qty"
+                                        class="w-full text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                                 </td>
 
+                                <!-- Rate -->
                                 <td class="px-4 py-3">
                                     <input type="number" step="1" min="0"
-                                           :name="`items[${idx}][rate]`"
-                                           x-model.number="row.rate"
-                                           class="w-full text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                        :name="`items[${idx}][rate]`"
+                                        x-model.number="row.rate"
+                                        class="w-full text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                                 </td>
 
+                                <!-- Discount -->
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2 justify-end">
                                         <select :name="`items[${idx}][discount_type]`"
@@ -203,18 +201,15 @@
                                             class="w-28 text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200"
                                             placeholder="0">
                                     </div>
-
-                                    <div class="mt-2 text-xs text-slate-500 text-right"
-                                        x-show="row.discount_type === 'percent'">
-                                        % discount applies to (qty × rate)
-                                    </div>
                                 </td>
 
-
+                                <!-- Amount -->
                                 <td class="px-4 py-3 text-right font-semibold whitespace-nowrap">
-                                <span x-text="currencySymbol"></span> <span x-text="format(lineTotal(row))"></span>
+                                    <span x-text="currencySymbol"></span>
+                                    <span x-text="format(lineTotal(row))"></span>
                                 </td>
 
+                                <!-- Remove -->
                                 <td class="px-4 py-3 text-right">
                                     <button type="button" @click="removeItem(idx)"
                                             class="px-3 py-2 text-xs rounded-xl border border-slate-200 hover:bg-slate-50">
@@ -224,6 +219,7 @@
                             </tr>
                         </template>
                     </tbody>
+
                 </table>
             </div>
 
@@ -287,13 +283,13 @@
 
 {{-- Alpine logic (uses Alpine from your Vite app.ts) --}}
 <script>
-window.quotationForm = function({ initialItems }) {
+window.quotationForm = function() {
+    const initialItems = @json($oldItems);
+
     return {
-        // Currency
         currency: @json(old('currency', 'MWK')),
         currencySymbol: 'MWK',
 
-        // Items
         items: (initialItems?.length ? initialItems : [
             { name: '', qty: 1, rate: 0, discount_type: 'fixed', discount: 0, note: '' }
         ]).map(r => ({
@@ -305,7 +301,6 @@ window.quotationForm = function({ initialItems }) {
             note: r.note ?? '',
         })),
 
-        // VAT
         vatRate: 16.5,
 
         init() {
@@ -314,13 +309,7 @@ window.quotationForm = function({ initialItems }) {
         },
 
         setCurrencySymbol() {
-            const map = {
-                MWK: 'MWK',
-                USD: '$',
-                ZAR: 'R',
-                EUR: '€',
-                GBP: '£',
-            };
+            const map = { MWK: 'MWK', USD: '$', ZAR: 'R', EUR: '€', GBP: '£' };
             this.currencySymbol = map[this.currency] ?? this.currency;
         },
 
@@ -333,16 +322,8 @@ window.quotationForm = function({ initialItems }) {
             if (this.items.length === 0) this.addItem();
         },
 
-        pickItem(idx, name, rate) {
-            this.items[idx].name = name;
-            this.items[idx].rate = Number(rate || 0);
-            if (!this.items[idx].qty) this.items[idx].qty = 1;
-        },
-
         lineBase(row) {
-            const qty = Number(row.qty || 0);
-            const rate = Number(row.rate || 0);
-            return qty * rate;
+            return Number(row.qty || 0) * Number(row.rate || 0);
         },
 
         lineDiscount(row) {
@@ -350,19 +331,15 @@ window.quotationForm = function({ initialItems }) {
             const d = Number(row.discount || 0);
 
             if (row.discount_type === 'percent') {
-                // cap at 100%
                 const pct = Math.min(Math.max(d, 0), 100);
                 return base * (pct / 100);
             }
 
-            // fixed discount
             return Math.min(Math.max(d, 0), base);
         },
 
         lineTotal(row) {
-            const base = this.lineBase(row);
-            const disc = this.lineDiscount(row);
-            const total = base - disc;
+            const total = this.lineBase(row) - this.lineDiscount(row);
             return total < 0 ? 0 : Math.round(total);
         },
 
@@ -371,8 +348,7 @@ window.quotationForm = function({ initialItems }) {
         },
 
         vatAmount() {
-            const rate = Number(this.vatRate || 0);
-            return Math.round(this.subTotal() * (rate / 100));
+            return Math.round(this.subTotal() * (Number(this.vatRate || 0) / 100));
         },
 
         grandTotal() {
@@ -385,4 +361,5 @@ window.quotationForm = function({ initialItems }) {
     }
 }
 </script>
+
 @endsection
