@@ -19,6 +19,7 @@
      x-data="salesDashboard({
         labels12: @js($chart['labels12']),
         sales12:  @js($chart['sales12']),
+        
         labels6:  @js($chart['labels6']),
         sales6:   @js($chart['sales6']),
      })"
@@ -75,22 +76,32 @@
                 </div>
             </div>
 
-            <div class="mt-4">
-                <canvas id="salesChart" class="w-full" height="110"></canvas>
-            </div>
+                <div class="mt-4 h-64">
+                    <canvas id="salesChart" class="w-full"></canvas>
+                </div>
 
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                 <div class="rounded-xl border border-slate-200 p-3">
                     <div class="text-xs text-slate-500">Best Month</div>
-                    <div class="font-semibold" x-text="bestMonthLabel + ' • MWK ' + format(bestMonthValue)"></div>
+
+                <div class="font-semibold"
+                    x-text="bestMonthLabel + ' • MWK ' + format(bestMonthValue)">
                 </div>
+
+                </div>
+
                 <div class="rounded-xl border border-slate-200 p-3">
                     <div class="text-xs text-slate-500">Average / Month</div>
-                    <div class="font-semibold" x-text="'MWK ' + format(avg)"></div>
+                    <div class="font-semibold"
+                        x-text="'MWK ' + format(avg)">
+                    </div>
                 </div>
+
                 <div class="rounded-xl border border-slate-200 p-3">
                     <div class="text-xs text-slate-500">Latest Month</div>
-                    <div class="font-semibold" x-text="latestLabel + ' • MWK ' + format(latestValue)"></div>
+                    <div class="font-semibold"
+                        x-text="latestLabel + ' • MWK ' + format(latestValue)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,9 +205,6 @@
     </div>
 </div>
 
-{{-- Alpine + Chart.js (interactive) --}}
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <script>
 function salesDashboard(payload) {

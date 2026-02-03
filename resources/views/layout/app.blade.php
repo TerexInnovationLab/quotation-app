@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title', 'Sales')</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css','resources/js/app.ts'])
 </head>
 <body class="bg-slate-50 text-slate-900">
 <div class="min-h-screen flex">
@@ -33,7 +33,6 @@
                         ['label' => 'Quotations', 'route' => 'sales.quotations.index', 'icon' => 'M7 7h10M7 11h10M7 15h6'],
                         ['label' => 'Invoices', 'route' => 'sales.invoices.index', 'icon' => 'M6 2h8l4 4v16H6z'],
                         ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'icon' => 'M12 1v22M7 6h10M7 18h10'],
-                        ['label' => 'Sales Orders', 'route' => 'sales.orders.index', 'icon' => 'M4 7h16M4 12h16M4 17h16'],
                     ];
                 @endphp
 
