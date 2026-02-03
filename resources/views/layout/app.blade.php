@@ -72,9 +72,6 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button class="hidden sm:inline-flex px-3 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
-                    Export
-                </button>
                 @yield('primary_action')
                 <div class="ml-2 h-9 w-9 rounded-xl bg-slate-100 grid place-items-center text-sm font-semibold">
                     TI

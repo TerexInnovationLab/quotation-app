@@ -5,9 +5,7 @@
 @section('page_title','Dashboard')
 
 @section('primary_action')
-    <button class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
-        + New Transaction
-    </button>
+
 @endsection
 
 @section('content')
