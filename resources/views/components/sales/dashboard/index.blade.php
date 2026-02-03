@@ -169,7 +169,7 @@
     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200">
             <div class="text-sm font-semibold">Payments Due by Customer</div>
-            <div class="text-xs text-slate-500">Aging summary (dummy data)</div>
+            <div class="text-xs text-slate-500">Aging summary</div>
         </div>
 
         <div class="overflow-x-auto">

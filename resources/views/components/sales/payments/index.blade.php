@@ -5,7 +5,7 @@
 @section('page_title','Payments Received')
 
 @section('primary_action')
-    <button class="px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
+    <button class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
         + Record Payment
     </button>
 @endsection
