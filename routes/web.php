@@ -1,17 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
+use App\Http\Controllers\Sales\DashboardController;
+use App\Http\Controllers\Sales\QuotationController;
+use App\Http\Controllers\Sales\InvoiceController;
+use App\Http\Controllers\Sales\PaymentsReceivedController;
+use App\Http\Controllers\Sales\SalesOrderController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+Route::redirect('/', '/sales/quotations');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-require __DIR__.'/settings.php';
+Route::prefix('sales')->name('sales.')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('quotations', [QuotationController::class, 'index'])->name('quotations.index');
+    Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('payments-received', [PaymentsReceivedController::class, 'index'])->name('payments.index');
+    Route::get('sales-orders', [SalesOrderController::class, 'index'])->name('orders.index');
+});
