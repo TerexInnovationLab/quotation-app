@@ -10,9 +10,13 @@ use App\Http\Controllers\Sales\SettingsController;
 use App\Http\Controllers\Sales\ClientController;
 use App\Http\Controllers\Sales\ProductServiceController;
 
-Route::redirect('/', '/sales/quotations');
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('sales.dashboard')
+        : redirect()->route('login');
+});
 
-Route::prefix('sales')->name('sales.')->group(function () {
+Route::middleware('auth')->prefix('sales')->name('sales.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('quotations', [QuotationController::class, 'index'])->name('quotations.index');

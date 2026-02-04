@@ -50,6 +50,7 @@
 <div class="h-screen flex overflow-hidden"
      x-data="{
         sidebarExpanded: true,
+        showLogoutConfirm: false,
         init() {
             const saved = localStorage.getItem('sidebarExpanded');
             if (saved !== null) {
@@ -113,7 +114,7 @@
         </nav>
 
         <div class="shrink-0 p-4 border-t border-slate-200">
-            <form method="POST" action="/logout">
+            <form method="POST" action="{{ route('logout') }}" x-ref="logoutForm" @submit.prevent="showLogoutConfirm = true">
                 @csrf
                 <button type="submit"
                         class="w-full rounded-xl border border-[var(--app-primary)] bg-white px-3 py-2 text-sm font-medium text-[var(--app-primary)] hover:bg-slate-100 flex items-center justify-center gap-2">
@@ -152,6 +153,28 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6">
             @yield('content')
         </main>
+    </div>
+
+    <div x-show="showLogoutConfirm"
+         x-transition.opacity
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
+         style="display: none;">
+        <div @click.outside="showLogoutConfirm = false" class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
+            <h3 class="text-lg font-semibold text-slate-900">Confirm logout</h3>
+            <p class="mt-2 text-sm text-slate-600">Are you sure you want to log out of your account?</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button type="button"
+                        @click="showLogoutConfirm = false"
+                        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
+                    Cancel
+                </button>
+                <button type="button"
+                        @click="$refs.logoutForm.submit()"
+                        class="rounded-lg bg-[var(--app-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--app-primary-hover)]">
+                    Logout
+                </button>
+            </div>
+        </div>
     </div>
 
 </div>
