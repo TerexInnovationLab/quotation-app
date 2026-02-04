@@ -272,7 +272,7 @@
             </a>
             <button type="submit"
                     class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
-                Save Invoice (UI)
+                Save Invoice 
             </button>
         </div>
     </form>

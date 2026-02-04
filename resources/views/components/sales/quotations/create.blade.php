@@ -271,8 +271,8 @@
                 Cancel
             </a>
             <button type="submit"
-                    class="px-4 py-2 text-sm rounded-xl bg-slate-900 text-white hover:bg-slate-800">
-                Save Quotation (UI)
+                    class="px-4 py-2 text-sm rounded-xl bg-[#465FFF] text-white hover:bg-[#3d54e6]">
+                Save Quotation
             </button>
         </div>
     </form>
