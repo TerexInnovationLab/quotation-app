@@ -15,9 +15,6 @@
             <label for="password" class="mb-2 block text-sm font-medium">Password</label>
             <input id="password" name="password" type="password" required autofocus autocomplete="current-password"
                    class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 focus:border-fuchsia-500 focus:ring-fuchsia-500">
-            @error('password')
-                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-            @enderror
         </div>
         <button type="submit"
                 class="w-full rounded-xl bg-fuchsia-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-700">

@@ -17,18 +17,12 @@
             <label for="email" class="mb-2 block text-sm font-medium">Email</label>
             <input id="email" name="email" type="email" value="{{ old('email', $email) }}" required autocomplete="email"
                    class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 focus:border-blue-500 focus:ring-blue-500">
-            @error('email')
-                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-            @enderror
         </div>
 
         <div>
             <label for="password" class="mb-2 block text-sm font-medium">New password</label>
             <input id="password" name="password" type="password" required autocomplete="new-password"
                    class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 focus:border-blue-500 focus:ring-blue-500">
-            @error('password')
-                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-            @enderror
         </div>
 
         <div>

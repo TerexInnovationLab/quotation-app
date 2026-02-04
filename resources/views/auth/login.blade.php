@@ -21,23 +21,24 @@
             <label for="email" class="mb-2 block text-sm font-medium">Email</label>
             <input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email"
                    class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 focus:border-teal-500 focus:ring-teal-500">
-            @error('email')
-                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-            @enderror
         </div>
 
         <div>
-            <div class="mb-2 flex items-center justify-between">
-                <label for="password" class="block text-sm font-medium">Password</label>
-                @if ($canResetPassword ?? false)
-                    <a href="{{ route('password.request') }}" class="text-xs font-semibold text-teal-700 hover:text-teal-800">Forgot password?</a>
-                @endif
+            <label for="password" class="mb-2 block text-sm font-medium">Password</label>
+            <div x-data="{ showPassword: false }" class="relative">
+                <input id="password" name="password" x-bind:type="showPassword ? 'text' : 'password'" required autocomplete="current-password"
+                       class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 pr-12 focus:border-teal-500 focus:ring-teal-500">
+                <button type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute inset-y-0 right-0 mr-3 text-xs font-semibold text-slate-600 hover:text-slate-800">
+                    <span x-text="showPassword ? 'Hide' : 'Show'"></span>
+                </button>
             </div>
-            <input id="password" name="password" type="password" required autocomplete="current-password"
-                   class="w-full rounded-xl border-slate-300 bg-white px-4 py-3 focus:border-teal-500 focus:ring-teal-500">
-            @error('password')
-                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-            @enderror
+            @if ($canResetPassword ?? false)
+                <div class="mt-2">
+                    <a href="{{ route('password.request') }}" class="text-xs font-semibold text-teal-700 hover:text-teal-800">Forgot password?</a>
+                </div>
+            @endif
         </div>
 
         <label class="flex items-center gap-2 text-sm text-slate-700">

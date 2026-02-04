@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css','resources/js/app.js'])
     <style>
         body {
@@ -50,5 +51,23 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const messages = @json($errors->all());
+                const html = '<ul style="text-align:left;margin:0;padding-left:1rem;">'
+                    + messages.map(function (m) { return '<li>' + m + '</li>'; }).join('')
+                    + '</ul>';
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please fix the following',
+                    html: html,
+                    confirmButtonText: 'Okay',
+                    confirmButtonColor: '#0d9488'
+                });
+            });
+        </script>
+    @endif
 </body>
 </html>
