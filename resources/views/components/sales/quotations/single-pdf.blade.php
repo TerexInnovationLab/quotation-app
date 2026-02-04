@@ -24,17 +24,19 @@
 
         .watermark {
             position: fixed;
-            top: 41%;
+            top: 43%;
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 76px;
-            letter-spacing: 4px;
+            font-size: 56px;
+            letter-spacing: 2px;
             font-weight: 700;
-            color: #64748b;
-            opacity: 0.08;
+            color: #1e293b;
+            opacity: 0.06;
             transform: rotate(-25deg);
             z-index: -1;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .header-table,
@@ -44,6 +46,10 @@
         .notes-table {
             width: 100%;
             border-collapse: collapse;
+        }
+
+        .header-table {
+            page-break-inside: avoid;
         }
 
         .header-table td {
@@ -248,52 +254,46 @@
             white-space: pre-line;
         }
 
-        .auth-table {
-            margin-top: 16px;
+        .verification-stack {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            gap: 8px;
+            page-break-inside: avoid;
         }
 
-        .auth-table td {
-            width: 50%;
-            border: 0;
-            padding: 0;
-            vertical-align: top;
-        }
-
-        .stamp-cell {
+        .company-stamp {
+            margin-top: 12px;
             text-align: left;
         }
 
+        .qr-panel,
+        .stamp-panel {
+            display: inline-block;
+            width: 104px;
+            box-sizing: border-box;
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            padding: 6px;
+            background: #ffffff;
+        }
+
+        .stamp-panel {
+            background: #fff7f7;
+            border-color: #fecaca;
+        }
+
         .seal-image {
-            width: 130px;
-            height: 130px;
+            width: 84px;
+            height: 84px;
             object-fit: contain;
             opacity: 0.88;
         }
 
-        .seal-fallback {
-            width: 126px;
-            height: 126px;
-            border: 3px solid #dc2626;
-            color: #dc2626;
-            border-radius: 50%;
-            text-align: center;
-            transform: rotate(-13deg);
-            box-sizing: border-box;
-            padding: 30px 8px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            line-height: 1.3;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .qr-cell {
-            text-align: right;
-        }
-
         .qr-image {
-            width: 112px;
-            height: 112px;
+            width: 84px;
+            height: 84px;
             border: 1px solid #cbd5e1;
             padding: 4px;
             background: #ffffff;
@@ -301,20 +301,115 @@
 
         .qr-fallback {
             display: inline-block;
-            width: 112px;
-            height: 112px;
-            line-height: 112px;
+            width: 84px;
+            height: 84px;
+            line-height: 84px;
             text-align: center;
             border: 1px dashed #cbd5e1;
             color: #94a3b8;
-            font-size: 10px;
+            font-size: 8px;
             text-transform: uppercase;
         }
 
         .auth-note {
-            margin-top: 6px;
+            margin-top: 5px;
             color: #64748b;
-            font-size: 10px;
+            font-size: 8px;
+            word-break: break-all;
+        }
+
+        .stamp-realistic {
+            width: 88px;
+            height: 88px;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+            border: 2px solid #dc2626;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #dc2626;
+            overflow: hidden;
+            transform: rotate(-12deg);
+        }
+
+        .stamp-realistic .stamp-edge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            bottom: -3px;
+            left: -3px;
+            border: 3px dashed rgba(220, 38, 38, 0.9);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .stamp-realistic .stamp-core {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            bottom: 7px;
+            left: 7px;
+            border: 2px solid rgba(220, 38, 38, 0.8);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .stamp-realistic .stamp-top,
+        .stamp-realistic .stamp-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 8px;
+            letter-spacing: 0.9px;
+            font-weight: 800;
+            z-index: 2;
+        }
+
+        .stamp-realistic .stamp-top {
+            top: 12px;
+        }
+
+        .stamp-realistic .stamp-bottom {
+            bottom: 11px;
+        }
+
+        .stamp-realistic .stamp-stars-top,
+        .stamp-realistic .stamp-stars-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 7px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .stamp-realistic .stamp-stars-top {
+            top: 22px;
+        }
+
+        .stamp-realistic .stamp-stars-bottom {
+            bottom: 22px;
+        }
+
+        .stamp-realistic .stamp-band {
+            position: absolute;
+            left: -8px;
+            right: -8px;
+            top: 35px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 1.2px;
+            font-weight: 900;
+            color: #dc2626;
+            background: #ffffff;
+            border-top: 2px solid #dc2626;
+            border-bottom: 2px solid #dc2626;
+            z-index: 3;
         }
 
         .footer {
@@ -327,7 +422,7 @@
     </style>
 </head>
 <body>
-    <div class="watermark">{{ $watermarkText ?? 'QUOTATION' }}</div>
+    <div class="watermark">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'QUOTATION')) }}</div>
     <div class="top-accent"></div>
 
     <table class="header-table">
@@ -344,6 +439,25 @@
                     {{ $company['address'] }}<br>
                     {{ $company['email'] }} | {{ $company['phone'] }}
                 </div>
+                <div class="company-stamp">
+                    <div class="stamp-panel">
+                        <div class="section-title">Official Stamp</div>
+                        @if(!empty($company['seal']))
+                            <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
+                        @else
+                            <div class="stamp-realistic">
+                                <div class="stamp-edge"></div>
+                                <div class="stamp-core"></div>
+                                <div class="stamp-top">APPROVED</div>
+                                <div class="stamp-stars-top">* * *</div>
+                                <div class="stamp-band">APPROVED</div>
+                                <div class="stamp-stars-bottom">* * *</div>
+                                <div class="stamp-bottom">APPROVED</div>
+                            </div>
+                        @endif
+                        <div class="auth-note">Digitally approved by {{ $company['name'] }}</div>
+                    </div>
+                </div>
             </td>
             <td class="meta-wrap">
                 <h2 class="doc-title">QUOTATION</h2>
@@ -353,6 +467,16 @@
                     <div class="row"><span class="label">Issue Date:</span> {{ $quotation['quotation_date'] }}</div>
                     <div class="row"><span class="label">Valid Until:</span> {{ $quotation['expiry_date'] }}</div>
                     <div class="row"><span class="label">Generated:</span> {{ $generatedAt->format('Y-m-d H:i') }}</div>
+                </div>
+                <div class="verification-stack">
+                    <div class="qr-panel">
+                        <div class="section-title">QR Verification</div>
+                        @if(!empty($documentQr))
+                            <img src="{{ $documentQr }}" alt="Quotation QR code" class="qr-image">
+                        @else
+                            <div class="qr-fallback">QR unavailable</div>
+                        @endif
+                    </div>
                 </div>
             </td>
         </tr>
@@ -430,31 +554,6 @@
             <td>
                 <div class="section-title">Terms</div>
                 <div class="notes-content">{{ $quotation['terms'] }}</div>
-            </td>
-        </tr>
-    </table>
-
-    <table class="auth-table">
-        <tr>
-            <td class="stamp-cell">
-                <div class="section-title">Seal / Stamp</div>
-                @if(!empty($company['seal']))
-                    <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
-                @else
-                    <div class="seal-fallback">
-                        {{ $company['name'] }}<br>Authorized
-                    </div>
-                @endif
-                <div class="auth-note">Digitally approved by {{ $company['name'] }}</div>
-            </td>
-            <td class="qr-cell">
-                <div class="section-title">QR Verification</div>
-                @if(!empty($documentQr))
-                    <img src="{{ $documentQr }}" alt="Quotation QR code" class="qr-image">
-                @else
-                    <div class="qr-fallback">QR unavailable</div>
-                @endif
-                <div class="auth-note">{{ $documentUrl ?? '' }}</div>
             </td>
         </tr>
     </table>
