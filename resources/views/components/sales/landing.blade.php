@@ -24,6 +24,7 @@
   .brand-ring { --tw-ring-color: var(--brand); }
   .brand-border { border-color: var(--brand); }
   .brand-shadow { box-shadow: 0 20px 40px rgba(70, 95, 255, 0.18); }
+  .top-link:hover { color: var(--brand); }
 
   /* Scroll reveal animations */
   [data-reveal]{
@@ -72,15 +73,15 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-8 text-sm text-slate-600">
-                <a href="#features" class="hover:text-slate-900">Features</a>
-                <a href="#how" class="hover:text-slate-900">How it works</a>
-                <a href="#security" class="hover:text-slate-900">Security</a>
-                <a href="#faq" class="hover:text-slate-900">FAQ</a>
+                <a href="#features" class="top-link">Features</a>
+                <a href="#how" class="top-link">How it works</a>
+                <a href="#security" class="top-link">Security</a>
+                <a href="#faq" class="top-link">FAQ</a>
             </nav>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('login') }}"
-                   class="hidden sm:inline-flex px-4 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
+                <a href="{{ url('/login') }}"
+                   class="top-link hidden sm:inline-flex px-4 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
                     Login
                 </a>
                 <a href="#cta"
@@ -101,10 +102,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <div data-reveal>
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-600">
-                        <span class="h-2 w-2 rounded-full brand-bg"></span>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet voluptate quaerat mollitia.
-                    </div>
 
                     <h1 class="mt-5 text-4xl sm:text-5xl font-semibold tracking-tight">
                         Create Quotations, Invoices & Receipts — fast, clean, professional.
@@ -378,29 +375,8 @@
         </div>
     </section>
 
-    {{-- CTA --}}
-    <section id="cta" class="bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <div>
-                    <h2 class="text-3xl font-semibold tracking-tight">Ready to streamline your sales workflow?</h2>
-                    <p class="mt-3 text-slate-200">
-                        Start with quotations and invoices, then expand into approvals, PDFs, payment integrations,
-                        and reporting as your needs grow.
-                    </p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-3 lg:justify-end">
-                    <a href="/sales/quotations/create"
-                       class="inline-flex justify-center px-5 py-3 rounded-2xl text-white brand-bg hover:opacity-95">
-                        Start Now
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- FAQ --}}
-    <section id="faq" class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+    <section id="faq" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div class="max-w-2xl">
             <h2 class="text-3xl font-semibold tracking-tight">FAQ</h2>
             <p class="mt-3 text-slate-600">Quick answers about the system.</p>
@@ -426,16 +402,16 @@
     </section>
 
     {{-- Footer --}}
-    <footer">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div class="text-sm text-slate-600">
-                <div class="mt-1">© {{ date('Y') }} • Designed by Terex Labs • All rights reserved </div>
+    <footer>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col items-center gap-6">
+            <div class="text-sm text-slate-600 text-center">
+                <div class="mt-1">&copy; {{ date('Y') }} &bull; Designed by Terex Labs &bull; All rights reserved</div>
             </div>
 
             <div class="flex items-center gap-4 text-sm text-slate-600">
                 <a href="#features" class="hover:text-slate-900">Features</a>
                 <a href="#how" class="hover:text-slate-900">How it works</a>
-                <a href="{{ route('login') }}" class="hover:text-slate-900">Login</a>
+                <a href="{{ url('/login') }}" class="hover:text-slate-900">Login</a>
             </div>
         </div>
     </footer>
@@ -462,3 +438,4 @@
 
 </body>
 </html>
+
