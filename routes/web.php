@@ -10,11 +10,9 @@ use App\Http\Controllers\Sales\SettingsController;
 use App\Http\Controllers\Sales\ClientController;
 use App\Http\Controllers\Sales\ProductServiceController;
 
-Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route('sales.dashboard')
-        : redirect()->route('login');
-});
+Route::view('/landing', 'components.sales.landing')->name('landing');
+
+Route::redirect('/', '/landing');
 
 Route::middleware('auth')->prefix('sales')->name('sales.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
