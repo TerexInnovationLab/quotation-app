@@ -258,7 +258,7 @@
     </section>
 
     {{-- How it works --}}
-    <section id="how" class="bg-slate-50 border-y border-slate-100">
+    <section id="how" class="bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
                 <div>
@@ -446,11 +446,11 @@
     </section>
 
     {{-- Footer --}}
-    <footer class="border-t border-slate-100">
+    <footer">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div class="text-sm text-slate-600">
                 <div class="font-semibold text-slate-900">Quotation App</div>
-                <div class="mt-1">© {{ date('Y') }} • Built with Laravel + Tailwind • Brand: <span class="brand-text font-medium">#465FFF</span></div>
+                <div class="mt-1">© {{ date('Y') }} • Designed by Terex Labs </div>
             </div>
 
             <div class="flex items-center gap-4 text-sm text-slate-600">
