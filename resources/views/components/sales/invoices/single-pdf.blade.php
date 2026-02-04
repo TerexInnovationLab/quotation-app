@@ -13,12 +13,28 @@
             color: #0f172a;
             font-size: 12px;
             line-height: 1.5;
+            position: relative;
         }
 
         .top-accent {
             height: 8px;
             background: #465fff;
             margin-bottom: 18px;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 41%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 76px;
+            letter-spacing: 4px;
+            font-weight: 700;
+            color: #64748b;
+            opacity: 0.08;
+            transform: rotate(-25deg);
+            z-index: -1;
         }
 
         .header-table,
@@ -232,6 +248,75 @@
             white-space: pre-line;
         }
 
+        .auth-table {
+            margin-top: 16px;
+        }
+
+        .auth-table td {
+            width: 50%;
+            border: 0;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        .stamp-cell {
+            text-align: left;
+        }
+
+        .seal-image {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            opacity: 0.88;
+        }
+
+        .seal-fallback {
+            width: 126px;
+            height: 126px;
+            border: 3px solid #dc2626;
+            color: #dc2626;
+            border-radius: 50%;
+            text-align: center;
+            transform: rotate(-13deg);
+            box-sizing: border-box;
+            padding: 30px 8px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .qr-cell {
+            text-align: right;
+        }
+
+        .qr-image {
+            width: 112px;
+            height: 112px;
+            border: 1px solid #cbd5e1;
+            padding: 4px;
+            background: #ffffff;
+        }
+
+        .qr-fallback {
+            display: inline-block;
+            width: 112px;
+            height: 112px;
+            line-height: 112px;
+            text-align: center;
+            border: 1px dashed #cbd5e1;
+            color: #94a3b8;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .auth-note {
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 10px;
+        }
+
         .footer {
             margin-top: 18px;
             border-top: 1px solid #e2e8f0;
@@ -242,6 +327,7 @@
     </style>
 </head>
 <body>
+    <div class="watermark">{{ $watermarkText ?? 'INVOICE' }}</div>
     <div class="top-accent"></div>
 
     <table class="header-table">
@@ -344,6 +430,31 @@
             <td>
                 <div class="section-title">Terms</div>
                 <div class="notes-content">{{ $invoice['terms'] }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="auth-table">
+        <tr>
+            <td class="stamp-cell">
+                <div class="section-title">Seal / Stamp</div>
+                @if(!empty($company['seal']))
+                    <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
+                @else
+                    <div class="seal-fallback">
+                        {{ $company['name'] }}<br>Authorized
+                    </div>
+                @endif
+                <div class="auth-note">Digitally approved by {{ $company['name'] }}</div>
+            </td>
+            <td class="qr-cell">
+                <div class="section-title">QR Verification</div>
+                @if(!empty($documentQr))
+                    <img src="{{ $documentQr }}" alt="Invoice QR code" class="qr-image">
+                @else
+                    <div class="qr-fallback">QR unavailable</div>
+                @endif
+                <div class="auth-note">{{ $documentUrl ?? '' }}</div>
             </td>
         </tr>
     </table>

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Sales;
 
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -154,6 +158,9 @@ class QuotationController
             'items' => $document['items'],
             'generatedAt' => now(),
             'company' => $this->companyProfile(),
+            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'])),
+            'documentUrl' => route('sales.quotations.show', $row['number']),
+            'watermarkText' => 'QUOTATION',
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream($row['number'] . '.pdf');
@@ -170,6 +177,9 @@ class QuotationController
             'items' => $document['items'],
             'generatedAt' => now(),
             'company' => $this->companyProfile(),
+            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'])),
+            'documentUrl' => route('sales.quotations.show', $row['number']),
+            'watermarkText' => 'QUOTATION',
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download($row['number'] . '.pdf');
@@ -242,6 +252,7 @@ class QuotationController
     private function companyProfile(): array
     {
         $logo = null;
+        $seal = null;
         $logoPaths = [
             public_path('images/company-logo.png'),
             public_path('images/company-logo.jpg'),
@@ -249,6 +260,20 @@ class QuotationController
             public_path('logo.png'),
             public_path('logo.jpg'),
             public_path('logo.jpeg'),
+        ];
+        $sealPaths = [
+            public_path('images/company-seal.png'),
+            public_path('images/company-seal.jpg'),
+            public_path('images/company-seal.jpeg'),
+            public_path('images/company-stamp.png'),
+            public_path('images/company-stamp.jpg'),
+            public_path('images/company-stamp.jpeg'),
+            public_path('seal.png'),
+            public_path('seal.jpg'),
+            public_path('seal.jpeg'),
+            public_path('stamp.png'),
+            public_path('stamp.jpg'),
+            public_path('stamp.jpeg'),
         ];
 
         foreach ($logoPaths as $path) {
@@ -261,6 +286,16 @@ class QuotationController
             break;
         }
 
+        foreach ($sealPaths as $path) {
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path) ?: 'image/png';
+            $seal = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path));
+            break;
+        }
+
         return [
             'name' => 'AccountYanga Ltd',
             'tagline' => 'Billing and Invoicing',
@@ -268,6 +303,36 @@ class QuotationController
             'phone' => '+265 88 000 0000',
             'address' => 'Lilongwe, Malawi',
             'logo' => $logo,
+            'seal' => $seal,
         ];
+    }
+
+    private function quotationQrPayload(array $row, array $quotation): string
+    {
+        return implode("\n", [
+            'DOCUMENT: QUOTATION',
+            'NUMBER: ' . $quotation['quotation_number'],
+            'CUSTOMER: ' . $quotation['customer_name'],
+            'AMOUNT: ' . $quotation['currency'] . ' ' . number_format((float) $quotation['grand_total'], 2, '.', ''),
+            'DATE: ' . $quotation['quotation_date'],
+            'VALID UNTIL: ' . $quotation['expiry_date'],
+            'VERIFY: ' . route('sales.quotations.show', $row['number']),
+        ]);
+    }
+
+    private function qrCodeDataUri(string $payload): ?string
+    {
+        try {
+            $renderer = new ImageRenderer(
+                new RendererStyle(220, 2),
+                new SvgImageBackEnd(),
+            );
+            $writer = new Writer($renderer);
+            $svg = $writer->writeString($payload);
+
+            return 'data:image/svg+xml;base64,' . base64_encode($svg);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }
