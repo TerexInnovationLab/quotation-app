@@ -255,18 +255,26 @@
             white-space: pre-line;
         }
 
-        .verification-stack {
-            margin-top: 12px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-            gap: 8px;
+        .security-bottom {
+            margin-top: 8px;
+            width: 100%;
+            display: table;
+            table-layout: fixed;
             page-break-inside: avoid;
         }
 
-        .company-stamp {
-            margin-top: 12px;
+        .security-col {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+        }
+
+        .security-col.left {
             text-align: left;
+        }
+
+        .security-col.right {
+            text-align: right;
         }
 
         .signature-bottom {
@@ -489,25 +497,6 @@
                     {{ $company['address'] }}<br>
                     {{ $company['email'] }} | {{ $company['phone'] }}
                 </div>
-                <div class="company-stamp">
-                    <div class="stamp-panel">
-                        <div class="section-title">Official Stamp</div>
-                        @if(!empty($company['seal']))
-                            <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
-                        @else
-                            <div class="stamp-realistic">
-                                <div class="stamp-edge"></div>
-                                <div class="stamp-core"></div>
-                                <div class="stamp-top">APPROVED</div>
-                                <div class="stamp-stars-top">* * *</div>
-                                <div class="stamp-band">APPROVED</div>
-                                <div class="stamp-stars-bottom">* * *</div>
-                                <div class="stamp-bottom">APPROVED</div>
-                            </div>
-                        @endif
-                        <div class="auth-note">Digitally approved by {{ $company['name'] }}</div>
-                    </div>
-                </div>
             </td>
             <td class="meta-wrap">
                 <h2 class="doc-title">QUOTATION</h2>
@@ -517,16 +506,6 @@
                     <div class="row"><span class="label">Issue Date:</span> {{ $quotation['quotation_date'] }}</div>
                     <div class="row"><span class="label">Valid Until:</span> {{ $quotation['expiry_date'] }}</div>
                     <div class="row"><span class="label">Generated:</span> {{ $generatedAt->format('Y-m-d H:i') }}</div>
-                </div>
-                <div class="verification-stack">
-                    <div class="qr-panel">
-                        <div class="section-title">QR Verification</div>
-                        @if(!empty($documentQr))
-                            <img src="{{ $documentQr }}" alt="Quotation QR code" class="qr-image">
-                        @else
-                            <div class="qr-fallback">QR unavailable</div>
-                        @endif
-                    </div>
                 </div>
             </td>
         </tr>
@@ -607,6 +586,35 @@
             </td>
         </tr>
     </table>
+
+    <div class="security-bottom">
+        <div class="security-col left">
+            <div class="stamp-panel">
+                @if(!empty($company['seal']))
+                    <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
+                @else
+                    <div class="stamp-realistic">
+                        <div class="stamp-edge"></div>
+                        <div class="stamp-core"></div>
+                        <div class="stamp-top">APPROVED</div>
+                        <div class="stamp-stars-top">* * *</div>
+                        <div class="stamp-band">APPROVED</div>
+                        <div class="stamp-stars-bottom">* * *</div>
+                        <div class="stamp-bottom">APPROVED</div>
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="security-col right">
+            <div class="qr-panel">
+                @if(!empty($documentQr))
+                    <img src="{{ $documentQr }}" alt="Quotation QR code" class="qr-image">
+                @else
+                    <div class="qr-fallback">QR unavailable</div>
+                @endif
+            </div>
+        </div>
+    </div>
 
     <div class="signature-bottom">
         <div class="signature-panel">
