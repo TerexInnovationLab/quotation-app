@@ -61,7 +61,7 @@
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Please fix the following',
+                    title: 'Something went wrong',
                     html: html,
                     confirmButtonText: 'Okay',
                     confirmButtonColor: '#0d9488'
