@@ -11,7 +11,7 @@
 
     <form method="POST" action="{{ route('register') }}" class="space-y-4"
           x-data="{ showPassword: false, showPasswordConfirm: false }"
-          @submit="if ($refs.password.value !== $refs.passwordConfirmation.value) { $event.preventDefault(); Swal.fire({ icon: 'error', title: 'Something went wrong', text: 'Password and confirm password must match.', confirmButtonColor: '#0d9488' }); }">
+          @submit="if ($refs.password.value !== $refs.passwordConfirmation.value) { $event.preventDefault(); Swal.fire({ icon: 'error', title: 'Something went wrong', text: 'Password and confirm password do not match.', confirmButtonColor: '#0d9488' }); }">
         @csrf
         <div>
             <label for="name" class="mb-2 block text-sm font-medium">Full name</label>
