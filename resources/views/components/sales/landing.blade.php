@@ -64,10 +64,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <a href="{{ route('landing') }}" class="flex items-center gap-3">
                 <div class="h-10 w-10 rounded-2xl brand-bg text-white grid place-items-center font-semibold">
-                    Q
+                    A
                 </div>
                 <div class="leading-tight">
-                    <div class="font-semibold">Quotation App</div>
                     <div class="text-xs text-slate-500">Sales • Invoicing • Receipts</div>
                 </div>
             </a>
@@ -80,9 +79,9 @@
             </nav>
 
             <div class="flex items-center gap-2">
-                <a href="/sales/dashboard"
+                <a href="{{ route('login') }}"
                    class="hidden sm:inline-flex px-4 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
-                    Open App
+                    Login
                 </a>
                 <a href="#cta"
                    class="inline-flex px-4 py-2 text-sm rounded-xl text-white brand-bg hover:opacity-95 brand-shadow">
@@ -104,7 +103,7 @@
                 <div data-reveal>
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-600">
                         <span class="h-2 w-2 rounded-full brand-bg"></span>
-                        Zoho-style Sales UI • Built with Laravel + Tailwind
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet voluptate quaerat mollitia.
                     </div>
 
                     <h1 class="mt-5 text-4xl sm:text-5xl font-semibold tracking-tight">
@@ -119,12 +118,12 @@
                     <div class="mt-7 flex flex-col sm:flex-row gap-3" data-reveal data-delay="200">
                         <a href="#cta"
                            class="inline-flex justify-center px-5 py-3 rounded-2xl text-white brand-bg hover:opacity-95 brand-shadow">
-                            Start using it
+                            Sign Up
                         </a>
 
                         <a href="/sales/quotations"
                            class="inline-flex justify-center px-5 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50">
-                            View Quotations UI
+                            Get Started
                         </a>
                     </div>
 
@@ -270,7 +269,7 @@
                     <div class="mt-8 space-y-4">
                         <div class="rounded-3xl bg-white border border-slate-200 p-6 hover:shadow-sm hover:-translate-y-0.5 transition-transform duration-200" data-reveal>
                             <div class="flex items-start gap-3">
-                                <div class="h-8 w-8 rounded-2xl brand-bg text-white grid place-items-center text-sm font-semibold">1</div>
+                                <div class="h-8 w-8 rounded-2xl text-white grid place-items-center text-sm font-semibold border border-slate-200">1</div>
                                 <div>
                                     <div class="font-semibold">Create a quotation</div>
                                     <div class="mt-1 text-sm text-slate-600">Line items, notes, discounts, currency, terms.</div>
@@ -280,7 +279,7 @@
 
                         <div class="rounded-3xl bg-white border border-slate-200 p-6 hover:shadow-sm hover:-translate-y-0.5 transition-transform duration-200" data-reveal>
                             <div class="flex items-start gap-3">
-                                <div class="h-8 w-8 rounded-2xl brand-bg text-white grid place-items-center text-sm font-semibold">2</div>
+                                <div class="h-8 w-8 rounded-2xl text-white grid place-items-center text-sm font-semibold border border-slate-200">2</div>
                                 <div>
                                     <div class="font-semibold">Convert to invoice</div>
                                     <div class="mt-1 text-sm text-slate-600">Track due dates, status, and outstanding balances.</div>
@@ -290,7 +289,7 @@
 
                         <div class="rounded-3xl bg-white border border-slate-200 p-6 hover:shadow-sm hover:-translate-y-0.5 transition-transform duration-200" data-reveal>
                             <div class="flex items-start gap-3">
-                                <div class="h-8 w-8 rounded-2xl brand-bg text-white grid place-items-center text-sm font-semibold">3</div>
+                                <div class="h-8 w-8 rounded-2xl text-white grid place-items-center text-sm font-semibold border border-slate-200">3</div>
                                 <div>
                                     <div class="font-semibold">Record payments</div>
                                     <div class="mt-1 text-sm text-slate-600">Apply payments to invoices, manage credits, confirm receipts.</div>
@@ -322,14 +321,7 @@
                     </div>
 
                     <div class="mt-7 flex flex-col sm:flex-row gap-3">
-                        <a href="/sales/quotations/create"
-                           class="inline-flex justify-center px-5 py-3 rounded-2xl text-white brand-bg hover:opacity-95">
-                            Create a Quotation
-                        </a>
-                        <a href="/sales/dashboard"
-                           class="inline-flex justify-center px-5 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50">
-                            Explore Dashboard
-                        </a>
+
                     </div>
                 </div>
             </div>
@@ -382,14 +374,6 @@
                         <div class="font-semibold brand-text">Summary</div>
                     </div>
                 </div>
-
-                <div class="mt-7 rounded-2xl bg-white border border-slate-200 p-5">
-                    <div class="text-xs text-slate-500">Primary Brand Color</div>
-                    <div class="mt-2 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-xl brand-bg"></div>
-                        <div class="text-sm font-medium">#465FFF</div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -408,11 +392,7 @@
                 <div class="flex flex-col sm:flex-row gap-3 lg:justify-end">
                     <a href="/sales/quotations/create"
                        class="inline-flex justify-center px-5 py-3 rounded-2xl text-white brand-bg hover:opacity-95">
-                        Create your first Quotation
-                    </a>
-                    <a href="/sales/dashboard"
-                       class="inline-flex justify-center px-5 py-3 rounded-2xl border border-white/20 hover:bg-white/10">
-                        View Dashboard
+                        Start Now
                     </a>
                 </div>
             </div>
@@ -449,14 +429,13 @@
     <footer">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div class="text-sm text-slate-600">
-                <div class="font-semibold text-slate-900">Quotation App</div>
-                <div class="mt-1">© {{ date('Y') }} • Designed by Terex Labs </div>
+                <div class="mt-1">© {{ date('Y') }} • Designed by Terex Labs • All rights reserved </div>
             </div>
 
             <div class="flex items-center gap-4 text-sm text-slate-600">
                 <a href="#features" class="hover:text-slate-900">Features</a>
                 <a href="#how" class="hover:text-slate-900">How it works</a>
-                <a href="/sales/dashboard" class="hover:text-slate-900">Open App</a>
+                <a href="{{ route('login') }}" class="hover:text-slate-900">Login</a>
             </div>
         </div>
     </footer>
