@@ -50,7 +50,7 @@
 <div class="h-screen flex overflow-hidden" x-data="{ sidebarExpanded: true }">
 
     {{-- Sidebar --}}
-    <aside class="bg-white border-r border-slate-200 hidden lg:flex lg:flex-col h-screen sticky top-0 transition-all duration-200 overflow-hidden"
+    <aside class="bg-white border-r border-slate-200 hidden lg:flex lg:flex-col h-screen sticky top-0 shrink-0 transition-all duration-200 overflow-hidden"
            :class="sidebarExpanded ? 'w-72' : 'w-20'">
         <div class="h-16 px-5 flex items-center gap-3">
             <div class="h-9 w-9 shrink-0 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
@@ -89,7 +89,7 @@
                         $isActive = request()->routeIs($link['active'] ?? $link['route']);
                     @endphp
                     <a href="{{ route($link['route']) }}"
-                       class="flex items-center gap-3 px-3 py-2 rounded-xl border
+                       class="flex items-center gap-3 px-3 py-2 rounded-xl border whitespace-nowrap
                               {{ $isActive ? 'bg-[var(--app-primary)] text-white border-[var(--app-primary)]' : 'bg-white text-slate-700 border-transparent hover:bg-slate-100' }}">
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="{{ $link['icon'] }}" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
     </aside>
 
     {{-- Main --}}
-    <div class="flex-1 flex flex-col min-h-0">
+    <div class="flex-1 min-w-0 flex flex-col min-h-0">
         {{-- Topbar --}}
         <header class="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
