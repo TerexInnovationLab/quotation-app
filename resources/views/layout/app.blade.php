@@ -47,7 +47,19 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-<div class="h-screen flex overflow-hidden" x-data="{ sidebarExpanded: true }">
+<div class="h-screen flex overflow-hidden"
+     x-data="{
+        sidebarExpanded: true,
+        init() {
+            const saved = localStorage.getItem('sidebarExpanded');
+            if (saved !== null) {
+                this.sidebarExpanded = saved === 'true';
+            }
+            this.$watch('sidebarExpanded', (value) => {
+                localStorage.setItem('sidebarExpanded', value ? 'true' : 'false');
+            });
+        }
+     }">
 
     {{-- Sidebar --}}
     <aside class="bg-white border-r border-slate-200 hidden lg:flex lg:flex-col h-screen sticky top-0 shrink-0 transition-all duration-200 overflow-hidden"
