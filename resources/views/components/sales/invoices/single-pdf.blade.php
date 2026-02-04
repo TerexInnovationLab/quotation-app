@@ -603,7 +603,7 @@
                         <div class="stamp-bottom">APPROVED</div>
                     </div>
                 @endif
-                <div class="auth-note">Digitally approved by {{ $company['name'] }}</div>
+                
             </div>
         </div>
         <div class="security-col right">
@@ -632,7 +632,7 @@
     </div>
 
     <div class="footer">
-        This invoice is generated digitally by AccountYanga Ltd.
+        Powered by TerexLab.
     </div>
 </body>
 </html>

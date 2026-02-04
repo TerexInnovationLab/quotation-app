@@ -631,7 +631,7 @@
     </div>
 
     <div class="footer">
-        This quotation is generated digitally by AccountYanga Ltd.
+        Powered by TerexLab.
     </div>
 </body>
 </html>
