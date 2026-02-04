@@ -5,7 +5,7 @@
     <title>Invoice {{ $row['number'] }}</title>
     <style>
         @page {
-            margin: 28px 30px;
+            margin: 28px 30px 64px;
         }
 
         body {
@@ -14,6 +14,7 @@
             font-size: 12px;
             line-height: 1.5;
             position: relative;
+            padding-bottom: 62px;
         }
 
         .top-accent {
@@ -268,6 +269,11 @@
             text-align: left;
         }
 
+        .signature-bottom {
+            margin-top: 18px;
+            page-break-inside: avoid;
+        }
+
         .qr-panel,
         .stamp-panel {
             display: inline-block;
@@ -282,6 +288,16 @@
         .stamp-panel {
             background: #fff7f7;
             border-color: #fecaca;
+        }
+
+        .signature-panel {
+            margin-top: 8px;
+            width: 170px;
+            box-sizing: border-box;
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            padding: 6px 8px;
+            background: #ffffff;
         }
 
         .seal-image {
@@ -316,6 +332,36 @@
             color: #64748b;
             font-size: 8px;
             word-break: break-all;
+        }
+
+        .signature-image {
+            width: 140px;
+            height: 40px;
+            object-fit: contain;
+            display: block;
+            margin: 2px auto 0;
+        }
+
+        .signature-fallback {
+            width: 140px;
+            margin: 2px auto 0;
+            text-align: center;
+            font-size: 18px;
+            font-style: italic;
+            color: #334155;
+        }
+
+        .signature-line {
+            border-top: 1px solid #94a3b8;
+            margin: 2px auto 4px;
+            width: 140px;
+        }
+
+        .signature-meta {
+            text-align: center;
+            color: #64748b;
+            font-size: 8px;
+            margin-top: 2px;
         }
 
         .stamp-realistic {
@@ -413,11 +459,15 @@
         }
 
         .footer {
-            margin-top: 18px;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: -44px;
             border-top: 1px solid #e2e8f0;
             padding-top: 8px;
             font-size: 10px;
             color: #64748b;
+            text-align: center;
         }
     </style>
 </head>
@@ -558,8 +608,22 @@
         </tr>
     </table>
 
+    <div class="signature-bottom">
+        <div class="signature-panel">
+            <div class="section-title">Digital Signature (CEO)</div>
+            @if(!empty($company['ceo_signature']))
+                <img src="{{ $company['ceo_signature'] }}" alt="CEO signature" class="signature-image">
+            @else
+                <div class="signature-fallback">{{ $company['ceo_name'] }}</div>
+            @endif
+            <div class="signature-line"></div>
+            <div class="signature-meta">Signed by {{ $company['ceo_name'] }}</div>
+            <div class="signature-meta">{{ $generatedAt->format('Y-m-d H:i') }}</div>
+        </div>
+    </div>
+
     <div class="footer">
-        This invoice is generated digitally by {{ $company['name'] }}.
+        This invoice is generated digitally by AccountYanga Ltd.
     </div>
 </body>
 </html>

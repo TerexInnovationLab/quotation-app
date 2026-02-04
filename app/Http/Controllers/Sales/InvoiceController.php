@@ -339,6 +339,7 @@ class InvoiceController
     {
         $logo = null;
         $seal = null;
+        $ceoSignature = null;
         $logoPaths = [
             public_path('images/company-logo.png'),
             public_path('images/company-logo.jpg'),
@@ -361,6 +362,20 @@ class InvoiceController
             public_path('stamp.jpg'),
             public_path('stamp.jpeg'),
         ];
+        $ceoSignaturePaths = [
+            public_path('images/ceo-signature.png'),
+            public_path('images/ceo-signature.jpg'),
+            public_path('images/ceo-signature.jpeg'),
+            public_path('images/signature.png'),
+            public_path('images/signature.jpg'),
+            public_path('images/signature.jpeg'),
+            public_path('ceo-signature.png'),
+            public_path('ceo-signature.jpg'),
+            public_path('ceo-signature.jpeg'),
+            public_path('signature.png'),
+            public_path('signature.jpg'),
+            public_path('signature.jpeg'),
+        ];
 
         foreach ($logoPaths as $path) {
             if (! is_file($path)) {
@@ -382,14 +397,26 @@ class InvoiceController
             break;
         }
 
+        foreach ($ceoSignaturePaths as $path) {
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path) ?: 'image/png';
+            $ceoSignature = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path));
+            break;
+        }
+
         return [
             'name' => 'AccountYanga Ltd',
             'tagline' => 'Billing and Invoicing',
             'email' => 'billing@accountyanga.com',
             'phone' => '+265 88 000 0000',
             'address' => 'Lilongwe, Malawi',
+            'ceo_name' => 'Chief Executive Officer',
             'logo' => $logo,
             'seal' => $seal,
+            'ceo_signature' => $ceoSignature,
         ];
     }
 
