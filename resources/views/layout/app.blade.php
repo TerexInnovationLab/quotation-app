@@ -66,7 +66,7 @@
     <aside class="bg-white border-r border-slate-200 hidden lg:flex lg:flex-col h-screen sticky top-0 shrink-0 transition-all duration-200 overflow-hidden"
            :class="sidebarExpanded ? 'w-72' : 'w-20'">
         <div class="h-16 px-5 flex items-center gap-3">
-            <div class="h-9 w-9 shrink-0 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
+            <div x-show="sidebarExpanded" class="h-9 w-9 shrink-0 rounded-xl bg-[var(--app-primary)] text-white grid place-items-center font-semibold">
                 A
             </div>
             <div class="leading-tight" x-show="sidebarExpanded">
@@ -74,7 +74,8 @@
             </div>
             <button type="button"
                     @click="sidebarExpanded = !sidebarExpanded"
-                    class="ml-auto h-8 w-8 rounded-lg bg-[#465FFF] text-white grid place-items-center"
+                    :class="sidebarExpanded ? 'ml-auto' : 'mx-auto'"
+                    class="h-8 w-8 rounded-lg bg-[#465FFF] text-white grid place-items-center"
                     aria-label="Toggle sidebar">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" stroke-linejoin="round"/>
