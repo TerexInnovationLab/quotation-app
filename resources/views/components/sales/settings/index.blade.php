@@ -5,7 +5,7 @@
 @section('page_title','Settings')
 
 @section('primary_action')
-    <span class="text-xs text-slate-500">Manage your workspace configuration</span>
+    <span class="text-xs text-slate-500 dark:text-slate-400">Manage your workspace configuration</span>
 @endsection
 
 @section('content')
@@ -16,96 +16,138 @@
             'theme' => 'Theme Settings',
             'preferences' => 'Other Settings',
         ];
+        $inputClass = 'mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-slate-400 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700';
+        $selectClass = 'mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-slate-400 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-700';
+        $textareaClass = 'mt-1 w-full rounded-2xl border-slate-200 bg-white text-slate-900 focus:border-slate-400 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-700';
+        $panelClass = 'rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900';
+        $sectionEyebrow = 'text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500';
+        $sectionTitle = 'mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100';
+        $sectionDesc = 'text-xs text-slate-500 dark:text-slate-400';
     @endphp
 
     <div class="space-y-4 max-w-5xl">
         @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4 dark:bg-emerald-900/30 dark:border-emerald-700 dark:text-emerald-200">
                 {{ session('success') }}
             </div>
         @endif
 
-        <div class="bg-white border border-slate-200 rounded-2xl p-3 overflow-x-auto">
+        <div class="bg-white border border-slate-200 rounded-2xl p-3 overflow-x-auto dark:bg-slate-900 dark:border-slate-800">
             <div class="flex items-center gap-2 min-w-max">
                 @foreach($tabs as $key => $label)
                     <a href="{{ route('sales.settings.index', ['tab' => $key]) }}"
-                       class="px-3 py-2 text-sm rounded-xl border {{ $tab === $key ? 'bg-[#465FFF] text-white border-[#465FFF]' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50' }}">
+                       class="px-3 py-2 text-sm rounded-xl border {{ $tab === $key ? 'bg-[#465FFF] text-white border-[#465FFF] shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-800' }}">
                         {{ $label }}
                     </a>
                 @endforeach
             </div>
         </div>
 
-        <form method="POST" action="{{ route('sales.settings.update') }}" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
+        <form method="POST" action="{{ route('sales.settings.update') }}" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 dark:bg-slate-900 dark:border-slate-800">
             @csrf
             <input type="hidden" name="tab" value="{{ $tab }}">
 
             @if($tab === 'profile')
                 <div class="space-y-5">
-                    <div class="space-y-3">
-                        <h3 class="text-sm font-semibold text-slate-700">Profile Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs text-slate-500">Full Name</label>
-                                <input type="text" name="full_name" value="{{ old('full_name', 'Team Admin') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <div class="{{ $sectionEyebrow }}">Profile</div>
+                                <div class="{{ $sectionTitle }}">Your workspace identity</div>
+                                <div class="{{ $sectionDesc }}">Shown on dashboards, notifications, and signatures.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-300 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Full Name</label>
+                                <input type="text" name="full_name" value="{{ old('full_name', 'Team Admin') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Email</label>
-                                <input type="email" name="email" value="{{ old('email', 'admin@example.com') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Email</label>
+                                <input type="email" name="email" value="{{ old('email', 'admin@example.com') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Phone</label>
-                                <input type="text" name="phone" value="{{ old('phone', '+265 99 000 0000') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Phone</label>
+                                <input type="text" name="phone" value="{{ old('phone', '+265 99 000 0000') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Role</label>
-                                <input type="text" name="role" value="{{ old('role', 'Administrator') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Role</label>
+                                <input type="text" name="role" value="{{ old('role', 'Administrator') }}" class="{{ $inputClass }}">
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-100 space-y-3">
-                        <h3 class="text-sm font-semibold text-slate-700">Company Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs text-slate-500">Company Name</label>
-                                <input type="text" name="company_name" value="{{ old('company_name', 'AccountYanga Ltd') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <div class="{{ $sectionEyebrow }}">Company</div>
+                                <div class="{{ $sectionTitle }}">Organization details</div>
+                                <div class="{{ $sectionDesc }}">Used on invoices, letters, and receipts.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Company Name</label>
+                                <input type="text" name="company_name" value="{{ old('company_name', 'AccountYanga Ltd') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Tax ID</label>
-                                <input type="text" name="tax_id" value="{{ old('tax_id', 'TAX-000123') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Tax ID</label>
+                                <input type="text" name="tax_id" value="{{ old('tax_id', 'TAX-000123') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Phone</label>
-                                <input type="text" name="company_phone" value="{{ old('company_phone', '+265 88 000 0000') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Phone</label>
+                                <input type="text" name="company_phone" value="{{ old('company_phone', '+265 88 000 0000') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Email</label>
-                                <input type="email" name="company_email" value="{{ old('company_email', 'billing@accountyanga.com') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Email</label>
+                                <input type="email" name="company_email" value="{{ old('company_email', 'billing@accountyanga.com') }}" class="{{ $inputClass }}">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="text-xs text-slate-500">Address</label>
-                                <textarea name="company_address" rows="3" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">{{ old('company_address', 'Lilongwe, Malawi') }}</textarea>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Address</label>
+                                <textarea name="company_address" rows="3" class="{{ $textareaClass }}">{{ old('company_address', 'Lilongwe, Malawi') }}</textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-100 space-y-3">
-                        <h3 class="text-sm font-semibold text-slate-700">Logo Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs text-slate-500">Upload Company Logo</label>
-                                <input type="file" name="logo" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <div class="{{ $sectionEyebrow }}">Branding</div>
+                                <div class="{{ $sectionTitle }}">Logo & positioning</div>
+                                <div class="{{ $sectionDesc }}">Upload your logo for a consistent document identity.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Upload Company Logo</label>
+                                <input type="file" name="logo" class="{{ $inputClass }}">
                             </div>
                             <div>
-                                <label class="text-xs text-slate-500">Logo Position</label>
-                                <select name="logo_position" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Logo Position</label>
+                                <select name="logo_position" class="{{ $selectClass }}">
                                     @foreach(['Left', 'Center', 'Right'] as $option)
                                         <option value="{{ $option }}" @selected(old('logo_position', 'Left') === $option)>{{ $option }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="md:col-span-2 text-xs text-slate-500">Accepted formats: PNG, JPG, SVG. Max: 2MB.</div>
+                            <div class="md:col-span-2 text-xs text-slate-500 dark:text-slate-400">Accepted formats: PNG, JPG, SVG. Max: 2MB.</div>
                         </div>
                     </div>
                 </div>
@@ -221,6 +263,10 @@
                         ?: $findAccent($selectedLetterTemplate);
                     $receiptTemplateColor = $normalizeHex(old('receipt_template_color', request()->cookie('receipt_template_color', '')))
                         ?: $findAccent($selectedReceiptTemplate);
+                    $hasInvoiceColor = (string) request()->cookie('invoice_template_color', '') !== '';
+                    $hasQuotationColor = (string) request()->cookie('quotation_template_color', '') !== '';
+                    $hasLetterColor = (string) request()->cookie('letter_template_color', '') !== '';
+                    $hasReceiptColor = (string) request()->cookie('receipt_template_color', '') !== '';
                     $documentGroups = [
                         [
                             'title' => 'Invoices',
@@ -230,6 +276,7 @@
                             'subtitle' => 'Applied to invoice PDFs and exports.',
                             'color' => $invoiceTemplateColor,
                             'color_name' => 'invoice_template_color',
+                            'has_custom_color' => $hasInvoiceColor,
                         ],
                         [
                             'title' => 'Quotations',
@@ -239,6 +286,7 @@
                             'subtitle' => 'Applied to quotation PDFs and exports.',
                             'color' => $quotationTemplateColor,
                             'color_name' => 'quotation_template_color',
+                            'has_custom_color' => $hasQuotationColor,
                         ],
                         [
                             'title' => 'Letters',
@@ -248,6 +296,7 @@
                             'subtitle' => 'Applied to letter PDFs and exports.',
                             'color' => $letterTemplateColor,
                             'color_name' => 'letter_template_color',
+                            'has_custom_color' => $hasLetterColor,
                         ],
                         [
                             'title' => 'Receipts',
@@ -257,6 +306,7 @@
                             'subtitle' => 'Applied to receipt PDFs and exports.',
                             'color' => $receiptTemplateColor,
                             'color_name' => 'receipt_template_color',
+                            'has_custom_color' => $hasReceiptColor,
                         ],
                     ];
                 @endphp
@@ -391,10 +441,35 @@
                     .layout-frame .tp-top {
                         height: 8px;
                     }
+
+                    .dark .template-card {
+                        background: #0f172a;
+                        border-color: #1f2937;
+                        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+                    }
+
+                    .dark .template-card:hover {
+                        box-shadow: 0 18px 30px rgba(0, 0, 0, 0.45);
+                    }
+
+                    .dark .template-preview {
+                        background: #0b1220;
+                        border-color: #1f2937;
+                    }
+
+                    .dark .template-preview .tp-title,
+                    .dark .template-preview .tp-sub,
+                    .dark .template-preview .tp-row {
+                        background: #334155;
+                    }
+
+                    .dark .layout-grid .tp-row {
+                        border-color: #334155;
+                    }
                 </style>
 
                 <div class="space-y-6">
-                    <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 p-6 text-white shadow-xl">
+                    <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 p-6 text-white shadow-xl dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
                         <div class="text-xs uppercase tracking-[0.3em] text-white/60">Template Studio</div>
                         <div class="mt-3 text-2xl font-semibold">Design your document identity.</div>
                         <p class="mt-2 max-w-2xl text-sm text-white/70">
@@ -408,25 +483,25 @@
                     </div>
 
                     @foreach($documentGroups as $doc)
-                        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div class="{{ $panelClass }}">
                             <div class="flex flex-wrap items-center justify-between gap-3">
                                 <div>
-                                    <div class="text-xs uppercase tracking-[0.25em] text-slate-400">{{ $doc['title'] }}</div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-800">{{ $doc['title'] }} Templates</div>
-                                    <div class="text-xs text-slate-500">{{ $doc['subtitle'] }}</div>
+                                    <div class="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">{{ $doc['title'] }}</div>
+                                    <div class="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{{ $doc['title'] }} Templates</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $doc['subtitle'] }}</div>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-3">
-                                    <div class="rounded-full bg-slate-100 px-4 py-2 text-xs text-slate-600">
-                                        Selected: <span class="font-semibold text-slate-900">{{ $doc['selected'] }}</span>
+                                    <div class="rounded-full bg-slate-100 px-4 py-2 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                        Selected: <span class="font-semibold text-slate-900 dark:text-white">{{ $doc['selected'] }}</span>
                                     </div>
-                                    <label class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+                                    <label class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                                         <span class="h-3 w-3 rounded-full border border-white" style="background: {{ $doc['color'] }}"></span>
                                         <span>Accent</span>
                                         <input type="color"
                                                name="{{ $doc['color_name'] }}"
                                                value="{{ $doc['color'] }}"
-                                               class="h-6 w-8 cursor-pointer rounded border border-slate-200 bg-white p-0">
-                                        <span class="text-[10px] font-semibold text-slate-500">{{ strtoupper($doc['color']) }}</span>
+                                               class="h-6 w-8 cursor-pointer rounded border border-slate-200 bg-white p-0 dark:border-slate-700 dark:bg-slate-900">
+                                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{{ strtoupper($doc['color']) }}</span>
                                     </label>
                                 </div>
                             </div>
@@ -435,16 +510,22 @@
                                 @foreach($templateOptions as $option)
                                     @php
                                         $isSelected = $doc['selected'] === $option['label'];
-                                        $customAccent = $isSelected ? ($normalizeHex($doc['color']) ?? $option['accent']) : $option['accent'];
-                                        $customAccentSoft = $isSelected ? $mixColor($customAccent, '#ffffff', 0.88) : $option['accentSoft'];
-                                        $customAccentDark = $isSelected ? $mixColor($customAccent, '#000000', 0.35) : $option['accentDark'];
+                                        $customAccent = $doc['has_custom_color']
+                                            ? ($normalizeHex($doc['color']) ?? $option['accent'])
+                                            : $option['accent'];
+                                        $customAccentSoft = $doc['has_custom_color']
+                                            ? $mixColor($customAccent, '#ffffff', 0.88)
+                                            : $option['accentSoft'];
+                                        $customAccentDark = $doc['has_custom_color']
+                                            ? $mixColor($customAccent, '#000000', 0.35)
+                                            : $option['accentDark'];
                                     @endphp
                                     <label class="group relative cursor-pointer">
                                         <input type="radio" name="{{ $doc['name'] }}" value="{{ $option['label'] }}"
                                                class="peer sr-only" @checked($doc['selected'] === $option['label'])>
                                         <div class="template-card peer-checked:border-[#465FFF] peer-checked:ring-2 peer-checked:ring-[#465FFF]/20">
                                             <div class="flex items-center justify-between">
-                                                <div class="text-sm font-semibold text-slate-800">{{ $option['label'] }}</div>
+                                                <div class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ $option['label'] }}</div>
                                                 <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold"
                                                       style="background: {{ $customAccentSoft }}; color: {{ $customAccentDark }};">
                                                     {{ $option['tag'] }}
@@ -468,7 +549,7 @@
                                                     <div class="tp-total"></div>
                                                 </div>
                                             </div>
-                                            <div class="mt-3 text-[11px] text-slate-500">{{ $option['desc'] }}</div>
+                                            <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">{{ $option['desc'] }}</div>
                                         </div>
                                         <span class="pointer-events-none absolute right-3 top-3 rounded-full bg-[#465FFF] px-2 py-0.5 text-[10px] font-semibold text-white opacity-0 transition peer-checked:opacity-100">
                                             Selected
@@ -479,59 +560,110 @@
                         </div>
                     @endforeach
 
-                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <div class="text-sm font-semibold text-slate-700">Footer Message</div>
-                        <div class="text-xs text-slate-500">Shown on your generated PDFs across all templates.</div>
-                        <textarea name="footer_message" rows="3" class="mt-3 w-full rounded-2xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">{{ $footerMessage }}</textarea>
+                    <div class="{{ $panelClass }}">
+                        <div class="text-sm font-semibold text-slate-700 dark:text-slate-100">Footer Message</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400">Shown on your generated PDFs across all templates.</div>
+                        <textarea name="footer_message" rows="3" class="{{ $textareaClass }} mt-3">{{ $footerMessage }}</textarea>
                     </div>
                 </div>
             @elseif($tab === 'theme')
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs text-slate-500">Theme Mode</label>
-                        <select name="theme_mode" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
-                            @foreach(['light' => 'Light', 'dark' => 'Dark', 'system' => 'System'] as $value => $label)
-                                <option value="{{ $value }}" @selected(old('theme_mode', $appearance ?? 'system') === $value)>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500">Primary Color</label>
-                        <select name="primary_color" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
-                            @foreach([
-                                'indigo' => 'Indigo',
-                                'emerald' => 'Emerald',
-                                'rose' => 'Rose',
-                                'amber' => 'Amber',
-                                'sky' => 'Sky',
-                                'slate' => 'Slate',
-                            ] as $value => $label)
-                                <option value="{{ $value }}" @selected(old('primary_color', $primaryColor ?? 'indigo') === $value)>{{ $label }}</option>
-                            @endforeach
-                        </select>
+                <div class="space-y-5">
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <div class="{{ $sectionEyebrow }}">Appearance</div>
+                                <div class="{{ $sectionTitle }}">Theme & brand color</div>
+                                <div class="{{ $sectionDesc }}">Control light/dark mode and the primary accent color.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-300 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <path d="M12 3v2M12 19v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M3 12h2M19 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-1 lg:grid-cols-[1.2fr,1fr] gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-xs text-slate-500 dark:text-slate-400">Theme Mode</label>
+                                    <select name="theme_mode" class="{{ $selectClass }}">
+                                        @foreach(['light' => 'Light', 'dark' => 'Dark', 'system' => 'System'] as $value => $label)
+                                            <option value="{{ $value }}" @selected(old('theme_mode', $appearance ?? 'system') === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-xs text-slate-500 dark:text-slate-400">Primary Color</label>
+                                    <select name="primary_color" class="{{ $selectClass }}">
+                                        @foreach([
+                                            'indigo' => 'Indigo',
+                                            'emerald' => 'Emerald',
+                                            'rose' => 'Rose',
+                                            'amber' => 'Amber',
+                                            'sky' => 'Sky',
+                                            'slate' => 'Slate',
+                                        ] as $value => $label)
+                                            <option value="{{ $value }}" @selected(old('primary_color', $primaryColor ?? 'indigo') === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                                <div class="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Preview</div>
+                                <div class="mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                                    <div class="text-sm font-semibold text-slate-800 dark:text-slate-100">Workspace Accent</div>
+                                    <div class="mt-2 text-xs text-slate-500 dark:text-slate-400">Buttons and highlights</div>
+                                    <div class="mt-4 flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-xl bg-[var(--app-primary)]"></div>
+                                        <button type="button" class="rounded-xl bg-[var(--app-primary)] px-4 py-2 text-xs font-semibold text-white">
+                                            Primary Action
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @elseif($tab === 'preferences')
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs text-slate-500">Default Currency</label>
-                        <select name="default_currency" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
-                            @foreach(['MWK', 'USD', 'ZAR', 'EUR', 'GBP'] as $option)
-                                <option value="{{ $option }}" @selected(old('default_currency', 'MWK') === $option)>{{ $option }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500">Default VAT (%)</label>
-                        <input type="number" name="default_vat" min="0" max="100" step="0.1" value="{{ old('default_vat', '16.5') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500">Invoice Number Prefix</label>
-                        <input type="text" name="invoice_prefix" value="{{ old('invoice_prefix', 'INV-') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500">Payment Number Prefix</label>
-                        <input type="text" name="payment_prefix" value="{{ old('payment_prefix', 'PAY-') }}" class="mt-1 w-full rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
+                <div class="space-y-5">
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <div class="{{ $sectionEyebrow }}">Defaults</div>
+                                <div class="{{ $sectionTitle }}">Business preferences</div>
+                                <div class="{{ $sectionDesc }}">Set default currency, VAT, and numbering.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <path d="M12 1v22M17 5H9a4 4 0 0 0 0 8h6a4 4 0 0 1 0 8H6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Default Currency</label>
+                                <select name="default_currency" class="{{ $selectClass }}">
+                                    @foreach(['MWK', 'USD', 'ZAR', 'EUR', 'GBP'] as $option)
+                                        <option value="{{ $option }}" @selected(old('default_currency', 'MWK') === $option)>{{ $option }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Default VAT (%)</label>
+                                <input type="number" name="default_vat" min="0" max="100" step="0.1" value="{{ old('default_vat', '16.5') }}" class="{{ $inputClass }}">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Invoice Number Prefix</label>
+                                <input type="text" name="invoice_prefix" value="{{ old('invoice_prefix', 'INV-') }}" class="{{ $inputClass }}">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-500 dark:text-slate-400">Payment Number Prefix</label>
+                                <input type="text" name="payment_prefix" value="{{ old('payment_prefix', 'PAY-') }}" class="{{ $inputClass }}">
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endif
