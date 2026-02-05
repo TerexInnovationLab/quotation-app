@@ -322,11 +322,11 @@ class QuotationController
         }
 
         return [
-            'name' => 'AccountYanga Ltd',
-            'tagline' => 'Billing and Invoicing',
-            'email' => 'billing@accountyanga.com',
-            'phone' => '+265 88 000 0000',
-            'address' => 'Lilongwe, Malawi',
+            'name' => 'Terex Innovation Lab',
+            'tagline' => 'Innovating for Malawi Digital Economy',
+            'email' => 'info@terexlab.com',
+            'phone' => '+265 999 852 222',
+            'address' => 'Blantyre, Malawi',
             'ceo_name' => 'Chief Executive Officer',
             'logo' => $logo,
             'seal' => $seal,
