@@ -117,6 +117,24 @@ class QuotationController
         ]);
     }
 
+    /**
+     * Public verification view for QR scans.
+     */
+    public function verify(string $quotation)
+    {
+        $row = $this->findQuotationOrFail($quotation);
+        $document = $this->buildQuotationDocument($row);
+        $company = $this->companyProfile();
+
+        return view('verify.quotation', [
+            'row' => $row,
+            'quotation' => $document['quotation'],
+            'company' => $company,
+            'verifiedAt' => now(),
+            'verifyUrl' => route('quotations.verify', $row['number']),
+        ]);
+    }
+
     public function edit(string $quotation)
     {
         $row = $this->findQuotationOrFail($quotation);
@@ -152,13 +170,15 @@ class QuotationController
         $row = $this->findQuotationOrFail($quotation);
         $document = $this->buildQuotationDocument($row);
 
+        $company = $this->companyProfile();
+
         $pdf = Pdf::loadView('components.sales.quotations.single-pdf', [
             'row' => $row,
             'quotation' => $document['quotation'],
             'items' => $document['items'],
             'generatedAt' => now(),
-            'company' => $this->companyProfile(),
-            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'])),
+            'company' => $company,
+            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'], $company)),
             'documentUrl' => route('sales.quotations.show', $row['number']),
             'watermarkText' => 'QUOTATION',
         ])->setPaper('a4', 'portrait');
@@ -171,13 +191,15 @@ class QuotationController
         $row = $this->findQuotationOrFail($quotation);
         $document = $this->buildQuotationDocument($row);
 
+        $company = $this->companyProfile();
+
         $pdf = Pdf::loadView('components.sales.quotations.single-pdf', [
             'row' => $row,
             'quotation' => $document['quotation'],
             'items' => $document['items'],
             'generatedAt' => now(),
-            'company' => $this->companyProfile(),
-            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'])),
+            'company' => $company,
+            'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'], $company)),
             'documentUrl' => route('sales.quotations.show', $row['number']),
             'watermarkText' => 'QUOTATION',
         ])->setPaper('a4', 'portrait');
@@ -336,16 +358,25 @@ class QuotationController
         ];
     }
 
-    private function quotationQrPayload(array $row, array $quotation): string
+    private function quotationQrPayload(array $row, array $quotation, array $company): string
     {
+        $companyName = (string) ($company['name'] ?? 'Terex Innovation Lab');
+        $companyEmail = (string) ($company['email'] ?? '');
+        $companyPhone = (string) ($company['phone'] ?? '');
+        $contact = trim($companyEmail . ($companyEmail && $companyPhone ? ' | ' : '') . $companyPhone);
+
         return implode("\n", [
             'DOCUMENT: QUOTATION',
             'NUMBER: ' . $quotation['quotation_number'],
+            'STATUS: ' . strtoupper((string) ($row['status'] ?? '')),
+            'ISSUE DATE: ' . $quotation['quotation_date'],
+            'VALID UNTIL: ' . $quotation['expiry_date'],
             'CUSTOMER: ' . $quotation['customer_name'],
             'AMOUNT: ' . $quotation['currency'] . ' ' . number_format((float) $quotation['grand_total'], 2, '.', ''),
-            'DATE: ' . $quotation['quotation_date'],
-            'VALID UNTIL: ' . $quotation['expiry_date'],
-            'VERIFY: ' . route('sales.quotations.show', $row['number']),
+            'OWNER: ' . $companyName,
+            'CONTACT: ' . ($contact !== '' ? $contact : 'N/A'),
+            'SECURITY: Verified by ' . $companyName,
+            'VERIFY: ' . route('quotations.verify', $row['number']),
         ]);
     }
 

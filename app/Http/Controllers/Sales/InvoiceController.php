@@ -186,6 +186,24 @@ class InvoiceController
     }
 
     /**
+     * Public verification view for QR scans.
+     */
+    public function verify(string $invoice)
+    {
+        $row = $this->findInvoiceOrFail($invoice);
+        $document = $this->buildInvoiceDocument($row);
+        $company = $this->companyProfile();
+
+        return view('verify.invoice', [
+            'row' => $row,
+            'invoice' => $document['invoice'],
+            'company' => $company,
+            'verifiedAt' => now(),
+            'verifyUrl' => route('invoices.verify', $row['number']),
+        ]);
+    }
+
+    /**
      * Show invoice edit form
      */
     public function edit(string $invoice)
@@ -225,13 +243,15 @@ class InvoiceController
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
 
+        $company = $this->companyProfile();
+
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
             'invoice' => $document['invoice'],
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
-            'company' => $this->companyProfile(),
-            'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'])),
+            'company' => $company,
+            'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
             'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),
             'watermarkText' => 'INVOICE',
@@ -249,13 +269,15 @@ class InvoiceController
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
 
+        $company = $this->companyProfile();
+
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
             'invoice' => $document['invoice'],
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
-            'company' => $this->companyProfile(),
-            'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'])),
+            'company' => $company,
+            'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
             'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),
             'watermarkText' => 'INVOICE',
@@ -426,16 +448,25 @@ class InvoiceController
         ];
     }
 
-    private function invoiceQrPayload(array $row, array $invoice): string
+    private function invoiceQrPayload(array $row, array $invoice, array $company): string
     {
+        $companyName = (string) ($company['name'] ?? 'Terex Innovation Lab');
+        $companyEmail = (string) ($company['email'] ?? '');
+        $companyPhone = (string) ($company['phone'] ?? '');
+        $contact = trim($companyEmail . ($companyEmail && $companyPhone ? ' | ' : '') . $companyPhone);
+
         return implode("\n", [
             'DOCUMENT: INVOICE',
             'NUMBER: ' . $invoice['invoice_number'],
+            'STATUS: ' . strtoupper((string) ($row['status'] ?? '')),
+            'ISSUE DATE: ' . $invoice['invoice_date'],
+            'DUE: ' . $invoice['due_date'],
             'CUSTOMER: ' . $invoice['customer_name'],
             'AMOUNT: ' . $invoice['currency'] . ' ' . number_format((float) $invoice['grand_total'], 2, '.', ''),
-            'DATE: ' . $invoice['invoice_date'],
-            'DUE: ' . $invoice['due_date'],
-            'VERIFY: ' . route('sales.invoices.show', $row['number']),
+            'OWNER: ' . $companyName,
+            'CONTACT: ' . ($contact !== '' ? $contact : 'N/A'),
+            'SECURITY: Verified by ' . $companyName,
+            'VERIFY: ' . route('invoices.verify', $row['number']),
         ]);
     }
 

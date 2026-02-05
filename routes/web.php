@@ -16,6 +16,9 @@ Route::view('/landing', 'components.sales.landing')->name('landing');
 
 Route::redirect('/', '/landing');
 
+Route::get('verify/invoices/{invoice}', [InvoiceController::class, 'verify'])->name('invoices.verify');
+Route::get('verify/quotations/{quotation}', [QuotationController::class, 'verify'])->name('quotations.verify');
+
 Route::middleware('auth')->prefix('sales')->name('sales.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
