@@ -285,8 +285,8 @@
         }
 
         .qr-image {
-            width: 108px;
-            height: 108px;
+            width: 120px;
+            height: 120px;
             border: 0;
             padding: 4px;
             background: #ffffff;
@@ -380,8 +380,8 @@
         }
 
         .stamp-image {
-            width: 108px;
-            height: 108px;
+            width: 155px;
+            height: 155px;
             object-fit: contain;
             display: block;
         }
