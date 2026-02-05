@@ -265,12 +265,12 @@
         .qr-panel,
         .signature-panel {
             margin-top: 0;
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             box-sizing: border-box;
             border: 0;
             border-radius: 10px;
-            padding: 8px;
+            padding: 10px;
             background: #ffffff;
             display: inline-block;
             text-align: center;
@@ -278,15 +278,15 @@
         }
 
         .seal-image {
-            width: 84px;
-            height: 84px;
+            width: 108px;
+            height: 108px;
             object-fit: contain;
             opacity: 0.88;
         }
 
         .qr-image {
-            width: 84px;
-            height: 84px;
+            width: 108px;
+            height: 108px;
             border: 0;
             padding: 4px;
             background: #ffffff;
@@ -294,9 +294,9 @@
 
         .qr-fallback {
             display: inline-block;
-            width: 84px;
-            height: 84px;
-            line-height: 84px;
+            width: 108px;
+            height: 108px;
+            line-height: 108px;
             text-align: center;
             border: 0;
             color: #94a3b8;
@@ -312,18 +312,18 @@
         }
 
         .signature-image {
-            width: 108px;
-            height: 32px;
+            width: 132px;
+            height: 40px;
             object-fit: contain;
             display: block;
             margin: 2px auto 0;
         }
 
         .signature-fallback {
-            width: 108px;
+            width: 132px;
             margin: 2px auto 0;
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             font-style: italic;
             color: #334155;
         }
@@ -331,7 +331,7 @@
         .signature-line {
             border-top: 0;
             margin: 2px auto 4px;
-            width: 108px;
+            width: 132px;
         }
 
         .signature-meta {
@@ -343,7 +343,7 @@
 
         .signature-panel .section-title {
             margin-bottom: 4px;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         .security-section {
@@ -380,8 +380,8 @@
         }
 
         .stamp-image {
-            width: 84px;
-            height: 84px;
+            width: 108px;
+            height: 108px;
             object-fit: contain;
             display: block;
         }

@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 
 class SettingsController
 {
-    private array $tabs = ['profile', 'template', 'company', 'logo', 'theme', 'preferences'];
+    private array $tabs = ['profile', 'template', 'theme', 'preferences'];
+    private array $legacyTabAliases = [
+        'company' => 'profile',
+        'logo' => 'profile',
+    ];
     private array $themeModes = ['light', 'dark', 'system'];
     private array $primaryColors = ['indigo', 'emerald', 'rose', 'amber', 'sky', 'slate'];
 
     public function index(Request $request)
     {
-        $tab = (string) $request->query('tab', 'profile');
+        $tab = $this->normalizeTab((string) $request->query('tab', 'profile'));
 
         if (! in_array($tab, $this->tabs, true)) {
             $tab = 'profile';
@@ -23,11 +27,15 @@ class SettingsController
 
     public function update(Request $request)
     {
+        $validTabs = array_merge($this->tabs, array_keys($this->legacyTabAliases));
+
         $validated = $request->validate([
-            'tab' => ['required', 'in:' . implode(',', $this->tabs)],
+            'tab' => ['required', 'in:' . implode(',', $validTabs)],
         ]);
 
-        if ($validated['tab'] === 'theme') {
+        $tab = $this->normalizeTab($validated['tab']);
+
+        if ($tab === 'theme') {
             $theme = $request->validate([
                 'theme_mode' => ['required', 'in:' . implode(',', $this->themeModes)],
                 'primary_color' => ['required', 'in:' . implode(',', $this->primaryColors)],
@@ -41,7 +49,12 @@ class SettingsController
         }
 
         return redirect()
-            ->route('sales.settings.index', ['tab' => $validated['tab']])
+            ->route('sales.settings.index', ['tab' => $tab])
             ->with('success', 'Settings updated successfully (UI only).');
+    }
+
+    private function normalizeTab(string $tab): string
+    {
+        return $this->legacyTabAliases[$tab] ?? $tab;
     }
 }

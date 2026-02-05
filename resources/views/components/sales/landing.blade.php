@@ -9,6 +9,9 @@
     @vite(['resources/css/app.css','resources/js/app.ts'])
 
     <style>
+        html, body {
+            background-color: #f8fafc;
+        }
         :root { --brand: #465FFF; }
         .brand-bg { background-color: var(--brand); }
         .brand-text { color: var(--brand); }
@@ -25,13 +28,25 @@
   .brand-border { border-color: var(--brand); }
   .brand-shadow { box-shadow: 0 20px 40px rgba(70, 95, 255, 0.18); }
   .top-link:hover { color: var(--brand); }
+  .card-hover {
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, border-color .28s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+    border-color: rgba(70,95,255,.35);
+  }
 
   /* Scroll reveal animations */
   [data-reveal]{
-    opacity: 0;
-    transform: translateY(14px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity .7s ease, transform .7s ease;
     will-change: opacity, transform;
+  }
+  [data-reveal].will-reveal{
+    opacity: 0;
+    transform: translateY(14px);
   }
   [data-reveal].is-visible{
     opacity: 1;
@@ -56,7 +71,7 @@
     </style>
 </head>
 
-<body class="bg-white text-slate-900">
+<body class="bg-slate-50 text-slate-900">
     {{-- Top Nav --}}
     <header
         class="fixed inset-x-0 top-0 z-50 bg-white/5 backdrop-blur-md border-b border-slate-200"
@@ -113,7 +128,7 @@
                     </p>
 
                     <div class="mt-7 flex flex-col sm:flex-row gap-3" data-reveal data-delay="200">
-                        <a href="#cta"
+                        <a href="{{ url('/register') }}"
                            class="inline-flex justify-center px-5 py-3 rounded-2xl text-white brand-bg hover:opacity-95 brand-shadow">
                             Sign Up
                         </a>
@@ -125,15 +140,15 @@
                     </div>
 
                     <div class="mt-7 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-                        <div class="rounded-2xl border border-slate-200 p-4">
+                        <div class="card-hover rounded-2xl border border-slate-200 p-4">
                             <div class="text-xs text-slate-500">Speed</div>
                             <div class="font-semibold mt-1">Fewer clicks</div>
                         </div>
-                        <div class="rounded-2xl border border-slate-200 p-4">
+                        <div class="card-hover rounded-2xl border border-slate-200 p-4">
                             <div class="text-xs text-slate-500">Clarity</div>
                             <div class="font-semibold mt-1">Clean UI</div>
                         </div>
-                        <div class="rounded-2xl border border-slate-200 p-4">
+                        <div class="card-hover rounded-2xl border border-slate-200 p-4">
                             <div class="text-xs text-slate-500">Control</div>
                             <div class="font-semibold mt-1">Track payments</div>
                         </div>
@@ -154,15 +169,15 @@
 
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-3">
-                                <div class="rounded-2xl border border-slate-200 p-4">
+                                <div class="card-hover rounded-2xl border border-slate-200 p-4">
                                     <div class="text-xs text-slate-500">Total Sales</div>
                                     <div class="font-semibold mt-2">MWK 8,250,000</div>
                                 </div>
-                                <div class="rounded-2xl border border-slate-200 p-4">
+                                <div class="card-hover rounded-2xl border border-slate-200 p-4">
                                     <div class="text-xs text-slate-500">Outstanding</div>
                                     <div class="font-semibold mt-2">MWK 3,130,000</div>
                                 </div>
-                                <div class="rounded-2xl border border-slate-200 p-4">
+                                <div class="card-hover rounded-2xl border border-slate-200 p-4">
                                     <div class="text-xs text-slate-500">Payments</div>
                                     <div class="font-semibold mt-2">MWK 5,120,000</div>
                                 </div>
@@ -189,11 +204,11 @@
                             </div>
 
                             <div class="mt-5 grid grid-cols-2 gap-3">
-                                <div class="rounded-2xl border border-slate-200 p-4">
+                                <div class="card-hover rounded-2xl border border-slate-200 p-4">
                                     <div class="text-xs text-slate-500">Quotations</div>
                                     <div class="font-semibold mt-2">14</div>
                                 </div>
-                                <div class="rounded-2xl border border-slate-200 p-4">
+                                <div class="card-hover rounded-2xl border border-slate-200 p-4">
                                     <div class="text-xs text-slate-500">Invoices</div>
                                     <div class="font-semibold mt-2">22</div>
                                 </div>
@@ -212,10 +227,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div class="text-center text-xs text-slate-500">Built for teams that need reliable sales tracking</div>
             <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-slate-500">
-                <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">SMEs</div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">Universities</div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">Consultancies</div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-4 text-center">Projects</div>
+                <div class="card-hover rounded-2xl border border-slate-200 bg-white p-4 text-center">SMEs</div>
+                <div class=" card-hover rounded-2xl border border-slate-200 bg-white p-4 text-center">Universities</div>
+                <div class="card-hover rounded-2xl border border-slate-200 bg-white p-4 text-center">Consultancies</div>
+                <div class="card-hover rounded-2xl border border-slate-200 bg-white p-4 text-center">Projects</div>
             </div>
         </div>
     </section>
@@ -232,17 +247,17 @@
         <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @php
                 $cards = [
-                    ['t'=>'Quotations (Estimates)', 'd'=>'Create professional quotations with line items, notes, discounts, and currency.'],
+                    ['t'=>'Quotations', 'd'=>'Create professional quotations with line items, notes, discounts, and currency.'],
                     ['t'=>'Invoices', 'd'=>'Issue invoices quickly and track payment status at a glance.'],
                     ['t'=>'Payments Received', 'd'=>'Record receipts, reconcile collections, and keep customer balances accurate.'],
                     ['t'=>'Sales Orders', 'd'=>'Capture commitments and convert orders into invoices smoothly.'],
                     ['t'=>'Dashboard & Trends', 'd'=>'Interactive graphs, outstanding balances, and customer aging summaries.'],
-                    ['t'=>'Simple, scalable', 'd'=>'Built on Laravel + Tailwind so you can expand into full accounting later.'],
+                    ['t'=>'Simple, scalable', 'd'=>'Built on the latest technologies so you can expand into full accounting later.'],
                 ];
             @endphp
 
             @foreach($cards as $i => $c)
-                <div class="rounded-3xl border border-slate-200 p-6 hover:shadow-sm transition" data-reveal data-delay="{{ [0,100,200,300,400,100][$i % 6] }}">
+                <div class=" rounded-3xl border border-slate-200 p-6 hover:shadow-sm transition" data-reveal data-delay="{{ [0,100,200,300,400,100][$i % 6] }}">
                     <div class="h-10 w-10 rounded-2xl brand-bg/10 grid place-items-center">
                         <div class="h-2.5 w-2.5 rounded-full brand-bg"></div>
                     </div>
@@ -336,19 +351,19 @@
                 </p>
 
                 <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="rounded-3xl border border-slate-200 p-6">
+                    <div class="card-hover rounded-3xl border border-slate-200 p-6">
                         <div class="text-sm font-semibold">Role-based access</div>
                         <div class="mt-2 text-sm text-slate-600">Limit actions by staff role (e.g., view-only for executives).</div>
                     </div>
-                    <div class="rounded-3xl border border-slate-200 p-6">
+                    <div class="card-hover rounded-3xl border border-slate-200 p-6">
                         <div class="text-sm font-semibold">Audit-friendly</div>
                         <div class="mt-2 text-sm text-slate-600">Track edits, approvals, and payment records.</div>
                     </div>
-                    <div class="rounded-3xl border border-slate-200 p-6">
+                    <div class="card-hover rounded-3xl border border-slate-200 p-6">
                         <div class="text-sm font-semibold">Data integrity</div>
                         <div class="mt-2 text-sm text-slate-600">Standardize invoice numbering, due dates, and currency rules.</div>
                     </div>
-                    <div class="rounded-3xl border border-slate-200 p-6">
+                    <div class="card-hover rounded-3xl border border-slate-200 p-6">
                         <div class="text-sm font-semibold">Integrations-ready</div>
                         <div class="mt-2 text-sm text-slate-600">Later: email PDFs, WhatsApp receipts, payment gateways.</div>
                     </div>
@@ -358,17 +373,14 @@
             <div class="rounded-3xl border border-slate-200 bg-slate-50 p-7">
                 <div class="text-sm font-semibold">Dashboard highlights</div>
                 <div class="mt-4 space-y-3 text-sm text-slate-600">
-                    <div class="flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
+                    <div class="card-hover flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
                         <div>Outstanding by customer</div>
-                        <div class="font-semibold brand-text">Aging</div>
                     </div>
-                    <div class="flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
+                    <div class="card-hover flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
                         <div>Sales trend over time</div>
-                        <div class="font-semibold brand-text">Interactive</div>
                     </div>
-                    <div class="flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
+                    <div class="card-hover flex items-center justify-between rounded-2xl bg-white border border-slate-200 p-4">
                         <div>Paid vs unpaid invoices</div>
-                        <div class="font-semibold brand-text">Summary</div>
                     </div>
                 </div>
             </div>
@@ -388,12 +400,13 @@
                     ['q'=>'Can it generate PDFs?', 'a'=>'Yes, we can add PDF generation later (Blade → PDF) plus email sending and branded templates.'],
                     ['q'=>'Does it support multiple currencies?', 'a'=>'Yes. The quotation form already supports a currency selector and formatting; we can expand to exchange rates later.'],
                     ['q'=>'Can we track partial payments?', 'a'=>'Yes. Payments Received can be designed to apply receipts to one or multiple invoices with partial allocation.'],
-                    ['q'=>'Is this like Zoho or Wave?', 'a'=>'It’s inspired by their clarity: simple flows, clean UI, strong reporting — built on your own Laravel stack.'],
+                    ['q'=>'Can we customize invoice numbering?', 'a'=>'Yes. We can implement customizable invoice/quotation numbering schemes to fit your needs.'],
+                    ['q'=>'Is my data secure?', 'a'=>'Yes. The system is built security best practices, including hashed passwords, role-based access, and data validation.'],
                 ];
             @endphp
 
             @foreach($faqs as $f)
-                <div class="rounded-3xl border border-slate-200 p-6">
+                <div class="card-hover rounded-3xl border border-slate-200 p-6">
                     <div class="font-semibold">{{ $f['q'] }}</div>
                     <div class="mt-2 text-sm text-slate-600 leading-relaxed">{{ $f['a'] }}</div>
                 </div>
@@ -415,7 +428,7 @@
             </div>
         </div>
     </footer>
-    <script>
+<script>
   (function () {
     const els = document.querySelectorAll('[data-reveal]');
     if (!('IntersectionObserver' in window) || !els.length) {
@@ -426,16 +439,29 @@
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          entry.target.classList.remove('will-reveal');
           entry.target.classList.add('is-visible');
           io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
 
-    els.forEach(el => io.observe(el));
+    const viewportBottom = window.innerHeight * 0.95;
+    els.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const inInitialView = rect.top < viewportBottom;
+
+      if (inInitialView) {
+        el.classList.add('is-visible');
+      } else {
+        el.classList.add('will-reveal');
+        io.observe(el);
+      }
+    });
   })();
 </script>
 
 </body>
 </html>
+
 
