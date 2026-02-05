@@ -469,8 +469,11 @@
     <table class="header-table">
         <tr>
             <td class="brand-wrap">
+                @php($defaultLogoPath = public_path('images/terex_innovation_lab_logo.jpg'))
                 @if(!empty($company['logo']))
                     <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
+                @elseif(file_exists($defaultLogoPath))
+                    <img src="{{ $defaultLogoPath }}" alt="Terex Innovation Lab logo" class="logo">
                 @else
                     <div class="logo-fallback">A</div>
                 @endif
