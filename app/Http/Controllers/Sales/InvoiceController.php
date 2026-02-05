@@ -270,15 +270,15 @@ class InvoiceController
         $digits = preg_replace('/\D+/', '', $row['number']) ?: '00000';
 
         return redirect()
-            ->route('sales.payments.create', [
-                'payment_number' => 'RCPT-' . $digits,
+            ->route('sales.receipts.create', [
+                'receipt_number' => 'RCPT-' . $digits,
                 'customer_name' => $row['customer'],
                 'method' => 'Cash',
                 'reference' => $row['number'],
                 'amount' => $row['amount'],
                 'notes' => 'Converted from invoice ' . $row['number'],
             ])
-            ->with('success', 'Receipt draft opened. Confirm and save to record payment.');
+            ->with('success', 'Receipt draft opened. Confirm and save.');
     }
 
     /**

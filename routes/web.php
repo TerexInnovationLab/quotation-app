@@ -5,6 +5,7 @@ use App\Http\Controllers\Sales\DashboardController;
 use App\Http\Controllers\Sales\QuotationController;
 use App\Http\Controllers\Sales\InvoiceController;
 use App\Http\Controllers\Sales\LetterController;
+use App\Http\Controllers\Sales\ReceiptController;
 use App\Http\Controllers\Sales\PaymentsReceivedController;
 use App\Http\Controllers\Sales\SalesOrderController;
 use App\Http\Controllers\Sales\SettingsController;
@@ -41,6 +42,16 @@ Route::middleware('auth')->prefix('sales')->name('sales.')->group(function () {
     Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
     
+    Route::get('receipts', [ReceiptController::class, 'index'])->name('receipts.index');
+    Route::get('receipts/create', [ReceiptController::class, 'create'])->name('receipts.create');
+    Route::post('receipts', [ReceiptController::class, 'store'])->name('receipts.store');
+    Route::get('receipts/{receipt}/pdf', [ReceiptController::class, 'pdf'])->name('receipts.pdf');
+    Route::get('receipts/{receipt}/download', [ReceiptController::class, 'downloadPdf'])->name('receipts.download');
+    Route::post('receipts/{receipt}/send', [ReceiptController::class, 'send'])->name('receipts.send');
+    Route::get('receipts/{receipt}', [ReceiptController::class, 'show'])->name('receipts.show');
+    Route::get('receipts/{receipt}/edit', [ReceiptController::class, 'edit'])->name('receipts.edit');
+    Route::put('receipts/{receipt}', [ReceiptController::class, 'update'])->name('receipts.update');
+
     Route::get('letters', [LetterController::class, 'index'])->name('letters.index');
     Route::get('letters/create', [LetterController::class, 'create'])->name('letters.create');
     Route::post('letters', [LetterController::class, 'store'])->name('letters.store');
