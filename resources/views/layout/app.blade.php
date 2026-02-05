@@ -91,6 +91,7 @@
                         ['label' => 'Dashboard', 'route' => 'sales.dashboard', 'active' => 'sales.dashboard', 'icon' => 'M4 10.5h7V4H4v6.5zM13 20h7v-9h-7v9zM13 4h7v5h-7V4zM4 13h7v7H4v-7z'],
                         ['label' => 'Quotations', 'route' => 'sales.quotations.index', 'active' => 'sales.quotations.*', 'icon' => 'M7 7h10M7 11h10M7 15h6'],
                         ['label' => 'Invoices', 'route' => 'sales.invoices.index', 'active' => 'sales.invoices.*', 'icon' => 'M6 3h8l4 4v14H6zM14 3v4h4M9 11h6M9 15h6'],
+                        ['label' => 'Letters', 'route' => 'sales.letters.index', 'active' => 'sales.letters.*', 'icon' => 'M4 6h16v12H4zM4 6l8 6 8-6'],
                         ['label' => 'Payments Received', 'route' => 'sales.payments.index', 'active' => 'sales.payments.*', 'icon' => 'M3 7h18M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M12 4v8m0 0-3-3m3 3 3-3'],
                         ['label' => 'Clients / Customers', 'route' => 'sales.clients.index', 'active' => 'sales.clients.*', 'icon' => 'M16 11c1.657 0 3-1.79 3-4s-1.343-4-3-4-3 1.79-3 4 1.343 4 3 4zM8 11c1.657 0 3-1.79 3-4S9.657 3 8 3 5 4.79 5 7s1.343 4 3 4zM8 13c-2.761 0-5 1.79-5 4v1h10v-1c0-2.21-2.239-4-5-4zM16 13c-.602 0-1.18.086-1.724.245 1.623.93 2.724 2.43 2.724 4.255v.5H21v-.5c0-2.21-2.239-4-5-4z'],
                         ['label' => 'Products / Services', 'route' => 'sales.products.index', 'active' => 'sales.products.*', 'icon' => 'M4 7h16M7 3h10a1 1 0 0 1 1 1v3H6V4a1 1 0 0 1 1-1zM6 11h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-9zM10 15h4'],

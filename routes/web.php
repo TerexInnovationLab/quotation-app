@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sales\DashboardController;
 use App\Http\Controllers\Sales\QuotationController;
 use App\Http\Controllers\Sales\InvoiceController;
+use App\Http\Controllers\Sales\LetterController;
 use App\Http\Controllers\Sales\PaymentsReceivedController;
 use App\Http\Controllers\Sales\SalesOrderController;
 use App\Http\Controllers\Sales\SettingsController;
@@ -40,6 +41,16 @@ Route::middleware('auth')->prefix('sales')->name('sales.')->group(function () {
     Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
     
+    Route::get('letters', [LetterController::class, 'index'])->name('letters.index');
+    Route::get('letters/create', [LetterController::class, 'create'])->name('letters.create');
+    Route::post('letters', [LetterController::class, 'store'])->name('letters.store');
+    Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])->name('letters.pdf');
+    Route::get('letters/{letter}/download', [LetterController::class, 'downloadPdf'])->name('letters.download');
+    Route::post('letters/{letter}/send', [LetterController::class, 'send'])->name('letters.send');
+    Route::get('letters/{letter}', [LetterController::class, 'show'])->name('letters.show');
+    Route::get('letters/{letter}/edit', [LetterController::class, 'edit'])->name('letters.edit');
+    Route::put('letters/{letter}', [LetterController::class, 'update'])->name('letters.update');
+
     Route::get('payments-received', [PaymentsReceivedController::class, 'index'])->name('payments.index');
     Route::get('payments-received/create', [PaymentsReceivedController::class, 'create'])->name('payments.create');
     Route::post('payments-received', [PaymentsReceivedController::class, 'store'])->name('payments.store');
