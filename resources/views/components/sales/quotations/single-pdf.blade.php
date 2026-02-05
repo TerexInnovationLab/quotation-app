@@ -285,11 +285,11 @@
         .qr-panel,
         .stamp-panel {
             display: inline-block;
-            width: 104px;
+            width: 124px;
             box-sizing: border-box;
             border: 1px solid #dbe3ee;
             border-radius: 10px;
-            padding: 6px;
+            padding: 8px;
             background: #ffffff;
         }
 
@@ -300,24 +300,24 @@
 
         .signature-panel {
             margin-top: 8px;
-            width: 170px;
+            width: 196px;
             box-sizing: border-box;
             border: 1px solid #dbe3ee;
             border-radius: 10px;
-            padding: 6px 8px;
+            padding: 8px 10px;
             background: #ffffff;
         }
 
         .seal-image {
-            width: 84px;
-            height: 84px;
+            width: 104px;
+            height: 104px;
             object-fit: contain;
             opacity: 0.88;
         }
 
         .qr-image {
-            width: 84px;
-            height: 84px;
+            width: 104px;
+            height: 104px;
             border: 1px solid #cbd5e1;
             padding: 4px;
             background: #ffffff;
@@ -325,9 +325,9 @@
 
         .qr-fallback {
             display: inline-block;
-            width: 84px;
-            height: 84px;
-            line-height: 84px;
+            width: 104px;
+            height: 104px;
+            line-height: 104px;
             text-align: center;
             border: 1px dashed #cbd5e1;
             color: #94a3b8;
@@ -343,18 +343,18 @@
         }
 
         .signature-image {
-            width: 140px;
-            height: 40px;
+            width: 160px;
+            height: 48px;
             object-fit: contain;
             display: block;
             margin: 2px auto 0;
         }
 
         .signature-fallback {
-            width: 140px;
+            width: 160px;
             margin: 2px auto 0;
             text-align: center;
-            font-size: 18px;
+            font-size: 20px;
             font-style: italic;
             color: #334155;
         }
@@ -362,7 +362,7 @@
         .signature-line {
             border-top: 1px solid #94a3b8;
             margin: 2px auto 4px;
-            width: 140px;
+            width: 160px;
         }
 
         .signature-meta {
@@ -373,8 +373,8 @@
         }
 
         .stamp-realistic {
-            width: 88px;
-            height: 88px;
+            width: 104px;
+            height: 104px;
             margin: 0 auto;
             position: relative;
             box-sizing: border-box;
@@ -399,10 +399,10 @@
 
         .stamp-realistic .stamp-core {
             position: absolute;
-            top: 7px;
-            right: 7px;
-            bottom: 7px;
-            left: 7px;
+            top: 8px;
+            right: 8px;
+            bottom: 8px;
+            left: 8px;
             border: 2px solid rgba(220, 38, 38, 0.8);
             border-radius: 50%;
             z-index: 0;
@@ -414,18 +414,18 @@
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 8px;
-            letter-spacing: 0.9px;
+            font-size: 9px;
+            letter-spacing: 1px;
             font-weight: 800;
             z-index: 2;
         }
 
         .stamp-realistic .stamp-top {
-            top: 12px;
+            top: 14px;
         }
 
         .stamp-realistic .stamp-bottom {
-            bottom: 11px;
+            bottom: 13px;
         }
 
         .stamp-realistic .stamp-stars-top,
@@ -434,30 +434,30 @@
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 7px;
+            font-size: 8px;
             letter-spacing: 1px;
             font-weight: 700;
             z-index: 2;
         }
 
         .stamp-realistic .stamp-stars-top {
-            top: 22px;
+            top: 26px;
         }
 
         .stamp-realistic .stamp-stars-bottom {
-            bottom: 22px;
+            bottom: 26px;
         }
 
         .stamp-realistic .stamp-band {
             position: absolute;
-            left: -8px;
-            right: -8px;
-            top: 35px;
-            height: 18px;
-            line-height: 18px;
+            left: -10px;
+            right: -10px;
+            top: 41px;
+            height: 20px;
+            line-height: 20px;
             text-align: center;
-            font-size: 11px;
-            letter-spacing: 1.2px;
+            font-size: 12px;
+            letter-spacing: 1.3px;
             font-weight: 900;
             color: #dc2626;
             background: #ffffff;
