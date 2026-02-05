@@ -277,6 +277,7 @@ class QuotationController
             public_path('stamp.jpeg'),
         ];
         $ceoSignaturePaths = [
+            public_path('images/richard_chilipa_signature.jpg'),
             public_path('images/ceo-signature.png'),
             public_path('images/ceo-signature.jpg'),
             public_path('images/ceo-signature.jpeg'),
@@ -327,7 +328,8 @@ class QuotationController
             'email' => 'info@terexlab.com',
             'phone' => '+265 999 852 222',
             'address' => 'Blantyre, Malawi',
-            'ceo_name' => 'Chief Executive Officer',
+            'ceo_name' => 'Richard Chilipa',
+            'ceo_title' => 'Terex Innovation Lab CEO',
             'logo' => $logo,
             'seal' => $seal,
             'ceo_signature' => $ceoSignature,

@@ -1,32 +1,31 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Quotation {{ $row['number'] }}</title>
     <style>
         @page {
-            margin: 28px 30px 64px;
+            margin: 14px 16px 34px;
         }
 
         body {
             font-family: DejaVu Sans, sans-serif;
             color: #0f172a;
             font-size: 12px;
-            line-height: 1.5;
+            line-height: 1.45;
             position: relative;
-            padding-bottom: 62px;
+            padding-bottom: 34px;
         }
 
         .top-accent {
-            height: 8px;
+            height: 7px;
             background: #465fff;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .watermark {
             position: fixed;
-            top: 43%;
-            left: 0;
             width: 100%;
             text-align: center;
             font-size: 56px;
@@ -38,6 +37,21 @@
             z-index: -1;
             text-transform: uppercase;
             white-space: nowrap;
+        }
+
+        .watermark-top {
+            top: 18%;
+            left: 0;
+        }
+
+        .watermark-middle {
+            top: 45%;
+            left: 0;
+        }
+
+        .watermark-bottom {
+            top: 72%;
+            left: 0;
         }
 
         .header-table,
@@ -67,17 +81,17 @@
         }
 
         .logo {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             object-fit: contain;
             display: block;
             margin-bottom: 8px;
         }
 
         .logo-fallback {
-            width: 58px;
-            height: 58px;
-            line-height: 58px;
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
             text-align: center;
             font-size: 22px;
             color: #ffffff;
@@ -114,9 +128,9 @@
 
         .status-badge {
             display: inline-block;
-            margin-top: 7px;
+            margin-top: 6px;
             padding: 3px 10px;
-            border: 1px solid #cbd5e1;
+            border: 0;
             background: #f8fafc;
             color: #334155;
             font-size: 11px;
@@ -124,27 +138,27 @@
         }
 
         .meta {
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .meta .row {
-            margin-top: 4px;
+            margin-top: 3px;
             color: #334155;
             font-size: 11px;
         }
 
         .meta .label {
             color: #64748b;
-            width: 102px;
+            width: 92px;
             display: inline-block;
             text-align: left;
         }
 
         .subject {
-            margin-top: 14px;
+            margin-top: 12px;
             padding: 10px 12px;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 0;
             font-size: 11px;
         }
 
@@ -157,14 +171,14 @@
         }
 
         .bill-table {
-            margin-top: 20px;
+            margin-top: 14px;
         }
 
         .bill-table td {
             width: 50%;
             vertical-align: top;
-            padding: 12px 14px;
-            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            border: 0;
             background: #ffffff;
         }
 
@@ -181,13 +195,13 @@
         }
 
         .items-table {
-            margin-top: 20px;
+            margin-top: 14px;
         }
 
         .items-table th,
         .items-table td {
-            border: 1px solid #dbe3ee;
-            padding: 9px 10px;
+            border: 0;
+            padding: 7px 9px;
         }
 
         .items-table th {
@@ -217,11 +231,11 @@
         .totals-table {
             width: 42%;
             margin-left: auto;
-            margin-top: 14px;
+            margin-top: 10px;
         }
 
         .totals-table td {
-            padding: 6px 2px;
+            padding: 5px 2px;
             border: 0;
             font-size: 11px;
         }
@@ -232,20 +246,20 @@
         }
 
         .totals-table .grand td {
-            border-top: 1px solid #cbd5e1;
+            border-top: 0;
             font-size: 13px;
             font-weight: 700;
-            padding-top: 8px;
+            padding-top: 7px;
         }
 
         .notes-table {
-            margin-top: 18px;
+            margin-top: 12px;
         }
 
         .notes-table td {
             width: 50%;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
+            border: 0;
+            padding: 10px;
             vertical-align: top;
         }
 
@@ -264,14 +278,14 @@
         .qr-panel,
         .signature-panel {
             margin-top: 0;
-            display: inline-block;
             width: 160px;
-            height: 160px;
+            height: 170px;
             box-sizing: border-box;
             border: 0;
             border-radius: 10px;
             padding: 10px;
             background: #ffffff;
+            display: inline-block;
             text-align: center;
             overflow: hidden;
         }
@@ -284,8 +298,8 @@
         }
 
         .qr-image {
-            width: 108px;
-            height: 108px;
+            width: 120px;
+            height: 120px;
             border: 0;
             padding: 4px;
             background: #ffffff;
@@ -311,8 +325,8 @@
         }
 
         .signature-image {
-            width: 132px;
-            height: 40px;
+            width: 145px;
+            height: 50px;
             object-fit: contain;
             display: block;
             margin: 2px auto 0;
@@ -322,9 +336,10 @@
             width: 132px;
             margin: 2px auto 0;
             text-align: center;
-            font-size: 14px;
-            font-style: italic;
-            color: #334155;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .signature-line {
@@ -335,14 +350,23 @@
 
         .signature-meta {
             text-align: center;
-            color: #64748b;
-            font-size: 7px;
+            color: #0f172a;
+            font-size: 10px;
+            font-weight: 700;
             margin-top: 2px;
         }
 
         .signature-panel .section-title {
             margin-bottom: 4px;
             font-size: 10px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .signature-panel {
+            font-size: 10px;
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .security-section {
@@ -379,8 +403,8 @@
         }
 
         .stamp-image {
-            width: 108px;
-            height: 108px;
+            width: 155px;
+            height: 155px;
             object-fit: contain;
             display: block;
         }
@@ -404,17 +428,42 @@
             position: fixed;
             left: 0;
             right: 0;
-            bottom: -44px;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 8px;
+            bottom: -18px;
+            border-top: 0;
+            padding-top: 7px;
             font-size: 10px;
             color: #64748b;
             text-align: center;
         }
+
+        .footer-link {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            position: relative;
+            top: 6px;
+        }
+
+        .footer-text {
+            position: relative;
+            top: -10px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="watermark">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'QUOTATION')) }}</div>
+    <div class="watermark watermark-top">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'QUOTATION')) }}</div>
+    <div class="watermark watermark-middle">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'QUOTATION')) }}</div>
+    <div class="watermark watermark-bottom">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'QUOTATION')) }}</div>
     <div class="top-accent"></div>
 
     <table class="header-table">
@@ -526,8 +575,12 @@
             <tr>
                 <td class="security-cell-left">
                     <div class="stamp-container">
-                        @php($stampImagePath = public_path('images/approved-stamp.jpg'))
-                        @if(file_exists($stampImagePath))
+                        @php($stampImagePath = public_path('images/terex_stamp.jpg'))
+                        @if(!empty($stampDataUri ?? null))
+                            <img src="{{ $stampDataUri }}" alt="Approved stamp" class="stamp-image">
+                        @elseif(!empty($company['seal']))
+                            <img src="{{ $company['seal'] }}" alt="Approved stamp" class="stamp-image">
+                        @elseif(file_exists($stampImagePath))
                             <img src="{{ $stampImagePath }}" alt="Approved stamp" class="stamp-image">
                         @else
                             <div class="signature-meta">Stamp image unavailable</div>
@@ -543,9 +596,9 @@
                         @endif
                     </div>
                 </td>
-                <td class="security-cell-right">
+               <td class="security-cell-right">
                     <div class="signature-panel">
-                        <div class="section-title">Digital Signature (CEO)</div>
+                        <div class="section-title">Digital Signature</div>
                         @if(!empty($company['ceo_signature']))
                             <img src="{{ $company['ceo_signature'] }}" alt="CEO signature" class="signature-image">
                         @else
@@ -553,15 +606,19 @@
                         @endif
                         <div class="signature-line"></div>
                         <div class="signature-meta">Signed by {{ $company['ceo_name'] }}</div>
-                        <div class="signature-meta">{{ $generatedAt->format('Y-m-d H:i') }}</div>
+                        <div class="signature-meta">{{ $company['ceo_title'] ?? 'CEO' }}</div>
                     </div>
                 </td>
             </tr>
         </table>
 
         <div class="footer">
-            Powered by TerexLab.
+            <a class="footer-link" href="https://terexlab.com">
+                <img src="{{ public_path('images/terex_innovation_lab_logo.jpg') }}" alt="Terex Innovation Lab logo" class="footer-logo">
+                <span class="footer-text">Powered By Terex Innovation Lab</span>
+            </a>
         </div>
     </div>
 </body>
+
 </html>
