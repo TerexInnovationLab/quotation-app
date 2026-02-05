@@ -418,7 +418,7 @@
     <footer>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col items-center gap-6">
             <div class="text-sm text-slate-600 text-center">
-                <div class="mt-1">&copy; {{ date('Y') }} &bull; Designed by Terex Labs &bull; All rights reserved</div>
+                <div class="mt-1">&copy; {{ date('Y') }} &bull; Designed by Terex Innovation Lab &bull; All rights reserved</div>
             </div>
 
             <div class="flex items-center gap-4 text-sm text-slate-600">
