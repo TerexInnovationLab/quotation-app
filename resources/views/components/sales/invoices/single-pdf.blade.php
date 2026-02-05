@@ -266,7 +266,7 @@
         .signature-panel {
             margin-top: 0;
             width: 160px;
-            height: 160px;
+            height: 170px;
             box-sizing: border-box;
             border: 0;
             border-radius: 10px;
@@ -312,8 +312,8 @@
         }
 
         .signature-image {
-            width: 132px;
-            height: 40px;
+            width: 145px;
+            height: 50px;
             object-fit: contain;
             display: block;
             margin: 2px auto 0;
@@ -323,9 +323,10 @@
             width: 132px;
             margin: 2px auto 0;
             text-align: center;
-            font-size: 14px;
-            font-style: italic;
-            color: #334155;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .signature-line {
@@ -336,14 +337,23 @@
 
         .signature-meta {
             text-align: center;
-            color: #64748b;
-            font-size: 7px;
+            color: #0f172a;
+            font-size: 10px;
+            font-weight: 700;
             margin-top: 2px;
         }
 
         .signature-panel .section-title {
             margin-bottom: 4px;
             font-size: 10px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .signature-panel {
+            font-size: 10px;
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .security-section {
@@ -405,12 +415,34 @@
             position: fixed;
             left: 0;
             right: 0;
-            bottom: -36px;
+            bottom: -18px;
             border-top: 0;
             padding-top: 7px;
             font-size: 10px;
             color: #64748b;
             text-align: center;
+        }
+
+        .footer-link {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            position: relative;
+            top: 6px;
+        }
+
+        .footer-text {
+            position: relative;
+            top: -10px;
         }
     </style>
 </head>
@@ -549,7 +581,7 @@
                 </td>
                 <td class="security-cell-right">
                     <div class="signature-panel">
-                        <div class="section-title">Digital Signature (CEO)</div>
+                        <div class="section-title">Digital Signature</div>
                         @if(!empty($company['ceo_signature']))
                             <img src="{{ $company['ceo_signature'] }}" alt="CEO signature" class="signature-image">
                         @else
@@ -557,14 +589,17 @@
                         @endif
                         <div class="signature-line"></div>
                         <div class="signature-meta">Signed by {{ $company['ceo_name'] }}</div>
-                        <div class="signature-meta">{{ $generatedAt->format('Y-m-d H:i') }}</div>
+                        <div class="signature-meta">{{ $company['ceo_title'] ?? 'CEO' }}</div>
                     </div>
                 </td>
             </tr>
         </table>
 
         <div class="footer">
-            Powered by TerexLab.
+            <a class="footer-link" href="https://terexlab.com">
+                <img src="{{ public_path('images/terex_innovation_lab_logo.jpg') }}" alt="Terex Innovation Lab logo" class="footer-logo">
+                <span class="footer-text">Powered By Terex Innovation Lab</span>
+            </a>
         </div>
 </body>
 

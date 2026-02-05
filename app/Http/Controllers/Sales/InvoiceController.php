@@ -367,6 +367,7 @@ class InvoiceController
             public_path('stamp.jpeg'),
         ];
         $ceoSignaturePaths = [
+            public_path('images/richard_chilipa_signature.jpg'),
             public_path('images/ceo-signature.png'),
             public_path('images/ceo-signature.jpg'),
             public_path('images/ceo-signature.jpeg'),
@@ -417,7 +418,8 @@ class InvoiceController
             'email' => 'billing@accountyanga.com',
             'phone' => '+265 88 000 0000',
             'address' => 'Lilongwe, Malawi',
-            'ceo_name' => 'Chief Executive Officer',
+            'ceo_name' => 'Richard Chilipa',
+            'ceo_title' => 'Terex Innovation Lab CEO',
             'logo' => $logo,
             'seal' => $seal,
             'ceo_signature' => $ceoSignature,
