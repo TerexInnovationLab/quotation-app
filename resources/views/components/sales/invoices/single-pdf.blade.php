@@ -26,8 +26,6 @@
 
         .watermark {
             position: fixed;
-            top: 43%;
-            left: 0;
             width: 100%;
             text-align: center;
             font-size: 56px;
@@ -39,6 +37,21 @@
             z-index: -1;
             text-transform: uppercase;
             white-space: nowrap;
+        }
+
+        .watermark-top {
+            top: 18%;
+            left: 0;
+        }
+
+        .watermark-middle {
+            top: 45%;
+            left: 0;
+        }
+
+        .watermark-bottom {
+            top: 72%;
+            left: 0;
         }
 
         .header-table,
@@ -448,7 +461,9 @@
 </head>
 
 <body>
-    <div class="watermark">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'INVOICE')) }}</div>
+    <div class="watermark watermark-top">TEREX INNOVATION LAB</div>
+    <div class="watermark watermark-middle">TEREX INNOVATION LAB</div>
+    <div class="watermark watermark-bottom">TEREX INNOVATION LAB</div>
     <div class="top-accent"></div>
 
     <table class="header-table">
