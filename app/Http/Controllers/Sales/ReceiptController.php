@@ -122,12 +122,16 @@ class ReceiptController
     {
         $row = $this->findReceiptOrFail($receipt);
         $document = $this->buildReceiptDocument($row);
+        $template = request()->cookie('receipt_template', 'Template 4');
+        $templateColor = request()->cookie('receipt_template_color', '');
 
         $pdf = Pdf::loadView('components.sales.receipts.single-pdf', [
             'row' => $row,
             'receipt' => $document['receipt'],
             'company' => $this->companyProfile(),
             'generatedAt' => now(),
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream($row['number'] . '.pdf');
@@ -137,12 +141,16 @@ class ReceiptController
     {
         $row = $this->findReceiptOrFail($receipt);
         $document = $this->buildReceiptDocument($row);
+        $template = request()->cookie('receipt_template', 'Template 4');
+        $templateColor = request()->cookie('receipt_template_color', '');
 
         $pdf = Pdf::loadView('components.sales.receipts.single-pdf', [
             'row' => $row,
             'receipt' => $document['receipt'],
             'company' => $this->companyProfile(),
             'generatedAt' => now(),
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download($row['number'] . '.pdf');

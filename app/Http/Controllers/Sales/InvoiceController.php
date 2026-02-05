@@ -242,6 +242,8 @@ class InvoiceController
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
+        $template = request()->cookie('invoice_template', 'Template 2');
+        $templateColor = request()->cookie('invoice_template_color', '');
 
         $company = $this->companyProfile();
 
@@ -251,6 +253,8 @@ class InvoiceController
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
             'company' => $company,
+            'template' => $template,
+            'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
             'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),
@@ -268,6 +272,8 @@ class InvoiceController
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
+        $template = request()->cookie('invoice_template', 'Template 2');
+        $templateColor = request()->cookie('invoice_template_color', '');
 
         $company = $this->companyProfile();
 
@@ -277,6 +283,8 @@ class InvoiceController
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
             'company' => $company,
+            'template' => $template,
+            'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
             'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),

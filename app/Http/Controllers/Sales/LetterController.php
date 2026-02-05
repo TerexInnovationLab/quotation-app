@@ -125,6 +125,8 @@ class LetterController
         $row = $this->findLetterOrFail($letter);
         $document = $this->buildLetterDocument($row);
         $watermarkText = $this->watermarkForStatus($row['status'] ?? 'Draft');
+        $template = request()->cookie('letter_template', 'Template 1');
+        $templateColor = request()->cookie('letter_template_color', '');
 
         $pdf = Pdf::loadView('components.sales.letters.single-pdf', [
             'row' => $row,
@@ -132,6 +134,8 @@ class LetterController
             'company' => $this->companyProfile(),
             'generatedAt' => now(),
             'watermarkText' => $watermarkText,
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream($row['number'] . '.pdf');
@@ -142,6 +146,8 @@ class LetterController
         $row = $this->findLetterOrFail($letter);
         $document = $this->buildLetterDocument($row);
         $watermarkText = $this->watermarkForStatus($row['status'] ?? 'Draft');
+        $template = request()->cookie('letter_template', 'Template 1');
+        $templateColor = request()->cookie('letter_template_color', '');
 
         $pdf = Pdf::loadView('components.sales.letters.single-pdf', [
             'row' => $row,
@@ -149,6 +155,8 @@ class LetterController
             'company' => $this->companyProfile(),
             'generatedAt' => now(),
             'watermarkText' => $watermarkText,
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download($row['number'] . '.pdf');

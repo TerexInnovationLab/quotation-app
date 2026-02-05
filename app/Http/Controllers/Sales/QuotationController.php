@@ -169,6 +169,8 @@ class QuotationController
     {
         $row = $this->findQuotationOrFail($quotation);
         $document = $this->buildQuotationDocument($row);
+        $template = request()->cookie('quotation_template', 'Template 3');
+        $templateColor = request()->cookie('quotation_template_color', '');
 
         $company = $this->companyProfile();
 
@@ -178,6 +180,8 @@ class QuotationController
             'items' => $document['items'],
             'generatedAt' => now(),
             'company' => $company,
+            'template' => $template,
+            'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'], $company)),
             'documentUrl' => route('sales.quotations.show', $row['number']),
             'watermarkText' => 'QUOTATION',
@@ -190,6 +194,8 @@ class QuotationController
     {
         $row = $this->findQuotationOrFail($quotation);
         $document = $this->buildQuotationDocument($row);
+        $template = request()->cookie('quotation_template', 'Template 3');
+        $templateColor = request()->cookie('quotation_template_color', '');
 
         $company = $this->companyProfile();
 
@@ -199,6 +205,8 @@ class QuotationController
             'items' => $document['items'],
             'generatedAt' => now(),
             'company' => $company,
+            'template' => $template,
+            'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->quotationQrPayload($row, $document['quotation'], $company)),
             'documentUrl' => route('sales.quotations.show', $row['number']),
             'watermarkText' => 'QUOTATION',

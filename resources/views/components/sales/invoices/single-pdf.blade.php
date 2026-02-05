@@ -1,4 +1,55 @@
 <!doctype html>
+@php
+    $templateLabel = $template ?? 'Template 2';
+    $templateNumber = (int) preg_replace('/\D+/', '', (string) $templateLabel);
+    if ($templateNumber < 1 || $templateNumber > 6) {
+        $templateNumber = 2;
+    }
+    $templateStyles = [
+        1 => ['accent' => '#465fff', 'accentSoft' => '#eef2ff', 'accentDark' => '#1e293b'],
+        2 => ['accent' => '#0f766e', 'accentSoft' => '#ecfdf5', 'accentDark' => '#115e59'],
+        3 => ['accent' => '#e11d48', 'accentSoft' => '#fff1f2', 'accentDark' => '#9f1239'],
+        4 => ['accent' => '#d97706', 'accentSoft' => '#fffbeb', 'accentDark' => '#92400e'],
+        5 => ['accent' => '#0284c7', 'accentSoft' => '#f0f9ff', 'accentDark' => '#0c4a6e'],
+        6 => ['accent' => '#475569', 'accentSoft' => '#f8fafc', 'accentDark' => '#1f2937'],
+    ];
+    $style = $templateStyles[$templateNumber];
+    $normalizeHex = function (?string $value): ?string {
+        $value = strtolower(trim((string) $value));
+        if ($value === '') {
+            return null;
+        }
+        $value = ltrim($value, '#');
+        if (!preg_match('/^[0-9a-f]{6}$/', $value)) {
+            return null;
+        }
+        return '#' . $value;
+    };
+    $toRgb = function (string $hex): array {
+        $hex = ltrim($hex, '#');
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
+    };
+    $mixColor = function (string $hex, string $target, float $ratio) use ($toRgb): string {
+        [$r, $g, $b] = $toRgb($hex);
+        [$tr, $tg, $tb] = $toRgb($target);
+        $r = (int) round($r * (1 - $ratio) + $tr * $ratio);
+        $g = (int) round($g * (1 - $ratio) + $tg * $ratio);
+        $b = (int) round($b * (1 - $ratio) + $tb * $ratio);
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
+    };
+    $accentOverride = $normalizeHex($templateColor ?? '');
+    if ($accentOverride) {
+        $style = [
+            'accent' => $accentOverride,
+            'accentSoft' => $mixColor($accentOverride, '#ffffff', 0.88),
+            'accentDark' => $mixColor($accentOverride, '#000000', 0.35),
+        ];
+    }
+@endphp
 <html lang="en">
 
 <head>
@@ -7,6 +58,12 @@
     <style>
         @page {
             margin: 14px 16px 34px;
+        }
+
+        :root {
+            --accent: {{ $style['accent'] }};
+            --accent-soft: {{ $style['accentSoft'] }};
+            --accent-dark: {{ $style['accentDark'] }};
         }
 
         body {
@@ -20,7 +77,7 @@
 
         .top-accent {
             height: 7px;
-            background: #465fff;
+            background: var(--accent);
             margin-bottom: 16px;
         }
 
@@ -31,7 +88,7 @@
             font-size: 56px;
             letter-spacing: 2px;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--accent-dark);
             opacity: 0.06;
             transform: rotate(-25deg);
             z-index: -1;
@@ -95,7 +152,7 @@
             text-align: center;
             font-size: 22px;
             color: #ffffff;
-            background: #465fff;
+            background: var(--accent);
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -131,7 +188,7 @@
             margin-top: 6px;
             padding: 3px 10px;
             border: 0;
-            background: #f8fafc;
+            background: var(--accent-soft);
             color: #334155;
             font-size: 11px;
             font-weight: 700;
@@ -157,7 +214,7 @@
         .subject {
             margin-top: 12px;
             padding: 10px 12px;
-            background: #f8fafc;
+            background: var(--accent-soft);
             border: 0;
             font-size: 11px;
         }
@@ -205,7 +262,7 @@
         }
 
         .items-table th {
-            background: #f8fafc;
+            background: var(--accent-soft);
             color: #334155;
             font-size: 11px;
             text-transform: uppercase;
@@ -457,45 +514,134 @@
             position: relative;
             top: -10px;
         }
+
+        .side-accent {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--accent);
+            opacity: 0;
+        }
+
+        .header-card {
+            border: 1px solid transparent;
+            border-radius: 14px;
+            padding: 12px;
+            background: #ffffff;
+            page-break-inside: avoid;
+        }
+
+        .template-2 .side-accent {
+            opacity: 1;
+        }
+
+        .template-2 .subject {
+            border-left: 4px solid var(--accent);
+        }
+
+        .template-3 .header-card {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .template-3 .header-card * {
+            color: #ffffff;
+        }
+
+        .template-3 .header-card .label,
+        .template-3 .company-tagline {
+            color: var(--accent-soft);
+        }
+
+        .template-3 .status-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .template-4 .top-accent {
+            height: 3px;
+        }
+
+        .template-4 .watermark {
+            opacity: 0.02;
+        }
+
+        .template-4 .items-table th {
+            background: transparent;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .template-4 .subject {
+            border: 1px dashed #e2e8f0;
+            background: #ffffff;
+        }
+
+        .template-5 .items-table th,
+        .template-5 .items-table td {
+            border: 1px solid #e2e8f0;
+        }
+
+        .template-5 .items-table tbody tr:nth-child(even) td {
+            background: var(--accent-soft);
+        }
+
+        .template-6 {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .template-6 .top-accent {
+            height: 10px;
+        }
+
+        .template-6 .subject {
+            background: var(--accent-soft);
+        }
     </style>
 </head>
 
-<body>
+<body class="template-{{ $templateNumber }}">
+    <div class="side-accent"></div>
     <div class="watermark watermark-top">TEREX INNOVATION LAB</div>
     <div class="watermark watermark-middle">TEREX INNOVATION LAB</div>
     <div class="watermark watermark-bottom">TEREX INNOVATION LAB</div>
     <div class="top-accent"></div>
 
-    <table class="header-table">
-        <tr>
-            <td class="brand-wrap">
-                @php($defaultLogoPath = public_path('images/terex_innovation_lab_logo.jpg'))
-                @if(!empty($company['logo']))
-                    <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
-                @elseif(file_exists($defaultLogoPath))
-                    <img src="{{ $defaultLogoPath }}" alt="Terex Innovation Lab logo" class="logo">
-                @else
-                    <div class="logo-fallback">A</div>
-                @endif
-                <h1 class="company-name">{{ $company['name'] }}</h1>
-                <p class="company-tagline">{{ $company['tagline'] }}</p>
-                <div class="company-details">
-                    {{ $company['address'] }}<br>
-                    {{ $company['email'] }} | {{ $company['phone'] }}
-                </div>
-            </td>
-            <td class="invoice-meta-wrap">
-                <h2 class="invoice-title">INVOICE</h2>
-                <span class="status-badge">{{ strtoupper($row['status']) }}</span>
-                <div class="invoice-meta">
-                    <div class="row"><span class="label">Invoice No:</span> {{ $invoice['invoice_number'] }}</div>
-                    <div class="row"><span class="label">Invoice Date:</span> {{ $invoice['invoice_date'] }}</div>
-                    <div class="row"><span class="label">Due Date:</span> {{ $invoice['due_date'] }}</div>
-                    <div class="row"><span class="label">Generated:</span> {{ $generatedAt->format('Y-m-d H:i') }}</div>
-                </div>
-            </td>
-        </tr>
-    </table>
+    <div class="header-card">
+        <table class="header-table">
+            <tr>
+                <td class="brand-wrap">
+                    @php($defaultLogoPath = public_path('images/terex_innovation_lab_logo.jpg'))
+                    @if(!empty($company['logo']))
+                        <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
+                    @elseif(file_exists($defaultLogoPath))
+                        <img src="{{ $defaultLogoPath }}" alt="Terex Innovation Lab logo" class="logo">
+                    @else
+                        <div class="logo-fallback">A</div>
+                    @endif
+                    <h1 class="company-name">{{ $company['name'] }}</h1>
+                    <p class="company-tagline">{{ $company['tagline'] }}</p>
+                    <div class="company-details">
+                        {{ $company['address'] }}<br>
+                        {{ $company['email'] }} | {{ $company['phone'] }}
+                    </div>
+                </td>
+                <td class="invoice-meta-wrap">
+                    <h2 class="invoice-title">INVOICE</h2>
+                    <span class="status-badge">{{ strtoupper($row['status']) }}</span>
+                    <div class="invoice-meta">
+                        <div class="row"><span class="label">Invoice No:</span> {{ $invoice['invoice_number'] }}</div>
+                        <div class="row"><span class="label">Invoice Date:</span> {{ $invoice['invoice_date'] }}</div>
+                        <div class="row"><span class="label">Due Date:</span> {{ $invoice['due_date'] }}</div>
+                        <div class="row"><span class="label">Generated:</span> {{ $generatedAt->format('Y-m-d H:i') }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div class="subject">
         <strong>Subject:</strong> {{ $invoice['subject'] }}
