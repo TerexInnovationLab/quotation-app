@@ -99,7 +99,7 @@
                    class="top-link hidden sm:inline-flex px-4 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
                     Login
                 </a>
-                <a href="#cta"
+                <a href="{{ url('/login') }}"
                    class="inline-flex px-4 py-2 text-sm rounded-xl text-white brand-bg hover:opacity-95 brand-shadow">
                     Get Started
                 </a>
