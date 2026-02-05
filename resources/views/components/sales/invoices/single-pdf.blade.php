@@ -1,26 +1,27 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Invoice {{ $row['number'] }}</title>
     <style>
         @page {
-            margin: 28px 30px 64px;
+            margin: 14px 16px 34px;
         }
 
         body {
             font-family: DejaVu Sans, sans-serif;
             color: #0f172a;
             font-size: 12px;
-            line-height: 1.5;
+            line-height: 1.45;
             position: relative;
-            padding-bottom: 62px;
+            padding-bottom: 34px;
         }
 
         .top-accent {
-            height: 8px;
+            height: 7px;
             background: #465fff;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .watermark {
@@ -67,17 +68,17 @@
         }
 
         .logo {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             object-fit: contain;
             display: block;
             margin-bottom: 8px;
         }
 
         .logo-fallback {
-            width: 58px;
-            height: 58px;
-            line-height: 58px;
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
             text-align: center;
             font-size: 22px;
             color: #ffffff;
@@ -114,9 +115,9 @@
 
         .status-badge {
             display: inline-block;
-            margin-top: 7px;
+            margin-top: 6px;
             padding: 3px 10px;
-            border: 1px solid #cbd5e1;
+            border: 0;
             background: #f8fafc;
             color: #334155;
             font-size: 11px;
@@ -124,11 +125,11 @@
         }
 
         .invoice-meta {
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .invoice-meta .row {
-            margin-top: 4px;
+            margin-top: 3px;
             color: #334155;
             font-size: 11px;
         }
@@ -141,10 +142,10 @@
         }
 
         .subject {
-            margin-top: 14px;
+            margin-top: 12px;
             padding: 10px 12px;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 0;
             font-size: 11px;
         }
 
@@ -157,14 +158,14 @@
         }
 
         .bill-table {
-            margin-top: 20px;
+            margin-top: 14px;
         }
 
         .bill-table td {
             width: 50%;
             vertical-align: top;
-            padding: 12px 14px;
-            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            border: 0;
             background: #ffffff;
         }
 
@@ -181,13 +182,13 @@
         }
 
         .items-table {
-            margin-top: 20px;
+            margin-top: 14px;
         }
 
         .items-table th,
         .items-table td {
-            border: 1px solid #dbe3ee;
-            padding: 9px 10px;
+            border: 0;
+            padding: 7px 9px;
         }
 
         .items-table th {
@@ -217,11 +218,11 @@
         .totals-table {
             width: 42%;
             margin-left: auto;
-            margin-top: 14px;
+            margin-top: 10px;
         }
 
         .totals-table td {
-            padding: 6px 2px;
+            padding: 5px 2px;
             border: 0;
             font-size: 11px;
         }
@@ -232,20 +233,20 @@
         }
 
         .totals-table .grand td {
-            border-top: 1px solid #cbd5e1;
+            border-top: 0;
             font-size: 13px;
             font-weight: 700;
-            padding-top: 8px;
+            padding-top: 7px;
         }
 
         .notes-table {
-            margin-top: 18px;
+            margin-top: 12px;
         }
 
         .notes-table td {
             width: 50%;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
+            border: 0;
+            padding: 10px;
             vertical-align: top;
         }
 
@@ -258,78 +259,46 @@
         .security-bottom {
             margin-top: 8px;
             width: 100%;
-            display: table;
-            table-layout: fixed;
-            page-break-inside: avoid;
-        }
-
-        .security-col {
-            display: table-cell;
-            width: 50%;
-            vertical-align: top;
-        }
-
-        .security-col.left {
-            text-align: left;
-        }
-
-        .security-col.right {
-            text-align: right;
-        }
-
-        .signature-bottom {
-            margin-top: 18px;
             page-break-inside: avoid;
         }
 
         .qr-panel,
-        .stamp-panel {
-            display: inline-block;
-            width: 104px;
-            box-sizing: border-box;
-            border: 1px solid #dbe3ee;
-            border-radius: 10px;
-            padding: 6px;
-            background: #ffffff;
-        }
-
-        .stamp-panel {
-            background: #fff7f7;
-            border-color: #fecaca;
-        }
-
         .signature-panel {
-            margin-top: 8px;
-            width: 170px;
+            margin-top: 0;
+            width: 160px;
+            height: 160px;
             box-sizing: border-box;
-            border: 1px solid #dbe3ee;
+            border: 0;
             border-radius: 10px;
-            padding: 6px 8px;
+            padding: 10px;
             background: #ffffff;
+            display: inline-block;
+            text-align: center;
+            overflow: hidden;
         }
 
         .seal-image {
-            width: 84px;
-            height: 84px;
+            width: 108px;
+            height: 108px;
             object-fit: contain;
             opacity: 0.88;
         }
 
         .qr-image {
-            width: 84px;
-            height: 84px;
-            border: 1px solid #cbd5e1;
+            width: 108px;
+            height: 108px;
+            border: 0;
             padding: 4px;
             background: #ffffff;
         }
 
         .qr-fallback {
             display: inline-block;
-            width: 84px;
-            height: 84px;
-            line-height: 84px;
+            width: 108px;
+            height: 108px;
+            line-height: 108px;
             text-align: center;
-            border: 1px dashed #cbd5e1;
+            border: 0;
             color: #94a3b8;
             font-size: 8px;
             text-transform: uppercase;
@@ -343,7 +312,7 @@
         }
 
         .signature-image {
-            width: 140px;
+            width: 132px;
             height: 40px;
             object-fit: contain;
             display: block;
@@ -351,134 +320,101 @@
         }
 
         .signature-fallback {
-            width: 140px;
+            width: 132px;
             margin: 2px auto 0;
             text-align: center;
-            font-size: 18px;
+            font-size: 14px;
             font-style: italic;
             color: #334155;
         }
 
         .signature-line {
-            border-top: 1px solid #94a3b8;
+            border-top: 0;
             margin: 2px auto 4px;
-            width: 140px;
+            width: 132px;
         }
 
         .signature-meta {
             text-align: center;
             color: #64748b;
-            font-size: 8px;
+            font-size: 7px;
             margin-top: 2px;
         }
 
-        .stamp-realistic {
-            width: 88px;
-            height: 88px;
-            margin: 0 auto;
-            position: relative;
-            box-sizing: border-box;
-            border: 2px solid #dc2626;
-            border-radius: 50%;
-            background: #ffffff;
-            color: #dc2626;
-            overflow: hidden;
-            transform: rotate(-12deg);
+        .signature-panel .section-title {
+            margin-bottom: 4px;
+            font-size: 10px;
         }
 
-        .stamp-realistic .stamp-edge {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            bottom: -3px;
-            left: -3px;
-            border: 3px dashed rgba(220, 38, 38, 0.9);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .stamp-realistic .stamp-core {
-            position: absolute;
-            top: 7px;
-            right: 7px;
-            bottom: 7px;
-            left: 7px;
-            border: 2px solid rgba(220, 38, 38, 0.8);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .stamp-realistic .stamp-top,
-        .stamp-realistic .stamp-bottom {
-            position: absolute;
-            left: 0;
+        .security-section {
             width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-top: 0;
+            margin-top: 16px;
+            page-break-inside: avoid;
+        }
+
+        .security-section td {
+            vertical-align: top;
+            padding-top: 12px;
+            page-break-inside: avoid;
+        }
+
+        .security-cell-left {
+            text-align: left;
+        }
+
+        .security-cell-center {
             text-align: center;
-            font-size: 8px;
-            letter-spacing: 0.9px;
-            font-weight: 800;
-            z-index: 2;
         }
 
-        .stamp-realistic .stamp-top {
-            top: 12px;
+        .security-cell-right {
+            text-align: right;
         }
 
-        .stamp-realistic .stamp-bottom {
-            bottom: 11px;
+        .stamp-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .stamp-realistic .stamp-stars-top,
-        .stamp-realistic .stamp-stars-bottom {
-            position: absolute;
-            left: 0;
-            width: 100%;
+        .stamp-image {
+            width: 108px;
+            height: 108px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .qr-box {
+            border: 0;
+            border-radius: 10px;
+            padding: 8px;
+            background: white;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 10px;
             text-align: center;
-            font-size: 7px;
-            letter-spacing: 1px;
-            font-weight: 700;
-            z-index: 2;
-        }
-
-        .stamp-realistic .stamp-stars-top {
-            top: 22px;
-        }
-
-        .stamp-realistic .stamp-stars-bottom {
-            bottom: 22px;
-        }
-
-        .stamp-realistic .stamp-band {
-            position: absolute;
-            left: -8px;
-            right: -8px;
-            top: 35px;
-            height: 18px;
-            line-height: 18px;
-            text-align: center;
-            font-size: 11px;
-            letter-spacing: 1.2px;
-            font-weight: 900;
-            color: #dc2626;
-            background: #ffffff;
-            border-top: 2px solid #dc2626;
-            border-bottom: 2px solid #dc2626;
-            z-index: 3;
         }
 
         .footer {
             position: fixed;
             left: 0;
             right: 0;
-            bottom: -44px;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 8px;
+            bottom: -36px;
+            border-top: 0;
+            padding-top: 7px;
             font-size: 10px;
             color: #64748b;
             text-align: center;
         }
     </style>
 </head>
+
 <body>
     <div class="watermark">{{ strtoupper($company['name'] ?? ($watermarkText ?? 'INVOICE')) }}</div>
     <div class="top-accent"></div>
@@ -588,51 +524,46 @@
     </table>
 
     <div class="security-bottom">
-        <div class="security-col left">
-            <div class="stamp-panel">
-                @if(!empty($company['seal']))
-                    <img src="{{ $company['seal'] }}" alt="Company seal" class="seal-image">
-                @else
-                    <div class="stamp-realistic">
-                        <div class="stamp-edge"></div>
-                        <div class="stamp-core"></div>
-                        <div class="stamp-top">APPROVED</div>
-                        <div class="stamp-stars-top">* * *</div>
-                        <div class="stamp-band">APPROVED</div>
-                        <div class="stamp-stars-bottom">* * *</div>
-                        <div class="stamp-bottom">APPROVED</div>
+        <table class="security-section">
+            <tr>
+                <td class="security-cell-left">
+                    <div class="stamp-container">
+                        @php($stampImagePath = public_path('images/approved-stamp.jpg'))
+                        @if(file_exists($stampImagePath))
+                            <img src="{{ $stampImagePath }}" alt="Approved stamp" class="stamp-image">
+                        @else
+                            <div class="signature-meta">Stamp image unavailable</div>
+                        @endif
                     </div>
-                @endif
-                
-            </div>
-        </div>
-        <div class="security-col right">
-            <div class="qr-panel">
-                @if(!empty($documentQr))
-                    <img src="{{ $documentQr }}" alt="Invoice QR code" class="qr-image">
-                @else
-                    <div class="qr-fallback">QR unavailable</div>
-                @endif
-            </div>
-        </div>
-    </div>
+                </td>
+                <td class="security-cell-center">
+                    <div class="qr-panel">
+                        @if(!empty($documentQr))
+                            <img src="{{ $documentQr }}" alt="Invoice QR code" class="qr-image">
+                        @else
+                            <div class="qr-fallback">QR unavailable</div>
+                        @endif
+                    </div>
+                </td>
+                <td class="security-cell-right">
+                    <div class="signature-panel">
+                        <div class="section-title">Digital Signature (CEO)</div>
+                        @if(!empty($company['ceo_signature']))
+                            <img src="{{ $company['ceo_signature'] }}" alt="CEO signature" class="signature-image">
+                        @else
+                            <div class="signature-fallback">{{ $company['ceo_name'] }}</div>
+                        @endif
+                        <div class="signature-line"></div>
+                        <div class="signature-meta">Signed by {{ $company['ceo_name'] }}</div>
+                        <div class="signature-meta">{{ $generatedAt->format('Y-m-d H:i') }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
 
-    <div class="signature-bottom">
-        <div class="signature-panel">
-            <div class="section-title">Digital Signature (CEO)</div>
-            @if(!empty($company['ceo_signature']))
-                <img src="{{ $company['ceo_signature'] }}" alt="CEO signature" class="signature-image">
-            @else
-                <div class="signature-fallback">{{ $company['ceo_name'] }}</div>
-            @endif
-            <div class="signature-line"></div>
-            <div class="signature-meta">Signed by {{ $company['ceo_name'] }}</div>
-            <div class="signature-meta">{{ $generatedAt->format('Y-m-d H:i') }}</div>
+        <div class="footer">
+            Powered by TerexLab.
         </div>
-    </div>
-
-    <div class="footer">
-        Powered by TerexLab.
-    </div>
 </body>
+
 </html>
