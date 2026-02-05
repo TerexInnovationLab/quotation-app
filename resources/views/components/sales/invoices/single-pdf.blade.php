@@ -528,8 +528,10 @@
             <tr>
                 <td class="security-cell-left">
                     <div class="stamp-container">
-                        @php($stampImagePath = public_path('images/approved-stamp.jpg'))
-                        @if(file_exists($stampImagePath))
+                        @php($stampImagePath = public_path('images/terex_stamp.jpg'))
+                        @if(!empty($stampDataUri))
+                            <img src="{{ $stampDataUri }}" alt="Approved stamp" class="stamp-image">
+                        @elseif(file_exists($stampImagePath))
                             <img src="{{ $stampImagePath }}" alt="Approved stamp" class="stamp-image">
                         @else
                             <div class="signature-meta">Stamp image unavailable</div>

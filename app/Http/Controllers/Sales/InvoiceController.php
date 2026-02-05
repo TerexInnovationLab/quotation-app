@@ -223,14 +223,16 @@ class InvoiceController
     {
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
+        $generatedAt = now();
 
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
             'invoice' => $document['invoice'],
             'items' => $document['items'],
-            'generatedAt' => now(),
+            'generatedAt' => $generatedAt,
             'company' => $this->companyProfile(),
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'])),
+            'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),
             'watermarkText' => 'INVOICE',
         ])->setPaper('a4', 'portrait');
@@ -245,14 +247,16 @@ class InvoiceController
     {
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
+        $generatedAt = now();
 
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
             'invoice' => $document['invoice'],
             'items' => $document['items'],
-            'generatedAt' => now(),
+            'generatedAt' => $generatedAt,
             'company' => $this->companyProfile(),
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'])),
+            'stampDataUri' => $this->stampDataUri($generatedAt),
             'documentUrl' => route('sales.invoices.show', $row['number']),
             'watermarkText' => 'INVOICE',
         ])->setPaper('a4', 'portrait');
@@ -444,6 +448,79 @@ class InvoiceController
             $svg = $writer->writeString($payload);
 
             return 'data:image/svg+xml;base64,' . base64_encode($svg);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    private function stampDataUri(\DateTimeInterface $generatedAt): ?string
+    {
+        try {
+            if (! function_exists('imagettftext')) {
+                return null;
+            }
+
+            $templatePath = collect([
+                public_path('images/terex_stamp.png'),
+                public_path('images/terex_stamp.jpg'),
+                public_path('images/terex_stamp.jpeg'),
+                public_path('images/stamps/stamp-template.png'),
+            ])->first(fn ($path) => is_file($path));
+
+            if (! $templatePath) {
+                return null;
+            }
+
+            $fontPath = collect([
+                public_path('fonts/Oswald-Bold.ttf'),
+                public_path('fonts/Arial-Bold.ttf'),
+                'C:\\Windows\\Fonts\\arialbd.ttf',
+            ])->first(fn ($path) => is_file($path));
+
+            if (! $fontPath) {
+                return null;
+            }
+
+            $ext = strtolower(pathinfo($templatePath, PATHINFO_EXTENSION));
+            $image = match ($ext) {
+                'png' => imagecreatefrompng($templatePath),
+                'jpg', 'jpeg' => imagecreatefromjpeg($templatePath),
+                default => null,
+            };
+
+            if (! $image) {
+                return null;
+            }
+
+            imagealphablending($image, true);
+            imagesavealpha($image, true);
+
+            $text = strtoupper($generatedAt->format('jS M Y'));
+            $color = imagecolorallocate($image, 43, 78, 118);
+
+            $fontSize = 56;
+            $angle = 0;
+
+            $w = imagesx($image);
+            $h = imagesy($image);
+            $bbox = imagettfbbox($fontSize, $angle, $fontPath, $text);
+            $textW = abs($bbox[2] - $bbox[0]);
+            $textH = abs($bbox[7] - $bbox[1]);
+            $x = (int) round(($w - $textW) / 2);
+            $y = (int) round(($h / 2) + ($textH / 2) + 8);
+
+            imagettftext($image, $fontSize, $angle, $x, $y, $color, $fontPath, $text);
+
+            ob_start();
+            imagepng($image, null, 9);
+            $png = ob_get_clean();
+            imagedestroy($image);
+
+            if (! $png) {
+                return null;
+            }
+
+            return 'data:image/png;base64,' . base64_encode($png);
         } catch (\Throwable) {
             return null;
         }
