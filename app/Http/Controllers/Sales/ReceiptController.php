@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sales;
 
+use App\Support\SalesSettings;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -196,7 +197,11 @@ class ReceiptController
     {
         $logo = null;
         $signature = null;
-        $logoPaths = [
+        $settings = SalesSettings::get();
+        $profile = $settings['profile'] ?? [];
+        $companySettings = $settings['company'] ?? [];
+        $logoPaths = array_filter([
+            SalesSettings::logoStoragePath(),
             public_path('images/terex_innovation_lab_logo.jpg'),
             public_path('images/company-logo.png'),
             public_path('images/company-logo.jpg'),
@@ -204,7 +209,7 @@ class ReceiptController
             public_path('logo.png'),
             public_path('logo.jpg'),
             public_path('logo.jpeg'),
-        ];
+        ]);
         $signaturePaths = [
             public_path('images/richard_chilipa_signature.jpg'),
             public_path('images/ceo-signature.png'),
@@ -235,7 +240,7 @@ class ReceiptController
             break;
         }
 
-        return [
+        $company = [
             'name' => 'Terex Innovation Lab',
             'tagline' => 'Innovating for Malawi\'s Digital Economy',
             'email' => 'info@terexlab.com',
@@ -246,5 +251,29 @@ class ReceiptController
             'signatory_name' => 'Richard Chilipa',
             'signatory_title' => 'Chief Executive Officer',
         ];
+
+        if (! empty($companySettings['name'])) {
+            $company['name'] = $companySettings['name'];
+        }
+        if (! empty($companySettings['tagline'])) {
+            $company['tagline'] = $companySettings['tagline'];
+        }
+        if (! empty($companySettings['email'])) {
+            $company['email'] = $companySettings['email'];
+        }
+        if (! empty($companySettings['phone'])) {
+            $company['phone'] = $companySettings['phone'];
+        }
+        if (! empty($companySettings['address'])) {
+            $company['address'] = $companySettings['address'];
+        }
+        if (! empty($profile['full_name'])) {
+            $company['signatory_name'] = $profile['full_name'];
+        }
+        if (! empty($profile['role'])) {
+            $company['signatory_title'] = $profile['role'];
+        }
+
+        return $company;
     }
 }

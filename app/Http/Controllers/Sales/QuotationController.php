@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sales;
 
+use App\Support\SalesSettings;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
@@ -76,7 +77,10 @@ class QuotationController
             ['name' => 'Training (per day)', 'rate' => 300000],
         ];
 
-        return view('components.sales.quotations.create', compact('customers', 'items'));
+        $defaultVat = SalesSettings::defaultVat();
+        $defaultCurrency = SalesSettings::defaultCurrency();
+
+        return view('components.sales.quotations.create', compact('customers', 'items', 'defaultVat', 'defaultCurrency'));
     }
 
     public function store(Request $request)
@@ -88,6 +92,7 @@ class QuotationController
             'reference'       => ['nullable', 'string', 'max:255'],
             'subject'         => ['nullable', 'string', 'max:255'],
             'currency'        => ['nullable', 'string', 'max:10'],
+            'vat_rate'        => ['nullable', 'numeric', 'min:0', 'max:100'],
             'notes'           => ['nullable', 'string'],
             'terms'           => ['nullable', 'string'],
 
@@ -244,7 +249,7 @@ class QuotationController
 
     private function buildQuotationDocument(array $row): array
     {
-        $vatRate = 16.5;
+        $vatRate = SalesSettings::defaultVat();
         $grandTotal = (int) ($row['amount'] ?? 0);
         $subTotal = (int) round($grandTotal / (1 + ($vatRate / 100)));
         $vatAmount = $grandTotal - $subTotal;
@@ -267,7 +272,7 @@ class QuotationController
             'quotation_date' => $row['date'],
             'expiry_date' => $row['expiry'] ?? now()->addDays(14)->toDateString(),
             'subject' => 'Quotation ' . $row['number'],
-            'currency' => 'MWK',
+            'currency' => SalesSettings::defaultCurrency(),
             'vat_rate' => $vatRate,
             'notes' => 'Pricing based on current scope and assumptions.',
             'terms' => 'Validity until ' . ($row['expiry'] ?? now()->addDays(14)->toDateString()) . '.',
@@ -284,14 +289,18 @@ class QuotationController
         $logo = null;
         $seal = null;
         $ceoSignature = null;
-        $logoPaths = [
+        $settings = SalesSettings::get();
+        $profile = $settings['profile'] ?? [];
+        $companySettings = $settings['company'] ?? [];
+        $logoPaths = array_filter([
+            SalesSettings::logoStoragePath(),
             public_path('images/company-logo.png'),
             public_path('images/company-logo.jpg'),
             public_path('images/company-logo.jpeg'),
             public_path('logo.png'),
             public_path('logo.jpg'),
             public_path('logo.jpeg'),
-        ];
+        ]);
         $sealPaths = [
             public_path('images/company-seal.png'),
             public_path('images/company-seal.jpg'),
@@ -352,7 +361,7 @@ class QuotationController
             break;
         }
 
-        return [
+        $company = [
             'name' => 'Terex Innovation Lab',
             'tagline' => 'Innovating for Malawi Digital Economy',
             'email' => 'info@terexlab.com',
@@ -364,6 +373,30 @@ class QuotationController
             'seal' => $seal,
             'ceo_signature' => $ceoSignature,
         ];
+
+        if (! empty($companySettings['name'])) {
+            $company['name'] = $companySettings['name'];
+        }
+        if (! empty($companySettings['tagline'])) {
+            $company['tagline'] = $companySettings['tagline'];
+        }
+        if (! empty($companySettings['email'])) {
+            $company['email'] = $companySettings['email'];
+        }
+        if (! empty($companySettings['phone'])) {
+            $company['phone'] = $companySettings['phone'];
+        }
+        if (! empty($companySettings['address'])) {
+            $company['address'] = $companySettings['address'];
+        }
+        if (! empty($profile['full_name'])) {
+            $company['ceo_name'] = $profile['full_name'];
+        }
+        if (! empty($profile['role'])) {
+            $company['ceo_title'] = $profile['role'];
+        }
+
+        return $company;
     }
 
     private function quotationQrPayload(array $row, array $quotation, array $company): string

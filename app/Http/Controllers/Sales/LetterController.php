@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sales;
 
+use App\Support\SalesSettings;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -208,6 +209,9 @@ class LetterController
             'Our team proposes the development of a modern, secure, and scalable membership management platform that will support the full lifecycle of membership from online registration and verification to subscription payment processing and royalty summaries. The platform will reduce administrative workload, minimize manual processing errors, enhance data security, and improve member service delivery nationwide and internationally.',
         ]);
 
+        $settings = SalesSettings::get();
+        $profile = $settings['profile'] ?? [];
+
         $letter = [
             'recipient_name' => $recipientName,
             'recipient_org' => $recipientOrg,
@@ -218,8 +222,8 @@ class LetterController
             'reference' => $row['number'],
             'body' => $body,
             'closing' => 'Sincerely,',
-            'sender_name' => 'Richard Chilipa',
-            'sender_title' => 'Chief Executive Officer',
+            'sender_name' => $profile['full_name'] ?? 'Richard Chilipa',
+            'sender_title' => $profile['role'] ?? 'Chief Executive Officer',
         ];
 
         return compact('letter');
@@ -229,7 +233,11 @@ class LetterController
     {
         $logo = null;
         $signature = null;
-        $logoPaths = [
+        $settings = SalesSettings::get();
+        $profile = $settings['profile'] ?? [];
+        $companySettings = $settings['company'] ?? [];
+        $logoPaths = array_filter([
+            SalesSettings::logoStoragePath(),
             public_path('images/terex_innovation_lab_logo.jpg'),
             public_path('images/company-logo.png'),
             public_path('images/company-logo.jpg'),
@@ -237,7 +245,7 @@ class LetterController
             public_path('logo.png'),
             public_path('logo.jpg'),
             public_path('logo.jpeg'),
-        ];
+        ]);
         $signaturePaths = [
             public_path('images/richard_chilipa_signature.jpg'),
             public_path('images/ceo-signature.png'),
@@ -268,7 +276,7 @@ class LetterController
             break;
         }
 
-        return [
+        $company = [
             'name' => 'Terex Innovation Lab',
             'brand_top' => 'TEREX',
             'brand_middle' => 'INNOVATION',
@@ -286,6 +294,27 @@ class LetterController
             'logo' => $logo,
             'signature' => $signature,
         ];
+
+        if (! empty($companySettings['name'])) {
+            $company['name'] = $companySettings['name'];
+        }
+        if (! empty($companySettings['tagline'])) {
+            $company['tagline'] = $companySettings['tagline'];
+        }
+        if (! empty($companySettings['email'])) {
+            $company['email'] = $companySettings['email'];
+        }
+        if (! empty($companySettings['phone'])) {
+            $company['phone'] = $companySettings['phone'];
+        }
+        if (! empty($companySettings['address'])) {
+            $company['address_lines'] = SalesSettings::addressLines($companySettings['address']);
+        }
+        if (! empty($profile['full_name'])) {
+            $company['sender_name'] = $profile['full_name'];
+        }
+
+        return $company;
     }
 
     private function watermarkForStatus(string $status): ?string

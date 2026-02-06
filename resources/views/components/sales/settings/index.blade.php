@@ -23,15 +23,14 @@
         $sectionEyebrow = 'text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500';
         $sectionTitle = 'mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100';
         $sectionDesc = 'text-xs text-slate-500 dark:text-slate-400';
+        $settings = $settings ?? [];
+        $profile = $settings['profile'] ?? [];
+        $company = $settings['company'] ?? [];
+        $branding = $settings['branding'] ?? [];
+        $preferences = $settings['preferences'] ?? [];
     @endphp
 
     <div class="space-y-4 max-w-5xl">
-        @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4 dark:bg-emerald-900/30 dark:border-emerald-700 dark:text-emerald-200">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="bg-white border border-slate-200 rounded-2xl p-3 overflow-x-auto dark:bg-slate-900 dark:border-slate-800">
             <div class="flex items-center gap-2 min-w-max">
                 @foreach($tabs as $key => $label)
@@ -66,19 +65,19 @@
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Full Name</label>
-                                <input type="text" name="full_name" value="{{ old('full_name', 'Team Admin') }}" class="{{ $inputClass }}">
+                                <input type="text" name="full_name" value="{{ old('full_name', $profile['full_name'] ?? 'Team Admin') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Email</label>
-                                <input type="email" name="email" value="{{ old('email', 'admin@example.com') }}" class="{{ $inputClass }}">
+                                <input type="email" name="email" value="{{ old('email', $profile['email'] ?? 'admin@example.com') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Phone</label>
-                                <input type="text" name="phone" value="{{ old('phone', '+265 99 000 0000') }}" class="{{ $inputClass }}">
+                                <input type="text" name="phone" value="{{ old('phone', $profile['phone'] ?? '+265 99 000 0000') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Role</label>
-                                <input type="text" name="role" value="{{ old('role', 'Administrator') }}" class="{{ $inputClass }}">
+                                <input type="text" name="role" value="{{ old('role', $profile['role'] ?? 'Administrator') }}" class="{{ $inputClass }}">
                             </div>
                         </div>
                     </div>
@@ -99,23 +98,23 @@
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Company Name</label>
-                                <input type="text" name="company_name" value="{{ old('company_name', 'AccountYanga Ltd') }}" class="{{ $inputClass }}">
+                                <input type="text" name="company_name" value="{{ old('company_name', $company['name'] ?? 'AccountYanga Ltd') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Tax ID</label>
-                                <input type="text" name="tax_id" value="{{ old('tax_id', 'TAX-000123') }}" class="{{ $inputClass }}">
+                                <input type="text" name="tax_id" value="{{ old('tax_id', $company['tax_id'] ?? 'TAX-000123') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Phone</label>
-                                <input type="text" name="company_phone" value="{{ old('company_phone', '+265 88 000 0000') }}" class="{{ $inputClass }}">
+                                <input type="text" name="company_phone" value="{{ old('company_phone', $company['phone'] ?? '+265 88 000 0000') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Email</label>
-                                <input type="email" name="company_email" value="{{ old('company_email', 'billing@accountyanga.com') }}" class="{{ $inputClass }}">
+                                <input type="email" name="company_email" value="{{ old('company_email', $company['email'] ?? 'billing@accountyanga.com') }}" class="{{ $inputClass }}">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Address</label>
-                                <textarea name="company_address" rows="3" class="{{ $textareaClass }}">{{ old('company_address', 'Lilongwe, Malawi') }}</textarea>
+                                <textarea name="company_address" rows="3" class="{{ $textareaClass }}">{{ old('company_address', $company['address'] ?? 'Lilongwe, Malawi') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -143,7 +142,7 @@
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Logo Position</label>
                                 <select name="logo_position" class="{{ $selectClass }}">
                                     @foreach(['Left', 'Center', 'Right'] as $option)
-                                        <option value="{{ $option }}" @selected(old('logo_position', 'Left') === $option)>{{ $option }}</option>
+                                        <option value="{{ $option }}" @selected(old('logo_position', $branding['logo_position'] ?? 'Left') === $option)>{{ $option }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -647,21 +646,21 @@
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Default Currency</label>
                                 <select name="default_currency" class="{{ $selectClass }}">
                                     @foreach(['MWK', 'USD', 'ZAR', 'EUR', 'GBP'] as $option)
-                                        <option value="{{ $option }}" @selected(old('default_currency', 'MWK') === $option)>{{ $option }}</option>
+                                        <option value="{{ $option }}" @selected(old('default_currency', $preferences['default_currency'] ?? 'MWK') === $option)>{{ $option }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Default VAT (%)</label>
-                                <input type="number" name="default_vat" min="0" max="100" step="0.1" value="{{ old('default_vat', '16.5') }}" class="{{ $inputClass }}">
+                                <input type="number" name="default_vat" min="0" max="100" step="0.1" value="{{ old('default_vat', $preferences['default_vat'] ?? '16.5') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Invoice Number Prefix</label>
-                                <input type="text" name="invoice_prefix" value="{{ old('invoice_prefix', 'INV-') }}" class="{{ $inputClass }}">
+                                <input type="text" name="invoice_prefix" value="{{ old('invoice_prefix', $preferences['invoice_prefix'] ?? 'INV-') }}" class="{{ $inputClass }}">
                             </div>
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Payment Number Prefix</label>
-                                <input type="text" name="payment_prefix" value="{{ old('payment_prefix', 'PAY-') }}" class="{{ $inputClass }}">
+                                <input type="text" name="payment_prefix" value="{{ old('payment_prefix', $preferences['payment_prefix'] ?? 'PAY-') }}" class="{{ $inputClass }}">
                             </div>
                         </div>
                     </div>

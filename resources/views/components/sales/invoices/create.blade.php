@@ -22,12 +22,6 @@
      x-data="window.invoiceForm()"
      x-init="init()"
 >
-    @if (session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
-            {{ session('success') }}
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl p-4">
             <div class="font-semibold mb-2">Please fix the following:</div>
@@ -284,7 +278,7 @@ window.invoiceForm = function() {
     const initialItems = @json($oldItems);
 
     return {
-        currency: @json(old('currency', request('currency', 'MWK'))),
+        currency: @json(old('currency', request('currency', $defaultCurrency ?? 'MWK'))),
         currencySymbol: 'MWK',
 
         items: (initialItems?.length ? initialItems : [
@@ -298,7 +292,7 @@ window.invoiceForm = function() {
             note: r.note ?? '',
         })),
 
-        vatRate: 16.5,
+        vatRate: @json(old('vat_rate', $defaultVat ?? 16.5)),
 
         init() {
             this.setCurrencySymbol();

@@ -22,12 +22,6 @@
      x-data="window.quotationForm()"
      x-init="init()"
 >
-    @if (session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
-            {{ session('success') }}
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl p-4">
             <div class="font-semibold mb-2">Please fix the following:</div>
@@ -231,7 +225,7 @@
                     <div class="flex items-center justify-between">
                         <div class="text-slate-600">Tax (VAT %)</div>
                         <div class="flex items-center gap-2">
-                            <input type="number" min="0" step="0.1" x-model.number="vatRate"
+                            <input type="number" min="0" step="0.1" name="vat_rate" x-model.number="vatRate"
                                    class="w-24 text-right rounded-xl border-slate-200 focus:border-slate-400 focus:ring-slate-200">
                             <div class="font-semibold"><span x-text="currencySymbol"></span> <span x-text="format(vatAmount())"></span></div>
                         </div>
@@ -284,7 +278,7 @@ window.quotationForm = function() {
     const initialItems = @json($oldItems);
 
     return {
-        currency: @json(old('currency', 'MWK')),
+        currency: @json(old('currency', $defaultCurrency ?? 'MWK')),
         currencySymbol: 'MWK',
 
         items: (initialItems?.length ? initialItems : [
@@ -298,7 +292,7 @@ window.quotationForm = function() {
             note: r.note ?? '',
         })),
 
-        vatRate: 16.5,
+        vatRate: @json(old('vat_rate', $defaultVat ?? 16.5)),
 
         init() {
             this.setCurrencySymbol();

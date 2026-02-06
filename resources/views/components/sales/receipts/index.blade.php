@@ -13,12 +13,6 @@
 
 @section('content')
     <div class="space-y-4">
-        @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <x-sales.list-toolbar
             searchPlaceholder="Search receipts (number, customer, reference)..."
             :statusOptions="['All Statuses','Draft','Issued','Sent']"

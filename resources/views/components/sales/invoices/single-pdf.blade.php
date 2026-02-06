@@ -605,9 +605,9 @@
 
 <body class="template-{{ $templateNumber }}">
     <div class="side-accent"></div>
-    <div class="watermark watermark-top">TEREX INNOVATION LAB</div>
-    <div class="watermark watermark-middle">TEREX INNOVATION LAB</div>
-    <div class="watermark watermark-bottom">TEREX INNOVATION LAB</div>
+    <div class="watermark watermark-top">{{ strtoupper($company['name'] ?? 'INVOICE') }}</div>
+    <div class="watermark watermark-middle">{{ strtoupper($company['name'] ?? 'INVOICE') }}</div>
+    <div class="watermark watermark-bottom">{{ strtoupper($company['name'] ?? 'INVOICE') }}</div>
     <div class="top-accent"></div>
 
     <div class="header-card">

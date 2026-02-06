@@ -11,6 +11,7 @@
 @section('content')
 @php
     $fmt = fn($n) => number_format($n, 0);
+    $user = auth()->user();
 @endphp
 
 <div class="space-y-4"
@@ -23,6 +24,22 @@
      })"
      x-init="init()"
 >
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <div class="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Welcome back</div>
+            <div class="mt-2 text-2xl font-semibold text-slate-900 dark:text-white">
+                Hi, {{ $user?->name ?? 'there' }}
+            </div>
+            <div class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Here’s a snapshot of today’s sales activity.
+            </div>
+        </div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200/70 dark:border-slate-800/70 bg-white/80 dark:bg-slate-900/70 px-3 py-2 text-xs text-slate-600 dark:text-slate-300 shadow-sm">
+            <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+            Dashboard overview
+        </div>
+    </div>
+
     {{-- KPI Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <div class="bg-white border border-slate-200 rounded-2xl p-5">

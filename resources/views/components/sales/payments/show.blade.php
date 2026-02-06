@@ -19,12 +19,6 @@
 
 @section('content')
     <div class="max-w-4xl space-y-4">
-        @if (session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="bg-white border border-slate-200 rounded-2xl p-5">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>

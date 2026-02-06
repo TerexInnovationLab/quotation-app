@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sales;
 
+use App\Support\SalesSettings;
 use Illuminate\Http\Request;
 
 class SettingsController
@@ -30,7 +31,9 @@ class SettingsController
             $tab = 'profile';
         }
 
-        return view('components.sales.settings.index', compact('tab'));
+        $settings = SalesSettings::get();
+
+        return view('components.sales.settings.index', compact('tab', 'settings'));
     }
 
     public function update(Request $request)
@@ -93,6 +96,78 @@ class SettingsController
                 ->withCookie(cookie()->forever('appearance', $theme['theme_mode']))
                 ->withCookie(cookie()->forever('primary_color', $theme['primary_color']))
                 ->with('success', 'Theme settings updated.');
+        }
+
+        if ($tab === 'profile') {
+            $payload = $request->validate([
+                'full_name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'max:255'],
+                'phone' => ['nullable', 'string', 'max:255'],
+                'role' => ['nullable', 'string', 'max:255'],
+                'company_name' => ['required', 'string', 'max:255'],
+                'tax_id' => ['nullable', 'string', 'max:255'],
+                'company_phone' => ['nullable', 'string', 'max:255'],
+                'company_email' => ['nullable', 'email', 'max:255'],
+                'company_address' => ['nullable', 'string', 'max:1000'],
+                'logo_position' => ['nullable', 'in:Left,Center,Right'],
+                'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,svg', 'max:2048'],
+            ]);
+
+            $settings = SalesSettings::get();
+            $logoPath = (string) ($settings['branding']['logo_path'] ?? '');
+
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $extension = $file->getClientOriginalExtension() ?: 'png';
+                $stored = $file->storeAs('public/company', 'company-logo.' . $extension);
+                $logoPath = str_replace('public/', '', $stored);
+            }
+
+            SalesSettings::update([
+                'profile' => [
+                    'full_name' => $payload['full_name'],
+                    'email' => $payload['email'],
+                    'phone' => $payload['phone'] ?? '',
+                    'role' => $payload['role'] ?? '',
+                ],
+                'company' => [
+                    'name' => $payload['company_name'],
+                    'tax_id' => $payload['tax_id'] ?? '',
+                    'phone' => $payload['company_phone'] ?? '',
+                    'email' => $payload['company_email'] ?? '',
+                    'address' => $payload['company_address'] ?? '',
+                ],
+                'branding' => [
+                    'logo_path' => $logoPath,
+                    'logo_position' => $payload['logo_position'] ?? 'Left',
+                ],
+            ]);
+
+            return redirect()
+                ->route('sales.settings.index', ['tab' => 'profile'])
+                ->with('success', 'Profile settings updated.');
+        }
+
+        if ($tab === 'preferences') {
+            $prefs = $request->validate([
+                'default_currency' => ['required', 'string', 'in:MWK,USD,ZAR,EUR,GBP'],
+                'default_vat' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'invoice_prefix' => ['nullable', 'string', 'max:20'],
+                'payment_prefix' => ['nullable', 'string', 'max:20'],
+            ]);
+
+            SalesSettings::update([
+                'preferences' => [
+                    'default_currency' => $prefs['default_currency'],
+                    'default_vat' => $prefs['default_vat'] ?? 0,
+                    'invoice_prefix' => $prefs['invoice_prefix'] ?? '',
+                    'payment_prefix' => $prefs['payment_prefix'] ?? '',
+                ],
+            ]);
+
+            return redirect()
+                ->route('sales.settings.index', ['tab' => 'preferences'])
+                ->with('success', 'Preference settings updated.');
         }
 
         return redirect()
