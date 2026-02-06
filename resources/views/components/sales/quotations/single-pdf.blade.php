@@ -13,7 +13,7 @@
         $templateStyles = [
             1 => ['accent' => '#465fff', 'accentSoft' => '#eef2ff', 'accentDark' => '#1e293b'],
             2 => ['accent' => '#0f766e', 'accentSoft' => '#ecfdf5', 'accentDark' => '#115e59'],
-            3 => ['accent' => '#e11d48', 'accentSoft' => '#fff1f2', 'accentDark' => '#9f1239'],
+            3 => ['accent' => '#c11bc7', 'accentSoft' => '#fff1f2', 'accentDark' => '#9f1239'],
             4 => ['accent' => '#d97706', 'accentSoft' => '#fffbeb', 'accentDark' => '#92400e'],
             5 => ['accent' => '#0284c7', 'accentSoft' => '#f0f9ff', 'accentDark' => '#0c4a6e'],
             6 => ['accent' => '#475569', 'accentSoft' => '#f8fafc', 'accentDark' => '#1f2937'],
@@ -614,7 +614,7 @@
     <table class="header-table">
         <tr>
             <td class="brand-wrap">
-                @php($defaultLogoPath = public_path('images/terex_innovation_lab_logo.jpg'))
+                  @php($defaultLogoPath = public_path('images/terex_transparent_white_text.png'))
                 @if(!empty($company['logo']))
                     <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
                 @elseif(file_exists($defaultLogoPath))
