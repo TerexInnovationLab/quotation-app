@@ -126,8 +126,7 @@ class LetterController
         $row = $this->findLetterOrFail($letter);
         $document = $this->buildLetterDocument($row);
         $watermarkText = $this->watermarkForStatus($row['status'] ?? 'Draft');
-        $template = request()->cookie('letter_template', 'Template 1');
-        $templateColor = request()->cookie('letter_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.letters.single-pdf', [
             'row' => $row,
@@ -147,8 +146,7 @@ class LetterController
         $row = $this->findLetterOrFail($letter);
         $document = $this->buildLetterDocument($row);
         $watermarkText = $this->watermarkForStatus($row['status'] ?? 'Draft');
-        $template = request()->cookie('letter_template', 'Template 1');
-        $templateColor = request()->cookie('letter_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.letters.single-pdf', [
             'row' => $row,
@@ -180,6 +178,36 @@ class LetterController
         abort_unless($letter, 404);
 
         return $letter;
+    }
+
+    private function resolveTemplateSettings(): array
+    {
+        $template = (string) request()->cookie('document_template', '');
+        if ($template === '') {
+            foreach (['invoice_template', 'quotation_template', 'letter_template', 'receipt_template'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $template = $value;
+                    break;
+                }
+            }
+        }
+        if ($template === '') {
+            $template = 'Template 2';
+        }
+
+        $templateColor = (string) request()->cookie('document_template_color', '');
+        if ($templateColor === '') {
+            foreach (['invoice_template_color', 'quotation_template_color', 'letter_template_color', 'receipt_template_color'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $templateColor = $value;
+                    break;
+                }
+            }
+        }
+
+        return [$template, $templateColor];
     }
 
     private function buildLetterDocument(array $row): array

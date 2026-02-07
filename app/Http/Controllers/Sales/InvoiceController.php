@@ -246,8 +246,7 @@ class InvoiceController
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
-        $template = request()->cookie('invoice_template', 'Template 2');
-        $templateColor = request()->cookie('invoice_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $company = $this->companyProfile();
 
@@ -276,8 +275,7 @@ class InvoiceController
         $row = $this->findInvoiceOrFail($invoice);
         $document = $this->buildInvoiceDocument($row);
         $generatedAt = now();
-        $template = request()->cookie('invoice_template', 'Template 2');
-        $templateColor = request()->cookie('invoice_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $company = $this->companyProfile();
 
@@ -334,6 +332,36 @@ class InvoiceController
         abort_unless($invoice, 404);
 
         return $invoice;
+    }
+
+    private function resolveTemplateSettings(): array
+    {
+        $template = (string) request()->cookie('document_template', '');
+        if ($template === '') {
+            foreach (['invoice_template', 'quotation_template', 'letter_template', 'receipt_template'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $template = $value;
+                    break;
+                }
+            }
+        }
+        if ($template === '') {
+            $template = 'Template 2';
+        }
+
+        $templateColor = (string) request()->cookie('document_template_color', '');
+        if ($templateColor === '') {
+            foreach (['invoice_template_color', 'quotation_template_color', 'letter_template_color', 'receipt_template_color'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $templateColor = $value;
+                    break;
+                }
+            }
+        }
+
+        return [$template, $templateColor];
     }
 
     private function buildInvoiceDocument(array $row): array

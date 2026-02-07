@@ -48,14 +48,8 @@ class SettingsController
 
         if ($tab === 'template') {
             $templates = $request->validate([
-                'invoice_template' => ['required', 'in:' . implode(',', $this->templateOptions)],
-                'quotation_template' => ['required', 'in:' . implode(',', $this->templateOptions)],
-                'letter_template' => ['required', 'in:' . implode(',', $this->templateOptions)],
-                'receipt_template' => ['required', 'in:' . implode(',', $this->templateOptions)],
-                'invoice_template_color' => ['nullable', 'regex:/^#?[0-9a-fA-F]{6}$/'],
-                'quotation_template_color' => ['nullable', 'regex:/^#?[0-9a-fA-F]{6}$/'],
-                'letter_template_color' => ['nullable', 'regex:/^#?[0-9a-fA-F]{6}$/'],
-                'receipt_template_color' => ['nullable', 'regex:/^#?[0-9a-fA-F]{6}$/'],
+                'document_template' => ['required', 'in:' . implode(',', $this->templateOptions)],
+                'document_template_color' => ['nullable', 'regex:/^#?[0-9a-fA-F]{6}$/'],
                 'footer_message' => ['nullable', 'string', 'max:1000'],
             ]);
 
@@ -73,14 +67,8 @@ class SettingsController
 
             return redirect()
                 ->route('sales.settings.index', ['tab' => 'template'])
-                ->withCookie(cookie()->forever('invoice_template', $templates['invoice_template']))
-                ->withCookie(cookie()->forever('quotation_template', $templates['quotation_template']))
-                ->withCookie(cookie()->forever('letter_template', $templates['letter_template']))
-                ->withCookie(cookie()->forever('receipt_template', $templates['receipt_template']))
-                ->withCookie(cookie()->forever('invoice_template_color', $normalizeHex($templates['invoice_template_color'] ?? '')))
-                ->withCookie(cookie()->forever('quotation_template_color', $normalizeHex($templates['quotation_template_color'] ?? '')))
-                ->withCookie(cookie()->forever('letter_template_color', $normalizeHex($templates['letter_template_color'] ?? '')))
-                ->withCookie(cookie()->forever('receipt_template_color', $normalizeHex($templates['receipt_template_color'] ?? '')))
+                ->withCookie(cookie()->forever('document_template', $templates['document_template']))
+                ->withCookie(cookie()->forever('document_template_color', $normalizeHex($templates['document_template_color'] ?? '')))
                 ->withCookie(cookie()->forever('footer_message', $templates['footer_message'] ?? ''))
                 ->with('success', 'Template settings updated.');
         }

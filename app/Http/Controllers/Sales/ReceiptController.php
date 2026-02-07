@@ -123,8 +123,7 @@ class ReceiptController
     {
         $row = $this->findReceiptOrFail($receipt);
         $document = $this->buildReceiptDocument($row);
-        $template = request()->cookie('receipt_template', 'Template 4');
-        $templateColor = request()->cookie('receipt_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.receipts.single-pdf', [
             'row' => $row,
@@ -142,8 +141,7 @@ class ReceiptController
     {
         $row = $this->findReceiptOrFail($receipt);
         $document = $this->buildReceiptDocument($row);
-        $template = request()->cookie('receipt_template', 'Template 4');
-        $templateColor = request()->cookie('receipt_template_color', '');
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.receipts.single-pdf', [
             'row' => $row,
@@ -174,6 +172,36 @@ class ReceiptController
         abort_unless($receipt, 404);
 
         return $receipt;
+    }
+
+    private function resolveTemplateSettings(): array
+    {
+        $template = (string) request()->cookie('document_template', '');
+        if ($template === '') {
+            foreach (['invoice_template', 'quotation_template', 'letter_template', 'receipt_template'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $template = $value;
+                    break;
+                }
+            }
+        }
+        if ($template === '') {
+            $template = 'Template 2';
+        }
+
+        $templateColor = (string) request()->cookie('document_template_color', '');
+        if ($templateColor === '') {
+            foreach (['invoice_template_color', 'quotation_template_color', 'letter_template_color', 'receipt_template_color'] as $key) {
+                $value = (string) request()->cookie($key, '');
+                if ($value !== '') {
+                    $templateColor = $value;
+                    break;
+                }
+            }
+        }
+
+        return [$template, $templateColor];
     }
 
     private function buildReceiptDocument(array $row): array

@@ -214,10 +214,6 @@
                             'layout' => 'frame',
                         ],
                     ];
-                    $selectedInvoiceTemplate = old('invoice_template', request()->cookie('invoice_template', 'Template 2'));
-                    $selectedQuotationTemplate = old('quotation_template', request()->cookie('quotation_template', 'Template 3'));
-                    $selectedLetterTemplate = old('letter_template', request()->cookie('letter_template', 'Template 1'));
-                    $selectedReceiptTemplate = old('receipt_template', request()->cookie('receipt_template', 'Template 4'));
                     $footerMessage = old('footer_message', request()->cookie('footer_message', 'Thank you for your business.'));
                     $findAccent = function (string $label) use ($templateOptions) {
                         foreach ($templateOptions as $option) {
@@ -254,60 +250,25 @@
                         $b = (int) round($b * (1 - $ratio) + $tb * $ratio);
                         return sprintf('#%02x%02x%02x', $r, $g, $b);
                     };
-                    $invoiceTemplateColor = $normalizeHex(old('invoice_template_color', request()->cookie('invoice_template_color', '')))
-                        ?: $findAccent($selectedInvoiceTemplate);
-                    $quotationTemplateColor = $normalizeHex(old('quotation_template_color', request()->cookie('quotation_template_color', '')))
-                        ?: $findAccent($selectedQuotationTemplate);
-                    $letterTemplateColor = $normalizeHex(old('letter_template_color', request()->cookie('letter_template_color', '')))
-                        ?: $findAccent($selectedLetterTemplate);
-                    $receiptTemplateColor = $normalizeHex(old('receipt_template_color', request()->cookie('receipt_template_color', '')))
-                        ?: $findAccent($selectedReceiptTemplate);
-                    $hasInvoiceColor = (string) request()->cookie('invoice_template_color', '') !== '';
-                    $hasQuotationColor = (string) request()->cookie('quotation_template_color', '') !== '';
-                    $hasLetterColor = (string) request()->cookie('letter_template_color', '') !== '';
-                    $hasReceiptColor = (string) request()->cookie('receipt_template_color', '') !== '';
-                    $documentGroups = [
-                        [
-                            'title' => 'Invoices',
-                            'label' => 'Invoice',
-                            'name' => 'invoice_template',
-                            'selected' => $selectedInvoiceTemplate,
-                            'subtitle' => 'Applied to invoice PDFs and exports.',
-                            'color' => $invoiceTemplateColor,
-                            'color_name' => 'invoice_template_color',
-                            'has_custom_color' => $hasInvoiceColor,
-                        ],
-                        [
-                            'title' => 'Quotations',
-                            'label' => 'Quotation',
-                            'name' => 'quotation_template',
-                            'selected' => $selectedQuotationTemplate,
-                            'subtitle' => 'Applied to quotation PDFs and exports.',
-                            'color' => $quotationTemplateColor,
-                            'color_name' => 'quotation_template_color',
-                            'has_custom_color' => $hasQuotationColor,
-                        ],
-                        [
-                            'title' => 'Letters',
-                            'label' => 'Letter',
-                            'name' => 'letter_template',
-                            'selected' => $selectedLetterTemplate,
-                            'subtitle' => 'Applied to letter PDFs and exports.',
-                            'color' => $letterTemplateColor,
-                            'color_name' => 'letter_template_color',
-                            'has_custom_color' => $hasLetterColor,
-                        ],
-                        [
-                            'title' => 'Receipts',
-                            'label' => 'Receipt',
-                            'name' => 'receipt_template',
-                            'selected' => $selectedReceiptTemplate,
-                            'subtitle' => 'Applied to receipt PDFs and exports.',
-                            'color' => $receiptTemplateColor,
-                            'color_name' => 'receipt_template_color',
-                            'has_custom_color' => $hasReceiptColor,
-                        ],
-                    ];
+                    $cookieTemplate = collect([
+                        request()->cookie('document_template', ''),
+                        request()->cookie('invoice_template', ''),
+                        request()->cookie('quotation_template', ''),
+                        request()->cookie('letter_template', ''),
+                        request()->cookie('receipt_template', ''),
+                    ])->first(fn ($value) => is_string($value) && $value !== '');
+                    $selectedTemplate = old('document_template', $cookieTemplate ?: 'Template 2');
+                    $cookieTemplateColor = collect([
+                        request()->cookie('document_template_color', ''),
+                        request()->cookie('invoice_template_color', ''),
+                        request()->cookie('quotation_template_color', ''),
+                        request()->cookie('letter_template_color', ''),
+                        request()->cookie('receipt_template_color', ''),
+                    ])->first(fn ($value) => is_string($value) && $value !== '');
+                    $rawTemplateColor = (string) old('document_template_color', $cookieTemplateColor ?? '');
+                    $normalizedTemplateColor = $normalizeHex($rawTemplateColor);
+                    $hasDocumentColor = $normalizedTemplateColor !== null;
+                    $documentTemplateColor = $normalizedTemplateColor ?: $findAccent($selectedTemplate);
                 @endphp
                 <style>
                     .template-card {
@@ -472,92 +433,88 @@
                         <div class="text-xs uppercase tracking-[0.3em] text-white/60">Template Studio</div>
                         <div class="mt-3 text-2xl font-semibold">Design your document identity.</div>
                         <p class="mt-2 max-w-2xl text-sm text-white/70">
-                            Choose a template for every document type. Your selection updates the PDF layout instantly.
+                            Choose one template for all documents. Your selection updates invoices, quotations, letters, and receipts instantly.
                         </p>
                         <div class="mt-5 flex flex-wrap gap-3">
                             <div class="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-xs">6 Templates</div>
-                            <div class="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-xs">4 Document Types</div>
+                            <div class="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-xs">All Documents</div>
                             <div class="rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-xs">Instant PDF Sync</div>
                         </div>
                     </div>
 
-                    @foreach($documentGroups as $doc)
-                        <div class="{{ $panelClass }}">
-                            <div class="flex flex-wrap items-center justify-between gap-3">
-                                <div>
-                                    <div class="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">{{ $doc['title'] }}</div>
-                                    <div class="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">{{ $doc['title'] }} Templates</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">{{ $doc['subtitle'] }}</div>
-                                </div>
-                                <div class="flex flex-wrap items-center gap-3">
-                                    <div class="rounded-full bg-slate-100 px-4 py-2 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                                        Selected: <span class="font-semibold text-slate-900 dark:text-white">{{ $doc['selected'] }}</span>
-                                    </div>
-                                    <label class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                                        <span class="h-3 w-3 rounded-full border border-white" style="background: {{ $doc['color'] }}"></span>
-                                        <span>Accent</span>
-                                        <input type="color"
-                                               name="{{ $doc['color_name'] }}"
-                                               value="{{ $doc['color'] }}"
-                                               class="h-6 w-8 cursor-pointer rounded border border-slate-200 bg-white p-0 dark:border-slate-700 dark:bg-slate-900">
-                                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{{ strtoupper($doc['color']) }}</span>
-                                    </label>
-                                </div>
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <div class="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">All Documents</div>
+                                <div class="mt-1 text-lg font-semibold text-slate-800 dark:text-slate-100">Unified Template</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">Applied to invoices, quotations, letters, and receipts.</div>
                             </div>
-
-                            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                                @foreach($templateOptions as $option)
-                                    @php
-                                        $isSelected = $doc['selected'] === $option['label'];
-                                        $customAccent = $doc['has_custom_color']
-                                            ? ($normalizeHex($doc['color']) ?? $option['accent'])
-                                            : $option['accent'];
-                                        $customAccentSoft = $doc['has_custom_color']
-                                            ? $mixColor($customAccent, '#ffffff', 0.88)
-                                            : $option['accentSoft'];
-                                        $customAccentDark = $doc['has_custom_color']
-                                            ? $mixColor($customAccent, '#000000', 0.35)
-                                            : $option['accentDark'];
-                                    @endphp
-                                    <label class="group relative cursor-pointer">
-                                        <input type="radio" name="{{ $doc['name'] }}" value="{{ $option['label'] }}"
-                                               class="peer sr-only" @checked($doc['selected'] === $option['label'])>
-                                        <div class="template-card peer-checked:border-[#465FFF] peer-checked:ring-2 peer-checked:ring-[#465FFF]/20">
-                                            <div class="flex items-center justify-between">
-                                                <div class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ $option['label'] }}</div>
-                                                <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                                                      style="background: {{ $customAccentSoft }}; color: {{ $customAccentDark }};">
-                                                    {{ $option['tag'] }}
-                                                </span>
-                                            </div>
-                                            <div class="mt-3 template-preview layout-{{ $option['layout'] }}"
-                                                 style="--accent: {{ $customAccent }}; --accent-soft: {{ $customAccentSoft }}; --accent-dark: {{ $customAccentDark }};">
-                                                <div class="tp-top"></div>
-                                                <div class="tp-left"></div>
-                                                <div class="tp-content">
-                                                    <div class="tp-header">
-                                                        <div class="tp-logo"></div>
-                                                        <div class="tp-title"></div>
-                                                    </div>
-                                                    <div class="tp-sub"></div>
-                                                    <div class="tp-table">
-                                                        <div class="tp-row"></div>
-                                                        <div class="tp-row"></div>
-                                                        <div class="tp-row"></div>
-                                                    </div>
-                                                    <div class="tp-total"></div>
-                                                </div>
-                                            </div>
-                                            <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">{{ $option['desc'] }}</div>
-                                        </div>
-                                        <span class="pointer-events-none absolute right-3 top-3 rounded-full bg-[#465FFF] px-2 py-0.5 text-[10px] font-semibold text-white opacity-0 transition peer-checked:opacity-100">
-                                            Selected
-                                        </span>
-                                    </label>
-                                @endforeach
+                            <div class="flex flex-wrap items-center gap-3">
+                                <div class="rounded-full bg-slate-100 px-4 py-2 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                    Selected: <span class="font-semibold text-slate-900 dark:text-white">{{ $selectedTemplate }}</span>
+                                </div>
+                                <label class="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                    <span class="h-3 w-3 rounded-full border border-white" style="background: {{ $documentTemplateColor }}"></span>
+                                    <span>Accent</span>
+                                    <input type="color"
+                                           name="document_template_color"
+                                           value="{{ $documentTemplateColor }}"
+                                           class="h-6 w-8 cursor-pointer rounded border border-slate-200 bg-white p-0 dark:border-slate-700 dark:bg-slate-900">
+                                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{{ strtoupper($documentTemplateColor) }}</span>
+                                </label>
                             </div>
                         </div>
-                    @endforeach
+
+                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                            @foreach($templateOptions as $option)
+                                @php
+                                    $isSelected = $selectedTemplate === $option['label'];
+                                    $customAccent = $hasDocumentColor ? $documentTemplateColor : $option['accent'];
+                                    $customAccentSoft = $hasDocumentColor
+                                        ? $mixColor($customAccent, '#ffffff', 0.88)
+                                        : $option['accentSoft'];
+                                    $customAccentDark = $hasDocumentColor
+                                        ? $mixColor($customAccent, '#000000', 0.35)
+                                        : $option['accentDark'];
+                                @endphp
+                                <label class="group relative cursor-pointer">
+                                    <input type="radio" name="document_template" value="{{ $option['label'] }}"
+                                           class="peer sr-only" @checked($isSelected)>
+                                    <div class="template-card peer-checked:border-[#465FFF] peer-checked:ring-2 peer-checked:ring-[#465FFF]/20">
+                                        <div class="flex items-center justify-between">
+                                            <div class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ $option['label'] }}</div>
+                                            <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                                                  style="background: {{ $customAccentSoft }}; color: {{ $customAccentDark }};">
+                                                {{ $option['tag'] }}
+                                            </span>
+                                        </div>
+                                        <div class="mt-3 template-preview layout-{{ $option['layout'] }}"
+                                             style="--accent: {{ $customAccent }}; --accent-soft: {{ $customAccentSoft }}; --accent-dark: {{ $customAccentDark }};">
+                                            <div class="tp-top"></div>
+                                            <div class="tp-left"></div>
+                                            <div class="tp-content">
+                                                <div class="tp-header">
+                                                    <div class="tp-logo"></div>
+                                                    <div class="tp-title"></div>
+                                                </div>
+                                                <div class="tp-sub"></div>
+                                                <div class="tp-table">
+                                                    <div class="tp-row"></div>
+                                                    <div class="tp-row"></div>
+                                                    <div class="tp-row"></div>
+                                                </div>
+                                                <div class="tp-total"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">{{ $option['desc'] }}</div>
+                                    </div>
+                                    <span class="pointer-events-none absolute right-3 top-3 rounded-full bg-[#465FFF] px-2 py-0.5 text-[10px] font-semibold text-white opacity-0 transition peer-checked:opacity-100">
+                                        Selected
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
 
                     <div class="{{ $panelClass }}">
                         <div class="text-sm font-semibold text-slate-700 dark:text-slate-100">Footer Message</div>
