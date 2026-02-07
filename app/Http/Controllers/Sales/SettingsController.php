@@ -142,7 +142,67 @@ class SettingsController
                 'default_vat' => ['nullable', 'numeric', 'min:0', 'max:100'],
                 'invoice_prefix' => ['nullable', 'string', 'max:20'],
                 'payment_prefix' => ['nullable', 'string', 'max:20'],
+                'payment_airtel_enabled' => ['nullable'],
+                'payment_airtel_label' => ['nullable', 'string', 'max:255'],
+                'payment_airtel_account_name' => ['nullable', 'string', 'max:255'],
+                'payment_airtel_account_number' => ['nullable', 'string', 'max:255'],
+                'payment_airtel_reference' => ['nullable', 'string', 'max:255'],
+                'payment_airtel_logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
+                'payment_mpamba_enabled' => ['nullable'],
+                'payment_mpamba_label' => ['nullable', 'string', 'max:255'],
+                'payment_mpamba_account_name' => ['nullable', 'string', 'max:255'],
+                'payment_mpamba_account_number' => ['nullable', 'string', 'max:255'],
+                'payment_mpamba_reference' => ['nullable', 'string', 'max:255'],
+                'payment_mpamba_logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
+                'payment_bank_enabled' => ['nullable'],
+                'payment_bank_label' => ['nullable', 'string', 'max:255'],
+                'payment_bank_name' => ['nullable', 'string', 'max:255'],
+                'payment_bank_account_name' => ['nullable', 'string', 'max:255'],
+                'payment_bank_account_number' => ['nullable', 'string', 'max:255'],
+                'payment_bank_branch' => ['nullable', 'string', 'max:255'],
+                'payment_bank_swift' => ['nullable', 'string', 'max:255'],
+                'payment_bank_logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
             ]);
+
+            $settings = SalesSettings::get();
+            $payments = $settings['payments'] ?? [];
+
+            $airtelLogoPath = (string) ($payments['airtel_money']['logo_path'] ?? '');
+            if ($request->hasFile('payment_airtel_logo')) {
+                $file = $request->file('payment_airtel_logo');
+                $extension = $file->getClientOriginalExtension() ?: 'png';
+                $stored = $file->storeAs('public/payments', 'airtel-money.' . $extension);
+                $airtelLogoPath = str_replace('public/', '', $stored);
+            }
+
+            $mpambaLogoPath = (string) ($payments['mpamba']['logo_path'] ?? '');
+            if ($request->hasFile('payment_mpamba_logo')) {
+                $file = $request->file('payment_mpamba_logo');
+                $extension = $file->getClientOriginalExtension() ?: 'png';
+                $stored = $file->storeAs('public/payments', 'mpamba.' . $extension);
+                $mpambaLogoPath = str_replace('public/', '', $stored);
+            }
+
+            $bankLogoPath = (string) ($payments['bank']['logo_path'] ?? '');
+            if ($request->hasFile('payment_bank_logo')) {
+                $file = $request->file('payment_bank_logo');
+                $extension = $file->getClientOriginalExtension() ?: 'png';
+                $stored = $file->storeAs('public/payments', 'bank-transfer.' . $extension);
+                $bankLogoPath = str_replace('public/', '', $stored);
+            }
+
+            $airtelLabel = trim((string) ($prefs['payment_airtel_label'] ?? ''));
+            if ($airtelLabel === '') {
+                $airtelLabel = 'Airtel Money';
+            }
+            $mpambaLabel = trim((string) ($prefs['payment_mpamba_label'] ?? ''));
+            if ($mpambaLabel === '') {
+                $mpambaLabel = 'TNM Mpamba';
+            }
+            $bankLabel = trim((string) ($prefs['payment_bank_label'] ?? ''));
+            if ($bankLabel === '') {
+                $bankLabel = 'Bank Transfer';
+            }
 
             SalesSettings::update([
                 'preferences' => [
@@ -150,6 +210,34 @@ class SettingsController
                     'default_vat' => $prefs['default_vat'] ?? 0,
                     'invoice_prefix' => $prefs['invoice_prefix'] ?? '',
                     'payment_prefix' => $prefs['payment_prefix'] ?? '',
+                ],
+                'payments' => [
+                    'airtel_money' => [
+                        'enabled' => $request->boolean('payment_airtel_enabled'),
+                        'label' => $airtelLabel,
+                        'account_name' => trim((string) ($prefs['payment_airtel_account_name'] ?? '')),
+                        'account_number' => trim((string) ($prefs['payment_airtel_account_number'] ?? '')),
+                        'reference' => trim((string) ($prefs['payment_airtel_reference'] ?? '')),
+                        'logo_path' => $airtelLogoPath,
+                    ],
+                    'mpamba' => [
+                        'enabled' => $request->boolean('payment_mpamba_enabled'),
+                        'label' => $mpambaLabel,
+                        'account_name' => trim((string) ($prefs['payment_mpamba_account_name'] ?? '')),
+                        'account_number' => trim((string) ($prefs['payment_mpamba_account_number'] ?? '')),
+                        'reference' => trim((string) ($prefs['payment_mpamba_reference'] ?? '')),
+                        'logo_path' => $mpambaLogoPath,
+                    ],
+                    'bank' => [
+                        'enabled' => $request->boolean('payment_bank_enabled'),
+                        'label' => $bankLabel,
+                        'bank_name' => trim((string) ($prefs['payment_bank_name'] ?? '')),
+                        'account_name' => trim((string) ($prefs['payment_bank_account_name'] ?? '')),
+                        'account_number' => trim((string) ($prefs['payment_bank_account_number'] ?? '')),
+                        'branch' => trim((string) ($prefs['payment_bank_branch'] ?? '')),
+                        'swift' => trim((string) ($prefs['payment_bank_swift'] ?? '')),
+                        'logo_path' => $bankLogoPath,
+                    ],
                 ],
             ]);
 

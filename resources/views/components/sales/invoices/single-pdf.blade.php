@@ -326,6 +326,68 @@
             white-space: pre-line;
         }
 
+        .payment-section {
+            margin-top: 12px;
+        }
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .payment-cell {
+            width: 33.333%;
+            vertical-align: top;
+            padding: 6px;
+        }
+
+        .payment-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            background: #ffffff;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .payment-logo {
+            width: 48px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .payment-logo-fallback {
+            width: 48px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            color: var(--accent-dark);
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+
+        .payment-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .payment-line {
+            font-size: 10px;
+            color: #475569;
+            margin-top: 2px;
+            word-break: break-word;
+        }
+
         .security-bottom {
             margin-top: 8px;
             width: 100%;
@@ -706,6 +768,41 @@
         </tr>
     </table>
 
+    @if(!empty($paymentDetails))
+        <div class="payment-section">
+            <div class="section-title">Payment Details</div>
+            <table class="payment-table">
+                @php($paymentChunks = array_chunk($paymentDetails, 3))
+                @foreach($paymentChunks as $chunk)
+                    <tr>
+                        @foreach($chunk as $method)
+                            <td class="payment-cell">
+                                <div class="payment-card">
+                                    <div class="payment-header">
+                                        @if(!empty($method['logo']))
+                                            <img src="{{ $method['logo'] }}" alt="{{ $method['label'] }} logo" class="payment-logo">
+                                        @else
+                                            @php($logoText = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', (string) $method['label']), 0, 3)))
+                                            @php($logoText = $logoText !== '' ? $logoText : 'PAY')
+                                            <div class="payment-logo-fallback">{{ $logoText }}</div>
+                                        @endif
+                                        <div class="payment-title">{{ $method['label'] }}</div>
+                                    </div>
+                                    @foreach($method['lines'] as $line)
+                                        <div class="payment-line">{{ $line }}</div>
+                                    @endforeach
+                                </div>
+                            </td>
+                        @endforeach
+                        @for($i = count($chunk); $i < 3; $i++)
+                            <td class="payment-cell"></td>
+                        @endfor
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    @endif
+
     <table class="notes-table">
         <tr>
             <td>
@@ -765,6 +862,7 @@
                 <span class="footer-text">Powered By Terex Innovation Lab</span>
             </a>
         </div>
+    </div>
 </body>
 
 </html>

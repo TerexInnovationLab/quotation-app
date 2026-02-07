@@ -252,6 +252,7 @@ class InvoiceController
         [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $company = $this->companyProfile();
+        $paymentDetails = $this->paymentDetails();
 
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
@@ -259,6 +260,7 @@ class InvoiceController
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
             'company' => $company,
+            'paymentDetails' => $paymentDetails,
             'template' => $template,
             'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
@@ -281,6 +283,7 @@ class InvoiceController
         [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $company = $this->companyProfile();
+        $paymentDetails = $this->paymentDetails();
 
         $pdf = Pdf::loadView('components.sales.invoices.single-pdf', [
             'row' => $row,
@@ -288,6 +291,7 @@ class InvoiceController
             'items' => $document['items'],
             'generatedAt' => $generatedAt,
             'company' => $company,
+            'paymentDetails' => $paymentDetails,
             'template' => $template,
             'templateColor' => $templateColor,
             'documentQr' => $this->qrCodeDataUri($this->invoiceQrPayload($row, $document['invoice'], $company)),
@@ -517,6 +521,130 @@ class InvoiceController
         }
 
         return $company;
+    }
+
+    private function paymentDetails(): array
+    {
+        $settings = SalesSettings::get();
+        $payments = $settings['payments'] ?? [];
+        $methods = [];
+
+        $airtel = $payments['airtel_money'] ?? [];
+        if (! empty($airtel['enabled'])) {
+            $label = trim((string) ($airtel['label'] ?? '')) ?: 'Airtel Money';
+            $lines = array_filter([
+                $this->paymentLine('Account Name', $airtel['account_name'] ?? null),
+                $this->paymentLine('Account Number', $airtel['account_number'] ?? null),
+                $this->paymentLine('Reference', $airtel['reference'] ?? null),
+            ]);
+            if (empty($lines)) {
+                $lines = ['Details not provided'];
+            }
+            $methods[] = [
+                'label' => $label,
+                'logo' => $this->paymentLogoDataUri(
+                    $airtel['logo_path'] ?? '',
+                    [
+                        'images/payments/airtel-money.png',
+                        'images/payments/airtel-money.jpg',
+                        'images/payments/airtel-money.jpeg',
+                    ],
+                ),
+                'lines' => $lines,
+            ];
+        }
+
+        $mpamba = $payments['mpamba'] ?? [];
+        if (! empty($mpamba['enabled'])) {
+            $label = trim((string) ($mpamba['label'] ?? '')) ?: 'TNM Mpamba';
+            $lines = array_filter([
+                $this->paymentLine('Account Name', $mpamba['account_name'] ?? null),
+                $this->paymentLine('Account Number', $mpamba['account_number'] ?? null),
+                $this->paymentLine('Reference', $mpamba['reference'] ?? null),
+            ]);
+            if (empty($lines)) {
+                $lines = ['Details not provided'];
+            }
+            $methods[] = [
+                'label' => $label,
+                'logo' => $this->paymentLogoDataUri(
+                    $mpamba['logo_path'] ?? '',
+                    [
+                        'images/payments/mpamba.png',
+                        'images/payments/mpamba.jpg',
+                        'images/payments/mpamba.jpeg',
+                    ],
+                ),
+                'lines' => $lines,
+            ];
+        }
+
+        $bank = $payments['bank'] ?? [];
+        if (! empty($bank['enabled'])) {
+            $label = trim((string) ($bank['label'] ?? '')) ?: 'Bank Transfer';
+            $lines = array_filter([
+                $this->paymentLine('Bank', $bank['bank_name'] ?? null),
+                $this->paymentLine('Account Name', $bank['account_name'] ?? null),
+                $this->paymentLine('Account Number', $bank['account_number'] ?? null),
+                $this->paymentLine('Branch', $bank['branch'] ?? null),
+                $this->paymentLine('SWIFT', $bank['swift'] ?? null),
+            ]);
+            if (empty($lines)) {
+                $lines = ['Details not provided'];
+            }
+            $methods[] = [
+                'label' => $label,
+                'logo' => $this->paymentLogoDataUri(
+                    $bank['logo_path'] ?? '',
+                    [
+                        'images/payments/bank.png',
+                        'images/payments/bank.jpg',
+                        'images/payments/bank.jpeg',
+                    ],
+                ),
+                'lines' => $lines,
+            ];
+        }
+
+        return $methods;
+    }
+
+    private function paymentLine(string $label, ?string $value): ?string
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        return $label . ': ' . $value;
+    }
+
+    private function paymentLogoDataUri(string $storedPath, array $fallbackPaths): ?string
+    {
+        $paths = [];
+        if ($storedPath !== '') {
+            $paths[] = storage_path('app/public/' . ltrim($storedPath, '/'));
+        }
+        foreach ($fallbackPaths as $fallback) {
+            $paths[] = public_path($fallback);
+        }
+
+        foreach ($paths as $path) {
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path) ?: 'image/png';
+            $contents = file_get_contents($path);
+
+            if ($contents === false) {
+                continue;
+            }
+
+            return 'data:' . $mime . ';base64,' . base64_encode($contents);
+        }
+
+        return null;
     }
 
     private function invoiceQrPayload(array $row, array $invoice, array $company): string

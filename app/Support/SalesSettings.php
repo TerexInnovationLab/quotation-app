@@ -33,6 +33,34 @@ class SalesSettings
                 'invoice_prefix' => 'INV-',
                 'payment_prefix' => 'PAY-',
             ],
+            'payments' => [
+                'airtel_money' => [
+                    'enabled' => true,
+                    'label' => 'Airtel Money',
+                    'account_name' => 'Terex Innovation Lab',
+                    'account_number' => '0999 000 000',
+                    'reference' => 'Use invoice number as reference',
+                    'logo_path' => '',
+                ],
+                'mpamba' => [
+                    'enabled' => true,
+                    'label' => 'TNM Mpamba',
+                    'account_name' => 'Terex Innovation Lab',
+                    'account_number' => '0888 000 000',
+                    'reference' => 'Use invoice number as reference',
+                    'logo_path' => '',
+                ],
+                'bank' => [
+                    'enabled' => true,
+                    'label' => 'Bank Transfer',
+                    'bank_name' => 'National Bank of Malawi',
+                    'account_name' => 'Terex Innovation Lab',
+                    'account_number' => '1000000000',
+                    'branch' => 'Blantyre',
+                    'swift' => '',
+                    'logo_path' => '',
+                ],
+            ],
         ];
     }
 

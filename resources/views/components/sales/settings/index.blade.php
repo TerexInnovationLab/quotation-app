@@ -28,6 +28,7 @@
         $company = $settings['company'] ?? [];
         $branding = $settings['branding'] ?? [];
         $preferences = $settings['preferences'] ?? [];
+        $payments = $settings['payments'] ?? [];
     @endphp
 
     <div class="space-y-4 max-w-5xl">
@@ -618,6 +619,137 @@
                             <div>
                                 <label class="text-xs text-slate-500 dark:text-slate-400">Payment Number Prefix</label>
                                 <input type="text" name="payment_prefix" value="{{ old('payment_prefix', $preferences['payment_prefix'] ?? 'PAY-') }}" class="{{ $inputClass }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="{{ $panelClass }}">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <div class="{{ $sectionEyebrow }}">Payments</div>
+                                <div class="{{ $sectionTitle }}">Payment details for invoices</div>
+                                <div class="{{ $sectionDesc }}">Shown on invoice PDFs to help clients pay quickly.</div>
+                            </div>
+                            <div class="h-11 w-11 rounded-2xl bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-200 grid place-items-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-4">
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-semibold text-slate-700 dark:text-slate-100">Airtel Money</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Mobile money option.</div>
+                                    </div>
+                                    <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+                                        <input type="checkbox" name="payment_airtel_enabled" class="rounded border-slate-300 text-indigo-600" @checked((bool) old('payment_airtel_enabled', $payments['airtel_money']['enabled'] ?? true))>
+                                        Enabled
+                                    </label>
+                                </div>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Label</label>
+                                        <input type="text" name="payment_airtel_label" value="{{ old('payment_airtel_label', $payments['airtel_money']['label'] ?? 'Airtel Money') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Name</label>
+                                        <input type="text" name="payment_airtel_account_name" value="{{ old('payment_airtel_account_name', $payments['airtel_money']['account_name'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Number</label>
+                                        <input type="text" name="payment_airtel_account_number" value="{{ old('payment_airtel_account_number', $payments['airtel_money']['account_number'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Reference Note</label>
+                                        <input type="text" name="payment_airtel_reference" value="{{ old('payment_airtel_reference', $payments['airtel_money']['reference'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Logo (PNG/JPG)</label>
+                                        <input type="file" name="payment_airtel_logo" class="{{ $inputClass }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-semibold text-slate-700 dark:text-slate-100">TNM Mpamba</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Mobile money option.</div>
+                                    </div>
+                                    <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+                                        <input type="checkbox" name="payment_mpamba_enabled" class="rounded border-slate-300 text-indigo-600" @checked((bool) old('payment_mpamba_enabled', $payments['mpamba']['enabled'] ?? true))>
+                                        Enabled
+                                    </label>
+                                </div>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Label</label>
+                                        <input type="text" name="payment_mpamba_label" value="{{ old('payment_mpamba_label', $payments['mpamba']['label'] ?? 'TNM Mpamba') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Name</label>
+                                        <input type="text" name="payment_mpamba_account_name" value="{{ old('payment_mpamba_account_name', $payments['mpamba']['account_name'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Number</label>
+                                        <input type="text" name="payment_mpamba_account_number" value="{{ old('payment_mpamba_account_number', $payments['mpamba']['account_number'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Reference Note</label>
+                                        <input type="text" name="payment_mpamba_reference" value="{{ old('payment_mpamba_reference', $payments['mpamba']['reference'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Logo (PNG/JPG)</label>
+                                        <input type="file" name="payment_mpamba_logo" class="{{ $inputClass }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-semibold text-slate-700 dark:text-slate-100">Malawian Bank</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Bank transfer details.</div>
+                                    </div>
+                                    <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+                                        <input type="checkbox" name="payment_bank_enabled" class="rounded border-slate-300 text-indigo-600" @checked((bool) old('payment_bank_enabled', $payments['bank']['enabled'] ?? true))>
+                                        Enabled
+                                    </label>
+                                </div>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Label</label>
+                                        <input type="text" name="payment_bank_label" value="{{ old('payment_bank_label', $payments['bank']['label'] ?? 'Bank Transfer') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Bank Name</label>
+                                        <input type="text" name="payment_bank_name" value="{{ old('payment_bank_name', $payments['bank']['bank_name'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Name</label>
+                                        <input type="text" name="payment_bank_account_name" value="{{ old('payment_bank_account_name', $payments['bank']['account_name'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Account Number</label>
+                                        <input type="text" name="payment_bank_account_number" value="{{ old('payment_bank_account_number', $payments['bank']['account_number'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Branch</label>
+                                        <input type="text" name="payment_bank_branch" value="{{ old('payment_bank_branch', $payments['bank']['branch'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">SWIFT Code</label>
+                                        <input type="text" name="payment_bank_swift" value="{{ old('payment_bank_swift', $payments['bank']['swift'] ?? '') }}" class="{{ $inputClass }}">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="text-xs text-slate-500 dark:text-slate-400">Logo (PNG/JPG)</label>
+                                        <input type="file" name="payment_bank_logo" class="{{ $inputClass }}">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
