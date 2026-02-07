@@ -23,7 +23,7 @@
     }
 @endphp
 <!doctype html>
-<html lang="en" class="{{ ($appearance ?? 'system') === 'dark' ? 'dark' : '' }}" style="--app-primary: {{ $primary['base'] }}; --app-primary-hover: {{ $primary['hover'] }};">
+<html lang="en" class="{{ ($appearance ?? 'system') === 'dark' ? 'dark' : '' }}" data-appearance="{{ $appearance ?? 'system' }}" style="--app-primary: {{ $primary['base'] }}; --app-primary-hover: {{ $primary['hover'] }};">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">

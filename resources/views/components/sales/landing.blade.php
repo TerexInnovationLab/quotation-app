@@ -1,18 +1,59 @@
+@php
+    $primaryPalette = [
+        'indigo' => ['base' => '#465FFF', 'hover' => '#3d54e6'],
+        'emerald' => ['base' => '#10B981', 'hover' => '#059669'],
+        'rose' => ['base' => '#F43F5E', 'hover' => '#E11D48'],
+        'amber' => ['base' => '#F59E0B', 'hover' => '#D97706'],
+        'sky' => ['base' => '#0EA5E9', 'hover' => '#0284C7'],
+        'slate' => ['base' => '#475569', 'hover' => '#334155'],
+    ];
+    $primary = $primaryPalette[$primaryColor ?? 'indigo'] ?? $primaryPalette['indigo'];
+@endphp
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth {{ ($appearance ?? 'system') === 'dark' ? 'dark' : '' }}" data-appearance="{{ $appearance ?? 'system' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
     <title>Quotation & Invoicing System</title>
 
-    @vite(['resources/css/app.css','resources/js/app.ts'])
+    @vite(['resources/css/app.css','resources/js/app.js'])
+
+    <script>
+        (function () {
+            const appearance = @json($appearance ?? 'system');
+            const root = document.documentElement;
+
+            if (appearance === 'dark') {
+                root.classList.add('dark');
+                return;
+            }
+
+            if (appearance === 'light') {
+                root.classList.remove('dark');
+                return;
+            }
+
+            const media = window.matchMedia('(prefers-color-scheme: dark)');
+            const sync = function () {
+                root.classList.toggle('dark', media.matches);
+            };
+
+            sync();
+
+            if (typeof media.addEventListener === 'function') {
+                media.addEventListener('change', sync);
+            } else if (typeof media.addListener === 'function') {
+                media.addListener(sync);
+            }
+        })();
+    </script>
 
     <style>
         html, body {
             background-color: #f8fafc;
         }
-        :root { --brand: #465FFF; }
+        :root { --brand: {{ $primary['base'] }}; }
         .brand-bg { background-color: var(--brand); }
         .brand-text { color: var(--brand); }
         .brand-ring { --tw-ring-color: var(--brand); }
@@ -21,7 +62,7 @@
     </style>
 
     <style>
-  :root { --brand: #465FFF; }
+  :root { --brand: {{ $primary['base'] }}; }
   .brand-bg { background-color: var(--brand); }
   .brand-text { color: var(--brand); }
   .brand-ring { --tw-ring-color: var(--brand); }
@@ -69,9 +110,32 @@
     html { scroll-behavior: auto; }
   }
     </style>
+
+    <style>
+        .dark body.landing-page {
+            background-color: #0b1220;
+            color: #e2e8f0;
+        }
+
+        .dark .landing-page .bg-white { background-color: rgba(15, 23, 42, 0.92); }
+        .dark .landing-page .bg-slate-50 { background-color: #0f172a; }
+        .dark .landing-page .border-slate-200 { border-color: rgba(51, 65, 85, 0.85); }
+        .dark .landing-page .text-slate-900 { color: #f1f5f9; }
+        .dark .landing-page .text-slate-700 { color: #e2e8f0; }
+        .dark .landing-page .text-slate-600 { color: #cbd5f5; }
+        .dark .landing-page .text-slate-500 { color: #94a3b8; }
+
+        .dark .landing-page .hover\:bg-slate-50:hover { background-color: rgba(30, 41, 59, 0.6); }
+        .dark .landing-page .hover\:text-slate-900:hover { color: #f8fafc; }
+
+        .dark .landing-page .card-hover:hover {
+            box-shadow: 0 18px 34px rgba(2, 6, 23, 0.6);
+            border-color: rgba(99, 102, 241, 0.45);
+        }
+    </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="landing-page bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
     {{-- Top Nav --}}
     <header
         class="fixed inset-x-0 top-0 z-50 bg-white/5 backdrop-blur-md border-b border-slate-200"
@@ -463,5 +527,4 @@
 
 </body>
 </html>
-
 
