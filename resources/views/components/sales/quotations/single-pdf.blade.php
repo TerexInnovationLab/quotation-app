@@ -614,7 +614,7 @@
     <table class="header-table">
         <tr>
             <td class="brand-wrap">
-                  @php($defaultLogoPath = public_path('images/terex_transparent_white_text.png'))
+                  @php($defaultLogoPath = public_path('images/terex_transparent.png'))
                 @if(!empty($company['logo']))
                     <img src="{{ $company['logo'] }}" alt="Company logo" class="logo">
                 @elseif(file_exists($defaultLogoPath))
