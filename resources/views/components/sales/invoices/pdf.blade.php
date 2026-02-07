@@ -1,4 +1,55 @@
 <!doctype html>
+@php
+    $templateLabel = $template ?? 'Template 2';
+    $templateNumber = (int) preg_replace('/\D+/', '', (string) $templateLabel);
+    if ($templateNumber < 1 || $templateNumber > 6) {
+        $templateNumber = 2;
+    }
+    $templateStyles = [
+        1 => ['accent' => '#465fff', 'accentSoft' => '#eef2ff', 'accentDark' => '#1e293b'],
+        2 => ['accent' => '#0f766e', 'accentSoft' => '#ecfdf5', 'accentDark' => '#115e59'],
+        3 => ['accent' => '#e11d48', 'accentSoft' => '#fff1f2', 'accentDark' => '#9f1239'],
+        4 => ['accent' => '#d97706', 'accentSoft' => '#fffbeb', 'accentDark' => '#92400e'],
+        5 => ['accent' => '#0284c7', 'accentSoft' => '#f0f9ff', 'accentDark' => '#0c4a6e'],
+        6 => ['accent' => '#475569', 'accentSoft' => '#f8fafc', 'accentDark' => '#1f2937'],
+    ];
+    $style = $templateStyles[$templateNumber];
+    $normalizeHex = function (?string $value): ?string {
+        $value = strtolower(trim((string) $value));
+        if ($value === '') {
+            return null;
+        }
+        $value = ltrim($value, '#');
+        if (!preg_match('/^[0-9a-f]{6}$/', $value)) {
+            return null;
+        }
+        return '#' . $value;
+    };
+    $toRgb = function (string $hex): array {
+        $hex = ltrim($hex, '#');
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
+    };
+    $mixColor = function (string $hex, string $target, float $ratio) use ($toRgb): string {
+        [$r, $g, $b] = $toRgb($hex);
+        [$tr, $tg, $tb] = $toRgb($target);
+        $r = (int) round($r * (1 - $ratio) + $tr * $ratio);
+        $g = (int) round($g * (1 - $ratio) + $tg * $ratio);
+        $b = (int) round($b * (1 - $ratio) + $tb * $ratio);
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
+    };
+    $accentOverride = $normalizeHex($templateColor ?? '');
+    if ($accentOverride) {
+        $style = [
+            'accent' => $accentOverride,
+            'accentSoft' => $mixColor($accentOverride, '#ffffff', 0.88),
+            'accentDark' => $mixColor($accentOverride, '#000000', 0.35),
+        ];
+    }
+@endphp
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -14,9 +65,15 @@
             font-size: 12px;
         }
 
+        :root {
+            --accent: {{ $style['accent'] }};
+            --accent-soft: {{ $style['accentSoft'] }};
+            --accent-dark: {{ $style['accentDark'] }};
+        }
+
         .top-accent {
             height: 7px;
-            background: #465fff;
+            background: var(--accent);
             margin-bottom: 14px;
         }
 
@@ -54,7 +111,7 @@
             text-align: center;
             font-size: 18px;
             color: #ffffff;
-            background: #465fff;
+            background: var(--accent);
             font-weight: 700;
             margin-bottom: 6px;
         }

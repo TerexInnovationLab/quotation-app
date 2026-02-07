@@ -58,11 +58,14 @@ class InvoiceController
     public function exportPdf(Request $request)
     {
         $rows = $this->invoiceRows();
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.invoices.pdf', [
             'rows' => $rows,
             'generatedAt' => now(),
             'company' => $this->companyProfile(),
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         $filename = 'invoices-' . now()->format('Ymd-His') . '.pdf';

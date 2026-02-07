@@ -49,11 +49,14 @@ class QuotationController
     public function exportPdf(Request $request)
     {
         $rows = $this->quotationRows();
+        [$template, $templateColor] = $this->resolveTemplateSettings();
 
         $pdf = Pdf::loadView('components.sales.quotations.pdf', [
             'rows' => $rows,
             'generatedAt' => now(),
             'company' => $this->companyProfile(),
+            'template' => $template,
+            'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
         $filename = 'quotations-' . now()->format('Ymd-His') . '.pdf';
