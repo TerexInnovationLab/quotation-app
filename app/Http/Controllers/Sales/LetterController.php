@@ -138,7 +138,11 @@ class LetterController
             'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->stream($row['number'] . '.pdf');
+        return $pdf->stream($row['number'] . '.pdf')->withHeaders([
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 
     public function downloadPdf(string $letter)
@@ -158,7 +162,11 @@ class LetterController
             'templateColor' => $templateColor,
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->download($row['number'] . '.pdf');
+        return $pdf->download($row['number'] . '.pdf')->withHeaders([
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 
     public function send(Request $request, string $letter)

@@ -22,6 +22,22 @@
         $shareText = 'Letter ' . $row['number'] . ' to ' . $row['recipient'];
         $shareUrl = route('sales.letters.show', $row['number']);
         $sendUrl = route('sales.letters.send', $row['number']);
+        $templateCookie = collect([
+            request()->cookie('document_template', ''),
+            request()->cookie('invoice_template', ''),
+            request()->cookie('quotation_template', ''),
+            request()->cookie('letter_template', ''),
+            request()->cookie('receipt_template', ''),
+        ])->first(fn ($value) => is_string($value) && $value !== '');
+        $templateColorCookie = collect([
+            request()->cookie('document_template_color', ''),
+            request()->cookie('invoice_template_color', ''),
+            request()->cookie('quotation_template_color', ''),
+            request()->cookie('letter_template_color', ''),
+            request()->cookie('receipt_template_color', ''),
+        ])->first(fn ($value) => is_string($value) && $value !== '');
+        $pdfCacheKey = md5((string) $templateCookie . '|' . (string) $templateColorCookie);
+        $pdfUrl = route('sales.letters.pdf', ['letter' => $row['number'], 'v' => $pdfCacheKey]);
     @endphp
 
     <div class="space-y-4">
@@ -82,13 +98,13 @@
                         <div class="text-sm font-semibold">Letter PDF Preview</div>
                         <div class="text-xs text-slate-500">Live preview of {{ $row['number'] }}</div>
                     </div>
-                    <a href="{{ route('sales.letters.pdf', $row['number']) }}" target="_blank"
+                    <a href="{{ $pdfUrl }}" target="_blank"
                        class="inline-flex items-center px-3 py-2 text-sm rounded-xl border border-slate-200 hover:bg-slate-50">
                         Open Full PDF
                     </a>
                 </div>
 
-                <iframe src="{{ route('sales.letters.pdf', $row['number']) }}"
+                <iframe src="{{ $pdfUrl }}"
                         class="w-full h-[900px] bg-white"
                         title="Letter PDF preview">
                 </iframe>
