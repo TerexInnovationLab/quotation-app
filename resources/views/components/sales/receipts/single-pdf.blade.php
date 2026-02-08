@@ -232,6 +232,78 @@
             margin-top: 2px;
         }
 
+        .security-section {
+            margin-top: 16px;
+            width: 100%;
+            page-break-inside: avoid;
+        }
+
+        .security-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .security-cell {
+            vertical-align: top;
+        }
+
+        .security-cell-right {
+            text-align: right;
+        }
+
+        .stamp-container {
+            display: inline-block;
+            text-align: center;
+        }
+
+        .stamp-image {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .stamp-fallback {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #94a3b8;
+            border: 1px dashed #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .qr-panel {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            padding: 6px;
+            background: #ffffff;
+            text-align: center;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        .qr-image {
+            width: 104px;
+            height: 104px;
+            object-fit: contain;
+        }
+
+        .qr-fallback {
+            width: 104px;
+            height: 104px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #94a3b8;
+            border: 1px dashed #e2e8f0;
+            border-radius: 8px;
+        }
+
         .footer {
             position: fixed;
             left: 0;
@@ -388,6 +460,34 @@
         @endif
         <div class="signature-name">{{ $company['signatory_name'] }}</div>
         <div class="signature-title">{{ $company['signatory_title'] }}</div>
+    </div>
+
+    <div class="security-section">
+        <table class="security-table">
+            <tr>
+                <td class="security-cell">
+                    <div class="stamp-container">
+                        @php($stampImagePath = public_path('images/terex_stamp.jpg'))
+                        @if(!empty($stampDataUri ?? null))
+                            <img src="{{ $stampDataUri }}" alt="Approved stamp" class="stamp-image">
+                        @elseif(file_exists($stampImagePath))
+                            <img src="{{ $stampImagePath }}" alt="Approved stamp" class="stamp-image">
+                        @else
+                            <div class="stamp-fallback">Stamp unavailable</div>
+                        @endif
+                    </div>
+                </td>
+                <td class="security-cell security-cell-right">
+                    <div class="qr-panel">
+                        @if(!empty($documentQr ?? null))
+                            <img src="{{ $documentQr }}" alt="Receipt QR code" class="qr-image">
+                        @else
+                            <div class="qr-fallback">QR unavailable</div>
+                        @endif
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="footer">
